@@ -8,6 +8,8 @@ Estado: **borrador, pendiente de aprobación**. No publicado ni programado.
   Un primer intento falló sin coste.
 - Corrección: corte en el segundo 10 (antes descolgaba el fijo) y final nuevo de 5 s con sonrisa clara
   (Kling 3.0 imagen a vídeo, 10,08 créditos). Total: 40,32 créditos (2,52 $).
+- Segunda corrección: final rehecho sin sonrisa, expresión seria y concentrada (10,08 créditos).
+  Total Higgsfield: 50,40 créditos (3,15 $).
 - Textos y cierre añadidos con Remotion. Lleva la etiqueta "Escena creada con IA".
 - Es una escena, no un testimonio: la persona no es una clienta real.
 - Al publicar en Instagram/TikTok, marcar como contenido generado con IA.
