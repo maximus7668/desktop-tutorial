@@ -32,3 +32,5 @@ Texto propuesto:
   (256 créditos, ~0,05 $), toma 1.
 - Guion: "Tienes las manos ocupadas… y suena el teléfono. Hasta que contesta DEIKA. Coge la llamada,
   da la cita y te avisa al móvil. DEIKA. Tu teléfono, contestado siempre."
+- Locución rehecha entera en tono publicitario ([confident] / [excited]), misma voz Cristina, eleven_v4
+  (4 tomas, 900 créditos ElevenLabs, ~0,18 $); usada la toma 1. Sustituye a las anteriores.
