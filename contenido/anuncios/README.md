@@ -21,3 +21,10 @@ Texto propuesto:
 > Tu teléfono, contestado siempre. 👉 deika.eu
 >
 > #recepcionistaIA #peluqueria #pymes #autonomos
+
+### Versión con locución · `deika-anuncio-peluqueria-voz-9x16.mp4` (18 s)
+
+- Voz: ElevenLabs eleven_v4, "Cristina - Premium Spanish Advertising Voice" (castellano). 4 tomas generadas
+  (832 créditos ElevenLabs, ~0,17 $); usada la toma 1. Sonido ambiente del vídeo bajado al 32 %.
+- Guion: "Tienes las manos ocupadas… y suena el teléfono. Hasta que contesta DEIKA. Coge la llamada,
+  da la cita y te avisa al móvil. DEIKA. Tu teléfono, contestado siempre."
