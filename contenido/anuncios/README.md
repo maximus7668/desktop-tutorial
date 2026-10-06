@@ -24,7 +24,7 @@ Texto propuesto:
 >
 > #recepcionistaIA #peluqueria #pymes #autonomos
 
-### Versión con locución · `deika-anuncio-peluqueria-voz-9x16.mp4` (18 s)
+### Versión con locución · `deika-anuncio-peluqueria-voz-9x16.mp4` (14 s)
 
 - Voz: ElevenLabs eleven_v4, "Cristina - Premium Spanish Advertising Voice" (castellano). 4 tomas generadas
   (832 créditos ElevenLabs, ~0,17 $); usada la toma 1 para el final. Sonido ambiente del vídeo bajado al 32 %.
@@ -34,3 +34,4 @@ Texto propuesto:
   da la cita y te avisa al móvil. DEIKA. Tu teléfono, contestado siempre."
 - Locución rehecha entera en tono publicitario ([confident] / [excited]), misma voz Cristina, eleven_v4
   (4 tomas, 900 créditos ElevenLabs, ~0,18 $); usada la toma 1. Sustituye a las anteriores.
+- Ritmo ajustado: escena del teléfono recortada a 5,5 s y frases seguidas, sin huecos largos. Duración final 14 s.
