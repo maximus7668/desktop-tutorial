@@ -1,6 +1,6 @@
 # DEIKA · Primeras publicaciones del perfil de Instagram
 
-Estado: **borrador, pendiente de aprobación**. Para que el perfil no esté vacío antes del lunes 12.
+Estado: **aprobado y enviado a Posty el 6/10/2026** (22:35, 22:42 y 22:49 UTC; ids cmux9c5uz000eli7h5f1de8lp, cmux9c75g000fli7hntiuosvp, cmux9c7in000gli7hxw5ign04).
 Orden de publicación (la última queda arriba a la izquierda): 1 → 2 → 3, con unos minutos entre ellas.
 
 ## 1 · "¿Atiendes con cita?" (imagen) · `inicio-para-quien.jpg`
