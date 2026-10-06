@@ -35,3 +35,9 @@ Texto propuesto:
 - Locución rehecha entera en tono publicitario ([confident] / [excited]), misma voz Cristina, eleven_v4
   (4 tomas, 900 créditos ElevenLabs, ~0,18 $); usada la toma 1. Sustituye a las anteriores.
 - Ritmo ajustado: escena del teléfono recortada a 5,5 s y frases seguidas, sin huecos largos. Duración final 14 s.
+
+## Anuncio propio · `deika-anuncio-propio-suena-tu-telefono.mp4` (27 s, 480×848)
+
+Estado: subido a la biblioteca de Posty (media dc7ecbdb-a8fc-41b5-8e63-3e168490c9f3), **sin publicar**.
+Pendiente: confirmar que "Peluquería Marta", "Clínica Dental Arco" y "Restaurante La Plaza" son inventados,
+y la fecha de publicación.
