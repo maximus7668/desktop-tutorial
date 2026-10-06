@@ -6,6 +6,8 @@ Estado: **borrador, pendiente de aprobación**. No publicado ni programado.
 
 - Escena generada con Higgsfield, Kling 3.0 (15 s, sonido nativo). Coste: 30,24 créditos (1,89 $).
   Un primer intento falló sin coste.
+- Corrección: corte en el segundo 10 (antes descolgaba el fijo) y final nuevo de 5 s con sonrisa clara
+  (Kling 3.0 imagen a vídeo, 10,08 créditos). Total: 40,32 créditos (2,52 $).
 - Textos y cierre añadidos con Remotion. Lleva la etiqueta "Escena creada con IA".
 - Es una escena, no un testimonio: la persona no es una clienta real.
 - Al publicar en Instagram/TikTok, marcar como contenido generado con IA.
