@@ -38,6 +38,6 @@ Texto propuesto:
 
 ## Anuncio propio · `deika-anuncio-propio-suena-tu-telefono.mp4` (27 s, 480×848)
 
-Estado: subido a la biblioteca de Posty (media dc7ecbdb-a8fc-41b5-8e63-3e168490c9f3), **sin publicar**.
-Pendiente: confirmar que "Peluquería Marta", "Clínica Dental Arco" y "Restaurante La Plaza" son inventados,
-y la fecha de publicación.
+Estado: **publicado en Instagram el 7/10/2026** (Posty cmuxl9tgr000nli7hfp8wxzl3):
+https://www.instagram.com/reel/DeLeC9qjagg/
+"Peluquería Marta", "Clínica Dental Arco" y "Restaurante La Plaza" son negocios inventados (confirmado por el dueño).
