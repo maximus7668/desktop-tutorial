@@ -44,7 +44,8 @@ https://www.instagram.com/reel/DeLeC9qjagg/
 
 ### Versión con llamada · `deika-anuncio-peluqueria-llamada-9x16.mp4` (25 s)
 
-Estado: **borrador, pendiente de aprobación**.
+Estado: **aprobado y programado en Instagram para el sábado 10/10/2026 a las 13:00 (Madrid)**
+(Posty cmuxlstyn000oli7hc1xjq4pu). El texto del post indica "Escenas y voces creadas con IA. Llamada de ejemplo."
 
 - 0–5,5 s: escena del teléfono con narradora (Cristina): "Tienes las manos ocupadas. Y suena el teléfono. Hasta que contesta DEIKA."
 - 5,5–19 s: entra la música y se ve/oye la llamada resumida (marcada "Ejemplo de llamada"):
