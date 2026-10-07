@@ -41,3 +41,15 @@ Texto propuesto:
 Estado: **publicado en Instagram el 7/10/2026** (Posty cmuxl9tgr000nli7hfp8wxzl3):
 https://www.instagram.com/reel/DeLeC9qjagg/
 "Peluquería Marta", "Clínica Dental Arco" y "Restaurante La Plaza" son negocios inventados (confirmado por el dueño).
+
+### Versión con llamada · `deika-anuncio-peluqueria-llamada-9x16.mp4` (25 s)
+
+Estado: **borrador, pendiente de aprobación**.
+
+- 0–5,5 s: escena del teléfono con narradora (Cristina): "Tienes las manos ocupadas. Y suena el teléfono. Hasta que contesta DEIKA."
+- 5,5–19 s: entra la música y se ve/oye la llamada resumida (marcada "Ejemplo de llamada"):
+  DEIKA (voz Belén) se presenta como asistente de IA, ofrece jueves 10:00 o viernes 16:30, la clienta (voz Lía) elige jueves.
+- 19–21,7 s: la peluquera lee el aviso "Cita apuntada · jueves 10:00" (sin sonreír).
+- 21,7–25,3 s: cierre "DEIKA. Tu teléfono, contestado siempre."
+- Coste ElevenLabs: música 900 créditos (1 versión), voz DEIKA 876, voz clienta 244 → 2.020 créditos (~0,40 $).
+- Ojo: la música se generó con letra en "auto"; revisar que no tenga voz cantada.
