@@ -64,3 +64,9 @@ imagen de presentación y lámina 7 de "Qué hace". También cambiado en deika.e
 Programadas otra vez en Posty con el lema nuevo (8/10/2026), mismas fechas y textos; las antiguas, borradas.
 "Hola, somos DEIKA" y "Lo que hace DEIKA" (ya publicadas con el lema viejo) quedan como borradores en Posty
 (cmuz4d1ag000ar27tkvd7je1z y cmuz4d0wu0009r27tc70dx3kb) para publicarlas cuando se borren las viejas en Instagram.
+
+### Anuncio propio con el lema nuevo · `deika-anuncio-propio-siempre-atendido.mp4` (27 s)
+
+Final retocado (segunda línea del cierre cambiada a "siempre atendido.", misma tipografía Manrope 800 y animación).
+Publicado el 8/10/2026 (Posty cmuz4rmvo000cr27t64yqqisv): https://www.instagram.com/reel/DeOPvo0FDQE/
+"Hola, somos DEIKA" vuelto a publicar con la imagen nueva (cmuz4qbvi000br27tgs6fhgep): https://www.instagram.com/p/DeOPn_XDD_y/
