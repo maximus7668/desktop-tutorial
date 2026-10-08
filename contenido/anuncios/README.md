@@ -20,7 +20,7 @@ Texto propuesto:
 >
 > DEIKA coge las llamadas de tu peluquería, da la cita y te avisa al móvil. Con tu mismo número.
 >
-> Tu teléfono, contestado siempre. 👉 deika.eu
+> Tu teléfono, siempre atendido. 👉 deika.eu
 >
 > #recepcionistaIA #peluqueria #pymes #autonomos
 
@@ -31,7 +31,7 @@ Texto propuesto:
 - Corrección: la frase inicial sonaba susurrada; rehecha con [warmly] y sin puntos suspensivos
   (256 créditos, ~0,05 $), toma 1.
 - Guion: "Tienes las manos ocupadas… y suena el teléfono. Hasta que contesta DEIKA. Coge la llamada,
-  da la cita y te avisa al móvil. DEIKA. Tu teléfono, contestado siempre."
+  da la cita y te avisa al móvil. DEIKA. Tu teléfono, siempre atendido."
 - Locución rehecha entera en tono publicitario ([confident] / [excited]), misma voz Cristina, eleven_v4
   (4 tomas, 900 créditos ElevenLabs, ~0,18 $); usada la toma 1. Sustituye a las anteriores.
 - Ritmo ajustado: escena del teléfono recortada a 5,5 s y frases seguidas, sin huecos largos. Duración final 14 s.
@@ -51,6 +51,13 @@ Estado: **aprobado y programado en Instagram para el sábado 10/10/2026 a las 13
 - 5,5–19 s: entra la música y se ve/oye la llamada resumida (marcada "Ejemplo de llamada"):
   DEIKA (voz Belén) se presenta como asistente de IA, ofrece jueves 10:00 o viernes 16:30, la clienta (voz Lía) elige jueves.
 - 19–21,7 s: la peluquera lee el aviso "Cita apuntada · jueves 10:00" (sin sonreír).
-- 21,7–25,3 s: cierre "DEIKA. Tu teléfono, contestado siempre."
+- 21,7–25,3 s: cierre "DEIKA. Tu teléfono, siempre atendido."
 - Coste ElevenLabs: música 900 créditos (1 versión), voz DEIKA 876, voz clienta 244 → 2.020 créditos (~0,40 $).
 - Ojo: la música se generó con letra en "auto"; revisar que no tenga voz cantada.
+
+## Cambio de lema (8/10/2026)
+
+Lema nuevo: **"Tu teléfono, siempre atendido."** (antes "contestado siempre"). Rehechos con el lema nuevo:
+anuncio con llamada (texto final y locución de cierre, voz Cristina, eleven_v4, 196 créditos ElevenLabs, toma 1),
+Reel "Manos ocupadas", vídeo "Tres pasos" (16:9 y 9:16, con capturas nuevas de deika.eu), lámina 6 del carrusel,
+imagen de presentación y lámina 7 de "Qué hace". También cambiado en deika.eu y en la app.

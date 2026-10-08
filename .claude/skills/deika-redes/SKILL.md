@@ -17,7 +17,7 @@ programa nada sin un "ok" explícito del dueño para ese contenido concreto.
 - **Qué es:** una recepcionista con IA que coge el teléfono del negocio 24/7, da la cita en su
   agenda, recoge el aviso y avisa al equipo. Con el mismo número del negocio (desvío de
   llamadas), desde 49 €/mes, sin permanencia. Lo montan ellos; el cliente solo desvía el teléfono.
-- **Lema:** "Tu teléfono, contestado siempre."
+- **Lema:** "Tu teléfono, siempre atendido."
 - **Para quién:** negocios pequeños que atienden con cita y no pueden coger el teléfono:
   talleres, peluquerías y estética, clínicas, restaurantes, inmobiliarias y otros. **Mezcla
   siempre sectores**: que nunca parezca que DEIKA es solo para talleres.

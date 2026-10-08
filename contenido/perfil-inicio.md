@@ -28,7 +28,7 @@ Orden de publicación (la última queda arriba a la izquierda): 1 → 2 → 3, c
 >
 > #recepcionistaIA #pymes #autonomos
 
-## 3 · "Tu teléfono, contestado siempre" (imagen) · `inicio-presentacion.jpg`
+## 3 · "Tu teléfono, siempre atendido" (imagen) · `inicio-presentacion.jpg`
 
 > Hola, somos DEIKA 👋
 >
@@ -36,7 +36,7 @@ Orden de publicación (la última queda arriba a la izquierda): 1 → 2 → 3, c
 >
 > Aquí te contaremos cómo funciona, para quién es y qué hace en cada llamada.
 >
-> Tu teléfono, contestado siempre. 👉 deika.eu
+> Tu teléfono, siempre atendido. 👉 deika.eu
 >
 > #recepcionistaIA #pymes #autonomos
 
