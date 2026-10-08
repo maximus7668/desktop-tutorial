@@ -45,7 +45,7 @@ https://www.instagram.com/reel/DeLeC9qjagg/
 ### Versión con llamada · `deika-anuncio-peluqueria-llamada-9x16.mp4` (25 s)
 
 Estado: **aprobado y programado en Instagram para el sábado 10/10/2026 a las 13:00 (Madrid)**
-(Posty cmuxlstyn000oli7hc1xjq4pu). El texto del post indica "Escenas y voces creadas con IA. Llamada de ejemplo."
+(Posty cmuz4bzpx0005r27thmjhlff4). El texto del post indica "Escenas y voces creadas con IA. Llamada de ejemplo."
 
 - 0–5,5 s: escena del teléfono con narradora (Cristina): "Tienes las manos ocupadas. Y suena el teléfono. Hasta que contesta DEIKA."
 - 5,5–19 s: entra la música y se ve/oye la llamada resumida (marcada "Ejemplo de llamada"):
@@ -61,3 +61,6 @@ Lema nuevo: **"Tu teléfono, siempre atendido."** (antes "contestado siempre"). 
 anuncio con llamada (texto final y locución de cierre, voz Cristina, eleven_v4, 196 créditos ElevenLabs, toma 1),
 Reel "Manos ocupadas", vídeo "Tres pasos" (16:9 y 9:16, con capturas nuevas de deika.eu), lámina 6 del carrusel,
 imagen de presentación y lámina 7 de "Qué hace". También cambiado en deika.eu y en la app.
+Programadas otra vez en Posty con el lema nuevo (8/10/2026), mismas fechas y textos; las antiguas, borradas.
+"Hola, somos DEIKA" y "Lo que hace DEIKA" (ya publicadas con el lema viejo) quedan como borradores en Posty
+(cmuz4d1ag000ar27tkvd7je1z y cmuz4d0wu0009r27tc70dx3kb) para publicarlas cuando se borren las viejas en Instagram.
