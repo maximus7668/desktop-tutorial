@@ -68,5 +68,8 @@ Programadas otra vez en Posty con el lema nuevo (8/10/2026), mismas fechas y tex
 ### Anuncio propio con el lema nuevo · `deika-anuncio-propio-siempre-atendido.mp4` (27 s)
 
 Final retocado (segunda línea del cierre cambiada a "siempre atendido.", misma tipografía Manrope 800 y animación).
-Publicado el 8/10/2026 (Posty cmuz4rmvo000cr27t64yqqisv): https://www.instagram.com/reel/DeOPvo0FDQE/
+Locución del cierre cambiada a "DEIKA, tu teléfono, siempre atendido": voz del narrador clonada con Higgsfield Seed Audio
+(0,3 créditos) a partir de su propia locución aislada con ElevenLabs; la frase vieja se quitó de la música con máscara espectral.
+Publicado el 8/10/2026 (Posty cmuz5g3vh000dr27tpqxocn57): https://www.instagram.com/reel/DeOR7BfDICV/
+(la versión anterior, con la voz antigua, DeOPvo0FDQE, hay que borrarla a mano en Instagram).
 "Hola, somos DEIKA" vuelto a publicar con la imagen nueva (cmuz4qbvi000br27tgs6fhgep): https://www.instagram.com/p/DeOPn_XDD_y/
