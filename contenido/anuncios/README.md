@@ -32,44 +32,7 @@ Texto propuesto:
   (256 créditos, ~0,05 $), toma 1.
 - Guion: "Tienes las manos ocupadas… y suena el teléfono. Hasta que contesta DEIKA. Coge la llamada,
   da la cita y te avisa al móvil. DEIKA. Tu teléfono, siempre atendido."
-- Locución rehecha entera en tono publicitario ([confident] / [excited]), misma voz Cristina, eleven_v4
-  (4 tomas, 900 créditos ElevenLabs, ~0,18 $); usada la toma 1. Sustituye a las anteriores.
-- Ritmo ajustado: escena del teléfono recortada a 5,5 s y frases seguidas, sin huecos largos. Duración final 14 s.
-
-## Anuncio propio · `deika-anuncio-propio-suena-tu-telefono.mp4` (27 s, 480×848)
-
-Estado: **publicado en Instagram el 7/10/2026** (Posty cmuxl9tgr000nli7hfp8wxzl3):
-https://www.instagram.com/reel/DeLeC9qjagg/
-"Peluquería Marta", "Clínica Dental Arco" y "Restaurante La Plaza" son negocios inventados (confirmado por el dueño).
-
-### Versión con llamada · `deika-anuncio-peluqueria-llamada-9x16.mp4` (25 s)
-
-Estado: **aprobado y programado en Instagram para el sábado 10/10/2026 a las 13:00 (Madrid)**
-(Posty cmuz4bzpx0005r27thmjhlff4). El texto del post indica "Escenas y voces creadas con IA. Llamada de ejemplo."
-
-- 0–5,5 s: escena del teléfono con narradora (Cristina): "Tienes las manos ocupadas. Y suena el teléfono. Hasta que contesta DEIKA."
-- 5,5–19 s: entra la música y se ve/oye la llamada resumida (marcada "Ejemplo de llamada"):
-  DEIKA (voz Belén) se presenta como asistente de IA, ofrece jueves 10:00 o viernes 16:30, la clienta (voz Lía) elige jueves.
-- 19–21,7 s: la peluquera lee el aviso "Cita apuntada · jueves 10:00" (sin sonreír).
-- 21,7–25,3 s: cierre "DEIKA. Tu teléfono, siempre atendido."
-- Coste ElevenLabs: música 900 créditos (1 versión), voz DEIKA 876, voz clienta 244 → 2.020 créditos (~0,40 $).
-- Ojo: la música se generó con letra en "auto"; revisar que no tenga voz cantada.
-
-## Cambio de lema (8/10/2026)
-
-Lema nuevo: **"Tu teléfono, siempre atendido."** (antes "contestado siempre"). Rehechos con el lema nuevo:
-anuncio con llamada (texto final y locución de cierre, voz Cristina, eleven_v4, 196 créditos ElevenLabs, toma 1),
-Reel "Manos ocupadas", vídeo "Tres pasos" (16:9 y 9:16, con capturas nuevas de deika.eu), lámina 6 del carrusel,
-imagen de presentación y lámina 7 de "Qué hace". También cambiado en deika.eu y en la app.
-Programadas otra vez en Posty con el lema nuevo (8/10/2026), mismas fechas y textos; las antiguas, borradas.
-"Hola, somos DEIKA" y "Lo que hace DEIKA" (ya publicadas con el lema viejo) quedan como borradores en Posty
-(cmuz4d1ag000ar27tkvd7je1z y cmuz4d0wu0009r27tc70dx3kb) para publicarlas cuando se borren las viejas en Instagram.
-
-### Anuncio propio con el lema nuevo · `deika-anuncio-propio-siempre-atendido.mp4` (27 s)
-
-Final retocado (segunda línea del cierre cambiada a "siempre atendido.", misma tipografía Manrope 800 y animación).
-Locución rehecha entera con ElevenLabs eleven_v4 (8/10/2026): narradora Cristina (la de los demás anuncios) y
-saludos de la recepcionista con Belén (voz DEIKA del anuncio con llamada), en los mismos tiempos que la original.
-Música y sonidos originales, con la voz antigua quitada (aislamiento ElevenLabs + máscara espectral). ~1.700 créditos.
-Publicado el 8/10/2026 (Posty cmuz5mhb4000er27ta4es1bc9): https://www.instagram.com/reel/DeOSjGnlY4n/
-Borrar a mano en Instagram las versiones anteriores: DeOPvo0FDQE y DeOR7BfDICV.
+- Locución rehecha con ElevenLabs eleven_v4: narradora Cristina, cada bloque en una sola toma para que el tono sea continuo,
+y saludos de la recepcionista con Belén. Música nueva instrumental (ElevenLabs Music v2.5, 27,5 s) a volumen constante, sin bajadas.
+Publicado el 8/10/2026 (Posty cmuz9euxk000vr27tj1n2dy6r): https://www.instagram.com/reel/DeOeoEGDj70/
+Borrar a mano en Instagram las versiones anteriores: DeOSjGnlY4n, DeOR7BfDICV y DeOPvo0FDQE.
