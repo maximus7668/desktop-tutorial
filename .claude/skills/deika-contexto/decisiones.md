@@ -7,6 +7,10 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Carga de OpenStreetMap vía n8n** · Overpass rechaza las peticiones desde Cloudflare · Flujo n8n
+«DEIKA · Cargar negocios de Vitoria» (lunes 9 h + webhook). El botón del panel y el cron llaman a ese webhook
+(secreto `OSM_N8N_URL`); si falla, prueban Overpass directo. 390 negocios cargados.
+
 **2026-10-09 · ESTADO AL CERRAR LA SESIÓN** (producción = rama `claude/despliegue-cloudflare` de Deika-panel, commit 885ae61+)
 - Activo: leads con clasificación Claude (ANTHROPIC_API_KEY puesta y probada), avisos por el relé, decisiones en
   Administración → Leads, demo con +34945524251 y agente `agent_27903ca89b6d8f0e8ad87775b8` (bloqueo automático
