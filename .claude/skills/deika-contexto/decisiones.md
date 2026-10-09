@@ -7,6 +7,15 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Desplegado en producción** (Worker deika-panel + web deika.eu + migraciones 0010-0012) · Lo
+pidió el dueño · Activo: leads guardados y avisados, decisiones en Administración, recordatorios, puesta en
+marcha, prospección (OpenStreetMap los lunes). Desactivado: informe semanal (`INFORME_SEMANAL`), demo
+(`RETELL_DEMO_*`, pendiente del 400) y Claude (`ANTHROPIC_API_KEY`, sin clave aún).
+
+**2026-10-09 · Las decisiones se toman en el panel, no con botones de Telegram** · El bot lo tiene el relé
+`deika-relay-demo`, que solo manda texto, y n8n no tiene credencial de Telegram · Telegram avisa con enlace;
+Administración → Leads / Prospección decide (hay que estar identificado). n8n queda opcional.
+
 **2026-10-09 · Flujo 5 (prospección) = visitas en persona** · Email en frío pendiente del gestor (LSSI),
 Instagram automático prohibido, llamadas en frío con IA no · OpenStreetMap + web del negocio, 10/semana,
 solo citas literales, tarjeta «Visitar / Descartar / No contactar». No se envía nada. Privacidad actualizada.
