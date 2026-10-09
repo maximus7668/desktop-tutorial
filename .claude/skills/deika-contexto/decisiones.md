@@ -7,6 +7,11 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Google Places para los prospectos sin web** · Solo 41 de 390 tienen web en OSM · Antes de investigar,
+el Worker busca la web en Places (New) Text Search (máx. 20 búsquedas/tanda; secreto `GOOGLE_PLACES_KEY`). Solo se
+guarda `google_place_id`; la web se usa en el momento. Pendiente: el dueño activa «Places API (New)» y pone
+restricción y tope a la clave. Precio/condiciones sin verificar en la doc oficial (proxy bloqueado).
+
 **2026-10-09 · Carga de OpenStreetMap vía n8n** · Overpass rechaza las peticiones desde Cloudflare · Flujo n8n
 «DEIKA · Cargar negocios de Vitoria» (lunes 9 h + webhook). El botón del panel y el cron llaman a ese webhook
 (secreto `OSM_N8N_URL`); si falla, prueban Overpass directo. 390 negocios cargados.
