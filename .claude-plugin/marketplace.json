@@ -1,0 +1,5 @@
+{
+  "name": "deika",
+  "owner": { "name": "DEIKA" },
+  "plugins": [{ "name": "deika-ahorro", "source": "./plugins/deika-ahorro" }]
+}
