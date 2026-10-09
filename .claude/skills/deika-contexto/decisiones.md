@@ -11,7 +11,9 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 activable por negocio en Administración → Negocios; sale tras cada reserva confirmada al móvil del cliente, sin
 enlaces, máx. 100/día por negocio. **Inactivo hasta que haya remitente**: el 945 no envía SMS; hay que registrar el
 remitente alfanumérico «DEIKA» en Twilio (España exige registro previo, hasta 4 semanas) y poner `SMS_REMITENTE`.
-Es un mensaje de servicio pedido por el cliente (no publicidad). WhatsApp queda para después (plantillas de Meta).
+Es un mensaje de servicio pedido por el cliente (no publicidad). WhatsApp: montado el 09/10 (Cloud API de Meta, plantilla `confirmacion_cita` utility, con SMS de respaldo); **la
+plantilla está pendiente de aprobación del dueño** y falta que él cree la cuenta de WhatsApp Business (pasos en
+`automatizacion/plantillas/whatsapp-confirmacion.md` del repo del panel).
 
 **2026-10-09 · Respuesta a heydiga (aprobado por el dueño)** · heydiga da 200 min por 49 € y más integraciones ·
 (1) Mensaje principal de la web: «te la dejamos montada nosotros, desde 49 €». (2) **Demo de visita**: botón
