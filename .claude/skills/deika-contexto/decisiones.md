@@ -7,6 +7,13 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Respuesta a heydiga (aprobado por el dueño)** · heydiga da 200 min por 49 € y más integraciones ·
+(1) Mensaje principal de la web: «te la dejamos montada nosotros, desde 49 €». (2) **Demo de visita**: botón
+«Probar su recepcionista» en cada ficha de Prospección → llamada web de Retell (agente
+`agent_2c277c49dfaab3162cc8f66283`) con los datos públicos del negocio; tope 30/día. (3) **Nuevos minutos:**
+Básico 200, Negocio 450, Pro 800 (mismos precios); aplicado a los clientes actuales, a la web, al panel y al agente
+de demo (v2). Pendiente: probar el euskera; confirmaciones por SMS/WhatsApp.
+
 **2026-10-09 · Mejoras de la web por el análisis de competencia (aprobadas: 1, 2, 3 y 5)** · Sin prueba gratis
 y sin poder oír la IA, frente a Fonio, ElevenLabs y Recepcionista.com · En deika.eu: «Llámala tú» con el
 945 52 42 51 (agente entrante «DEMO 945 – Taller», taller de ejemplo con agenda de prueba), sección «Por qué

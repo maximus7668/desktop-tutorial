@@ -5,7 +5,7 @@ Precios comprobados en la web oficial ese día, salvo lo marcado «sin confirmar
 
 | Empresa | Entrada | Minutos | €/min | Prueba gratis | Notas | Fuente |
 |---|---|---|---|---|---|---|
-| DEIKA | 49 €/mes | 150 / 320 / 540 | 0,33 / 0,28 / 0,28 | No | Sin alta ni permanencia | deika.eu |
+| DEIKA | 49 €/mes | 200 / 450 / 800 (desde 09/10) | 0,25 / 0,20 / 0,19 | No | Sin alta ni permanencia | deika.eu |
 | **heydiga** (Barcelona/Madrid) | 49 €/mes Lite (lo configuras tú); 99 € Start con integraciones | 200 / 500 / 900 / 1.500 | 0,25 / 0,20 / 0,19 / 0,19 | «Empieza gratis» (Lite) | 50 idiomas (euskera no mencionado), WhatsApp (+39 €), 30+ integraciones (Booksy, Treatwell, TallerGP, Doctoralia…), recordatorios, 5–25 llamadas a la vez, ENS media + ISO 27001, servidores UE, testimonios | https://heydiga.com/es/precios |
 | Recepcionista.com | 99 €/mes | 200 / 900 / 1.500 | 0,50 / 0,22 / 0,20 | Demo de 20 min | WhatsApp, datos en la UE, vídeo con audio | https://recepcionista.com/ |
 | Fonio | 119 €/mes (99 anual) | 1.000 | 0,12 | 14 días + devolución 30 días | 60+ idiomas, calendario | https://www.fonio.ai/es/precios |

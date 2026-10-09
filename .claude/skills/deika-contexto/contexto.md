@@ -9,9 +9,9 @@
 - Panel para clientes: repo `maximus7668/deika-panel` (PWA en Cloudflare Workers + D1; agenda de
   Cal.com, llamadas de Retell vía n8n, avisos push, recepción, plan).
 - Precios (sin IVA, sin alta, sin permanencia, baja con 1 mes de aviso):
-  - Básico 49 €/mes, 150 min
-  - Negocio 89 €/mes, 320 min
-  - Pro 149 €/mes, 540 min
+  - Básico 49 €/mes, 200 min
+  - Negocio 89 €/mes, 450 min
+  - Pro 149 €/mes, 800 min
   - Minuto extra: 0,25 €
   - Primer mes con garantía: si se da de baja en el primer mes, se devuelve la cuota de ese mes (una vez por
     negocio, primera alta, sin incluir minutos de más). Decidido el 09/10/2026.
