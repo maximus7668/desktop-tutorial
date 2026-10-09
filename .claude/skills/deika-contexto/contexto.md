@@ -24,7 +24,7 @@
 - Orquestación: **n8n cloud**.
 - Cerebro: **API de Anthropic**.
 - Leads: **D1** del panel (tablas `leads` y `lead_acciones`).
-- Aprobaciones: **Telegram** (botones Aprobar/Rechazar).
+- Aprobaciones: aviso por **Telegram** (relé) y decisión en **Administración del panel**.
 - Agenda: **Cal.com** (ya lo usa el panel).
 - Email.
 
