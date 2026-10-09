@@ -12,7 +12,8 @@ y sin poder oír la IA, frente a Fonio, ElevenLabs y Recepcionista.com · En dei
 945 52 42 51 (agente entrante «DEMO 945 – Taller», taller de ejemplo con agenda de prueba), sección «Por qué
 DEIKA» (Vitoria, montaje en persona, desde 49 €, garantía), **primer mes con garantía** (web, FAQ, alta, aviso
 legal y agente de demo v1) y FAQ de agendas (Google Calendar/Outlook; Booksy/Treatwell/Doctoralia no se
-conectan directamente). Pendiente: audio de una llamada real con permiso de Talleres Gasteiz. Descartada por
+conectan directamente). Audio: recreación con voces de IA de ElevenLabs (Sofía y Paco, taller de ejemplo, 46 s), marcada como tal en la
+web; se puede cambiar por una llamada real si Talleres Gasteiz da permiso. Descartada por
 ahora la 4 (página de talleres).
 
 **2026-10-09 · Requisitos de encaje de prospectos (los eligió el dueño)** · Obligatorio: aparecer en Google Maps,
