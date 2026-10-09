@@ -1,6 +1,6 @@
 # Mejora total: estado y backlog
 
-Informe publicado: (todavía no hay)
+Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 Última auditoría completa: 09/10/2026 (sin acceso a producción: en esta sesión no hay credenciales de Cloudflare ni de Retell)
 
 ## Estado actual
