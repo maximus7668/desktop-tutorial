@@ -13,6 +13,8 @@
   - Negocio 89 €/mes, 320 min
   - Pro 149 €/mes, 540 min
   - Minuto extra: 0,25 €
+  - Primer mes con garantía: si se da de baja en el primer mes, se devuelve la cuota de ese mes (una vez por
+    negocio, primera alta, sin incluir minutos de más). Decidido el 09/10/2026.
 - Cliente piloto: un taller (Talleres Gasteiz). Sectores objetivo: taller, peluquería/estética,
   clínica, restaurante, inmobiliaria, otros.
 - La IA avisa al inicio de que es un agente de IA y de que se graba. No se hace pasar por persona.

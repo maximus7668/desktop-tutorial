@@ -7,6 +7,14 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Mejoras de la web por el análisis de competencia (aprobadas: 1, 2, 3 y 5)** · Sin prueba gratis
+y sin poder oír la IA, frente a Fonio, ElevenLabs y Recepcionista.com · En deika.eu: «Llámala tú» con el
+945 52 42 51 (agente entrante «DEMO 945 – Taller», taller de ejemplo con agenda de prueba), sección «Por qué
+DEIKA» (Vitoria, montaje en persona, desde 49 €, garantía), **primer mes con garantía** (web, FAQ, alta, aviso
+legal y agente de demo v1) y FAQ de agendas (Google Calendar/Outlook; Booksy/Treatwell/Doctoralia no se
+conectan directamente). Pendiente: audio de una llamada real con permiso de Talleres Gasteiz. Descartada por
+ahora la 4 (página de talleres).
+
 **2026-10-09 · Requisitos de encaje de prospectos (los eligió el dueño)** · Obligatorio: aparecer en Google Maps,
 abierto, ≥ 20 reseñas y dar cita por teléfono; si no, «No encaja» con motivo (se puede visitar igualmente).
 Prioridad: quejas del teléfono en reseñas > volumen > encaje; ruta ordenada por cercanía (coordenadas OSM).

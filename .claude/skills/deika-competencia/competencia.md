@@ -19,6 +19,6 @@ empresa de Euskadi encontrada; ningún competidor menciona euskera.
 **Puntos débiles de DEIKA:** sin prueba gratis; no se puede oír ni llamar a la IA desde la web; caro por
 minuto con volumen; integraciones poco claras; poco específico por sector; sin prueba social.
 
-**Mejoras propuestas (pendientes del dueño):** 1) audio y número de demo en la web; 2) bloque «Por qué
+**Mejoras (09/10/2026):** aplicadas 1 (sin audio aún), 2, 3 (garantía del primer mes) y 5; la 4 no. Antes: 1) audio y número de demo en la web; 2) bloque «Por qué
 DEIKA» (Vitoria, montaje en persona, sin alta, desde 49 €); 3) prueba gratis o garantía (ROJO);
 4) página de talleres; 5) integraciones claras en la FAQ.
