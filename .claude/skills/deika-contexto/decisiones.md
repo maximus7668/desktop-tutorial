@@ -7,6 +7,16 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Flujos 2 y 3 construidos (misma rama)** · Demo: el webhook firmado de Retell deja el lead en
+demo_hecha / no_contesta / no_contactar; reintento máx. 1 vez; «no me llaméis» bloquea para siempre ese
+lead. Seguimiento: botones Es cliente / Perdido y recordatorio a las 48 h · **Ningún mensaje al lead sale
+solo**: las tarjetas llevan enlace wa.me y el dueño escribe a mano (LSSI; WhatsApp API exige plantillas de
+Meta). Borradores en `automatizacion/plantillas/whatsapp-seguimiento.md`, pendientes de aprobación.
+
+**Pendiente del dueño** · Aprobar o cambiar las 3 plantillas de WhatsApp · Decidir el texto de aviso bajo el
+formulario («Te llamará nuestra recepcionista con IA… la llamada se graba») y revisarlo con el gestor ·
+Número importado en Retell para la demo.
+
 **2026-10-09 · Flujo 1 construido (rama `claude/leads-entrantes` de Deika-panel)** · El formulario de la
 web ya enviaba al Worker del panel · Leads en D1 (`leads`, `lead_acciones`); n8n clasifica con
 `claude-haiku-5-5` y manda tarjeta a Telegram con botones Le llamo yo / Demo DEIKA / Descartar. La demo
