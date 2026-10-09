@@ -7,6 +7,18 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · ESTADO AL CERRAR LA SESIÓN** (producción = rama `claude/despliegue-cloudflare` de Deika-panel, commit 885ae61+)
+- Activo: leads con clasificación Claude (ANTHROPIC_API_KEY puesta y probada), avisos por el relé, decisiones en
+  Administración → Leads, demo con +34945524251 y agente `agent_27903ca89b6d8f0e8ad87775b8` (bloqueo automático
+  desde el 17/10 si no es +34400), recordatorios, onboarding, baja de negocios (borra agente, ocultar),
+  prospección (carga OSM automática si vacía / lunes 9 h; 2 investigaciones a las 10 h laborables).
+- Desactivado: informe semanal (INFORME_SEMANAL), espera ok del dueño.
+- Twilio: paquete National BU2bb1ff…2b35a en revisión. Los números de España NO se compran por API (Exclusive
+  Number order / formulario en la consola): lo hace el dueño. Hay una comprobación programada (send_later).
+- Email en frío: NO (LSSI art. 21). Contacto = visitas en persona.
+- Pendiente del dueño: gestor (400 y email), comprar 400/945 en consola, probar la demo con su móvil, tope de
+  gasto en console.anthropic.com, decisiones de la web (sector, audio, cifras, euskera), rotar claves.
+
 **2026-10-09 · Desplegado en producción** (Worker deika-panel + web deika.eu + migraciones 0010-0012) · Lo
 pidió el dueño · Activo: leads guardados y avisados, decisiones en Administración, recordatorios, puesta en
 marcha, prospección (OpenStreetMap los lunes). Desactivado: informe semanal (`INFORME_SEMANAL`), demo
