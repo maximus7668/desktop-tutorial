@@ -15,7 +15,7 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 - Activo: leads con clasificación Claude (ANTHROPIC_API_KEY puesta y probada), avisos por el relé, decisiones en
   Administración → Leads, demo con +34945524251 y agente `agent_27903ca89b6d8f0e8ad87775b8` (bloqueo automático
   desde el 17/10 si no es +34400), recordatorios, onboarding, baja de negocios (borra agente, ocultar),
-  prospección (carga OSM automática si vacía / lunes 9 h; 2 investigaciones a las 10 h laborables).
+  prospección (carga OSM vía n8n lunes 9 h; 10 investigaciones a las 10 h laborables, máx. 50/semana desde el 09/10).
 - Desactivado: informe semanal (INFORME_SEMANAL), espera ok del dueño.
 - Twilio: paquete National BU2bb1ff…2b35a en revisión. Los números de España NO se compran por API (Exclusive
   Number order / formulario en la consola): lo hace el dueño. Hay una comprobación programada (send_later).
