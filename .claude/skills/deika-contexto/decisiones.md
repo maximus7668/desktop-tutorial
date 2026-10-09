@@ -7,6 +7,18 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Flujo 5 (prospección) = visitas en persona** · Email en frío pendiente del gestor (LSSI),
+Instagram automático prohibido, llamadas en frío con IA no · OpenStreetMap + web del negocio, 10/semana,
+solo citas literales, tarjeta «Visitar / Descartar / No contactar». No se envía nada. Privacidad actualizada.
+
+**2026-10-09 · Flujo 4 (onboarding)** · El alta ya existía en el panel · Añadido: puesta en marcha (qué le falta
+a cada alta, aviso L y J) e informe semanal por correo, **desactivado** hasta `INFORME_SEMANAL=activo`.
+
+**2026-10-09 · Twilio: paquete «Spain: National – Individual» enviado a revisión** (BU2bb1ff…2b35a), con el DNI
+y el titular ya aprobados · Para comprar un +34 400 para la demo · Twilio no vende números de España por API:
+la compra, cuando apruebe el paquete, desde la consola. Agente de demo en Retell creado y publicado
+(`agent_27903ca89b6d8f0e8ad87775b8`).
+
 **2026-10-09 · Número de la demo: Twilio** · Lo confirma el dueño · Se importa en Retell por SIP trunk
 (Geographic Permissions con España); pasos en `automatizacion/README.md`.
 
