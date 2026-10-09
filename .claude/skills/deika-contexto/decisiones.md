@@ -7,6 +7,12 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · SMS de confirmación de citas (Twilio)** · Lo tiene heydiga (por WhatsApp) · Montado y desplegado,
+activable por negocio en Administración → Negocios; sale tras cada reserva confirmada al móvil del cliente, sin
+enlaces, máx. 100/día por negocio. **Inactivo hasta que haya remitente**: el 945 no envía SMS; hay que registrar el
+remitente alfanumérico «DEIKA» en Twilio (España exige registro previo, hasta 4 semanas) y poner `SMS_REMITENTE`.
+Es un mensaje de servicio pedido por el cliente (no publicidad). WhatsApp queda para después (plantillas de Meta).
+
 **2026-10-09 · Respuesta a heydiga (aprobado por el dueño)** · heydiga da 200 min por 49 € y más integraciones ·
 (1) Mensaje principal de la web: «te la dejamos montada nosotros, desde 49 €». (2) **Demo de visita**: botón
 «Probar su recepcionista» en cada ficha de Prospección → llamada web de Retell (agente
