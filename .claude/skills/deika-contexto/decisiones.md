@@ -7,6 +7,21 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Flujo 1 construido (rama `claude/leads-entrantes` de Deika-panel)** · El formulario de la
+web ya enviaba al Worker del panel · Leads en D1 (`leads`, `lead_acciones`); n8n clasifica con
+`claude-haiku-5-5` y manda tarjeta a Telegram con botones Le llamo yo / Demo DEIKA / Descartar. La demo
+con Retell es ROJO: solo sale si un aprobador pulsa el botón. Topes en el Worker: 10 demos/día, solo
+teléfonos +34, una decisión por lead. Pendiente desplegar y configurar (ver `automatizacion/README.md`).
+
+**2026-10-09 · Leads en D1, no en Supabase** (sustituye a la entrada de Supabase de abajo) · El panel ya
+tiene D1, límites y administración en el mismo Worker · Un servicio menos que mantener.
+
+**2026-10-09 · Respuesta al lead = llamada, no email** · El formulario de la cabecera solo pide negocio y
+teléfono, y la web promete "te llamamos hoy" · Cal.com no hace falta para el flujo 1.
+
+**2026-10-09 · Número para llamadas salientes de demo** · Según la documentación de Retell, un número
+comprado en Retell solo llama a EE. UU. · Para llamar a +34 hace falta un número importado (p. ej. Twilio).
+
 **2026-10-09 · Aprobaciones por Telegram** · Botones inline sencillos y el dueño lo tiene en el
 móvil · Los flujos de n8n usan un bot de Telegram con Aprobar/Rechazar.
 
@@ -17,8 +32,8 @@ convierte en cliente, el alta en el panel sigue siendo manual (`npm run alta`).
 **2026-10-09 · n8n cloud** · Menos mantenimiento al empezar · Se puede migrar a autoalojado
 más adelante exportando los flujos.
 
-**2026-10-09 · Agenda de demos en Cal.com** · El panel ya usa Cal.com · Supuesto, pendiente de
-confirmar por el dueño.
+**2026-10-09 · Agenda de demos en Cal.com** · El panel ya usa Cal.com · Aparcado: el flujo 1 responde
+con una llamada.
 
 **2026-10-09 · Todo saliente es ROJO** · Punto de partida acordado · Sin excepciones hasta que
 haya historial de aprobaciones.

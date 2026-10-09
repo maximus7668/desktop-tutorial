@@ -23,7 +23,7 @@
 - Voz: **Retell** (con un relé en Cloudflare hacia n8n).
 - Orquestación: **n8n cloud**.
 - Cerebro: **API de Anthropic**.
-- Leads: **Supabase**.
+- Leads: **D1** del panel (tablas `leads` y `lead_acciones`).
 - Aprobaciones: **Telegram** (botones Aprobar/Rechazar).
 - Agenda: **Cal.com** (ya lo usa el panel).
 - Email.
@@ -75,8 +75,8 @@ sensible**. No se busca una IA que lo haga todo sin control.
 
 ## 7. Flujos (en este orden)
 
-1. **Lead entrante:** formulario web → n8n → Claude clasifica y responde en < 1 min → agenda demo
-   de 30 min → aviso al dueño por Telegram → todo a Supabase.
+1. **Lead entrante:** formulario web → Worker guarda en D1 → n8n: Claude Haiku clasifica → tarjeta en
+   Telegram con botones (Le llamo yo / Demo DEIKA / Descartar) → recordatorio si nadie decide en 2 h.
 2. **Demo con Retell:** el lead pide la llamada; agente de voz con aviso de IA y grabación; webhook
    de Retell → n8n con transcripción y resumen.
 3. **Seguimiento post-demo:** plantilla, aprobación del mensaje final, recordatorios.
