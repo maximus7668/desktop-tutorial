@@ -7,6 +7,18 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Número de la demo: Twilio** · Lo confirma el dueño · Se importa en Retell por SIP trunk
+(Geographic Permissions con España); pasos en `automatizacion/README.md`.
+
+**2026-10-09 · Aviso de IA y grabación bajo el formulario + privacidad actualizada** · El dueño lo delegó
+(«hazlo como mejor creas») · Cambio en `web-deika-eu/` (rama `claude/leads-entrantes`), sin publicar hasta
+desplegar. Recomendado que lo revise el gestor.
+
+**ALERTA LEGAL · Prefijo 400 desde ~17/10/2026** · BOE-A-2026-8409: las empresas en el ámbito de la Ley
+10/2025 solo pueden hacer llamadas comerciales desde números 400 · Pendiente de que el gestor diga si DEIKA
+está dentro y si la demo pedida por el lead cuenta como comercial. Hasta entonces, demo desactivada en
+producción desde el 17/10 (sin `RETELL_DEMO_*`).
+
 **2026-10-09 · Flujos 2 y 3 construidos (misma rama)** · Demo: el webhook firmado de Retell deja el lead en
 demo_hecha / no_contesta / no_contactar; reintento máx. 1 vez; «no me llaméis» bloquea para siempre ese
 lead. Seguimiento: botones Es cliente / Perdido y recordatorio a las 48 h · **Ningún mensaje al lead sale
