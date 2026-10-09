@@ -7,6 +7,13 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Requisitos de encaje de prospectos (los eligió el dueño)** · Obligatorio: aparecer en Google Maps,
+abierto, ≥ 20 reseñas y dar cita por teléfono; si no, «No encaja» con motivo (se puede visitar igualmente).
+Prioridad: quejas del teléfono en reseñas > volumen > encaje; ruta ordenada por cercanía (coordenadas OSM).
+Todos los sectores, más oficios (fontanero, electricista, cerrajero, climatización), podólogos, psicólogos,
+ópticas y autoescuelas. Reseñas: solo se leen en el momento, no se guardan. Contacto: solo visita, carta o
+llamada de una persona; email/WhatsApp solo con permiso (LSSI) — el dueño lo preguntó y se le explicó.
+
 **2026-10-09 · Google Places para los prospectos sin web** · Solo 41 de 390 tienen web en OSM · Antes de investigar,
 el Worker busca la web en Places (New) Text Search (máx. 20 búsquedas/tanda; secreto `GOOGLE_PLACES_KEY`). Solo se
 guarda `google_place_id`; la web se usa en el momento. Pendiente: el dueño activa «Places API (New)» y pone
