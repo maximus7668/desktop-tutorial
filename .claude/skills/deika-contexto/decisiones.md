@@ -7,6 +7,13 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-09 · Mantenimiento hecho por Claude (aprobado por el dueño)** · 945: agente v6 con máx. 5 min y sin la
+dirección de Madrid. Revisión diaria 9 h (Twilio < 5 $, ElevenLabs < 3.000 caracteres, Retell sin saldo → aviso por
+Telegram). Cadenas y franquicias → «No encaja» (lista por nombre + campo `esCadena` del investigador). Privacidad
+actualizada (Google Maps y reseñas, demo de visita, SMS/WhatsApp). Ramas fusionadas: `main` = producción en los dos
+repos. **Euskera: NO por ahora** — ElevenLabs v4 lo pronuncia y se transcribe bien, pero Retell no reconoce euskera
+(sí catalán y gallego); haría falta otro motor de reconocimiento.
+
 **2026-10-09 · SMS de confirmación de citas (Twilio)** · Lo tiene heydiga (por WhatsApp) · Montado y desplegado,
 activable por negocio en Administración → Negocios; sale tras cada reserva confirmada al móvil del cliente, sin
 enlaces, máx. 100/día por negocio. **Inactivo hasta que haya remitente**: el 945 no envía SMS; hay que registrar el
