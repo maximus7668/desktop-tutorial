@@ -1,0 +1,31 @@
+{
+  "name": "delfos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Delfos: pronósticos deportivos con datos en directo para fútbol, NBA, NFL, MLB, NHL, tenis y F1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "snapshot": "tsx scripts/snapshot.ts",
+    "build:artifact": "tsx scripts/snapshot.ts && vite build --mode artifact && tsx scripts/artifact.ts"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "sharp": "0.33.5",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3",
+    "vite": "5.4.11",
+    "vite-plugin-singlefile": "2.0.3",
+    "vitest": "2.1.8"
+  }
+}
