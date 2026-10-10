@@ -33,6 +33,8 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - M-011 · 09/10 · Cron: cada tarea aislada; si una falla, las demás siguen y llega aviso a Telegram · panel bd900f8 · tipos y tests.
 - M-012 · 09/10 · Plazos de conservación de la privacidad (leads 12 meses, «no contactar» solo lo imprescindible, investigaciones 12 meses) el día 1 de cada mes; **desactivado** hasta RETENCION=activa (mientras, solo avisa de cuántos tocaría) · privacidad actualizada con el seguimiento de visitas · panel d2f3b9a · consultas probadas en D1 local con todas las migraciones.
 
+- 10/10 · **Desplegado todo lo anterior**: migración 0019 en remoto, panel (versión 67695593) y web. Verificado en producción: 404 real, robots, sitemap, cabeceras, datos estructurados, privacidad nueva, API protegida (401 sin sesión) y columnas nuevas en D1.
+
 ## Propuestas rojas (esperan al dueño)
 - R-001 · Comparativa honesta con heydiga en la web (más minutos por euro, montaje incluido, local de Vitoria). Riesgo: nombrar a un competidor exige datos exactos y fechados (publicidad comparativa, Ley 3/1991 art. 10). Alternativa segura: «qué mirar al elegir una recepcionista con IA» sin nombres.
 - R-002 · Atender en inglés y francés en las recepcionistas de los clientes (turistas, Vitoria Green Capital). Cambia agentes de clientes que pagan → solo con su permiso, uno a uno.
@@ -41,14 +43,13 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - R-003 · Escuchar el webhook de estados de WhatsApp para mandar el SMS cuando el número no tenga WhatsApp. Se hace cuando WhatsApp esté activo.
 
 ## Pendiente del dueño
-- Dar acceso a Cloudflare en la sesión (variables CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID en el entorno) para desplegar la web y el panel.
+- Para próximos despliegues: CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID en el entorno de la sesión (no en el chat).
 - Guardar CLAVE_CIFRADO en un gestor de contraseñas: si se pierde, hay que pedir de nuevo la clave de Cal.com a cada negocio.
-- Desplegar todo lo hecho el 09/10 (necesita Cloudflare): `npx wrangler d1 migrations apply deika-panel --remote` (migración 0019) **antes** de `npm run deploy`, y después la web con `wrangler pages deploy`.
 - Comprobar en Retell que las grabaciones de las demos se borran a los 30 días (lo dice la privacidad).
 - Exportar a `automatizacion/n8n/` los flujos «Cargar negocios de Vitoria (OpenStreetMap)» e «Investigar negocios ahora» (no hay clave de n8n en la sesión).
 - Crear el perfil de empresa de DEIKA en Google (Google Business Profile, Vitoria-Gasteiz): da visibilidad local gratis.
 - Recargar el saldo de Retell (09/10/2026: sin saldo, no se atienden llamadas).
-- Rotar todas las claves que pasaron por el chat.
+- **Rotar todas las claves que pasaron por el chat el 10/10** (n8n, ElevenLabs, Cal.com, Twilio, Cloudflare, Posty, Higgsfield, Retell, Resend) y borrarlas del chat de WhatsApp donde las guarda.
 - Gestor: prefijo 400 (desde el 17/10/2026) y compra del número 400.
 - Registrar «DEIKA» como remitente de SMS en Twilio.
 - Cuenta de WhatsApp Business y aprobar la plantilla `confirmacion_cita`.
