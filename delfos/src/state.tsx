@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { loadDay, loadTables, MODE } from './data/source';
-import { LEAGUE_BY_ID } from './data/leagues';
-import type { LeagueTable, Match, Outcome, SportId } from './data/types';
+import { CROSS_SOCCER, DOMESTIC_SOCCER, LEAGUE_BY_ID } from './data/leagues';
+import type { LeagueTable, Match, SportId } from './data/types';
 
 /* ------------------------------ Almacén local ------------------------------ */
 
@@ -71,8 +71,6 @@ export interface DayState {
   failed: string[];
 }
 
-const SOCCER_DOMESTIC = ['esp.1', 'eng.1', 'ita.1', 'ger.1', 'fra.1', 'por.1', 'ned.1', 'bra.1', 'arg.1', 'mex.1', 'usa.1', 'esp.2'];
-const CROSS = ['uefa.champions', 'uefa.europa', 'uefa.europa.conf', 'conmebol.libertadores', 'uefa.nations'];
 
 export function tablesNeeded(matches: Match[]): string[] {
   const ids = new Set<string>();
@@ -80,7 +78,7 @@ export function tablesNeeded(matches: Match[]): string[] {
     const l = LEAGUE_BY_ID[m.leagueId];
     if (!l || l.sport === 'tennis' || l.sport === 'racing') continue;
     ids.add(m.leagueId);
-    if (CROSS.includes(m.leagueId)) SOCCER_DOMESTIC.forEach((x) => ids.add(x));
+    if (CROSS_SOCCER.includes(m.leagueId)) DOMESTIC_SOCCER.forEach((x) => ids.add(x));
   }
   return [...ids];
 }
@@ -110,7 +108,8 @@ export function useDay(k: string, nonce = 0): DayState {
 
 export interface SlipPick {
   matchId: string;
-  outcome: Outcome | 'over' | 'under' | 'btts';
+  /** Mercado y selección: "ml:home", "total:over:2.5", "corners:over:9.5"… */
+  key: string;
   label: string;
   matchLabel: string;
   leagueId: string;
@@ -126,18 +125,18 @@ interface SlipCtx {
   remove: (matchId: string) => void;
   clear: () => void;
   replace: (p: SlipPick[]) => void;
-  has: (matchId: string, outcome: SlipPick['outcome']) => boolean;
+  has: (matchId: string, key: string) => boolean;
 }
 
 const Ctx = createContext<SlipCtx | null>(null);
 
 export function SlipProvider({ children }: { children: ReactNode }) {
-  const [picks, setPicks] = useState<SlipPick[]>(() => readLocal<SlipPick[]>('slip', []));
+  const [picks, setPicks] = useState<SlipPick[]>(() => readLocal<SlipPick[]>('slip', []).filter((x) => typeof x.key === 'string'));
   useEffect(() => writeLocal('slip', picks), [picks]);
   const toggle = useCallback((p: SlipPick) => {
     setPicks((cur) => {
       const same = cur.find((x) => x.matchId === p.matchId);
-      if (same && same.outcome === p.outcome) return cur.filter((x) => x.matchId !== p.matchId);
+      if (same && same.key === p.key) return cur.filter((x) => x.matchId !== p.matchId);
       // Una selección por partido: la nueva sustituye a la anterior.
       return [...cur.filter((x) => x.matchId !== p.matchId), p];
     });
@@ -148,7 +147,7 @@ export function SlipProvider({ children }: { children: ReactNode }) {
     remove: (id) => setPicks((cur) => cur.filter((x) => x.matchId !== id)),
     clear: () => setPicks([]),
     replace: (p) => setPicks(p),
-    has: (id, o) => picks.some((x) => x.matchId === id && x.outcome === o),
+    has: (id, k) => picks.some((x) => x.matchId === id && x.key === k),
   }), [picks, toggle]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

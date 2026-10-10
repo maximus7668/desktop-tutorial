@@ -1,7 +1,7 @@
 // Normalizador de las respuestas públicas de ESPN (site.api.espn.com).
 // Lo usan tanto la app en directo como el script que genera la instantánea.
 import type {
-  Constructor, Driver, F1Data, League, LeagueTable, Match, Odds, Race, RaceSession, RankEntry, Side, Status, TeamStats,
+  Constructor, Driver, F1Data, League, LeagueTable, Match, MatchStats, Odds, Race, RaceSession, RankEntry, Side, Status, TeamStats,
 } from './types';
 import { esName } from './names';
 
@@ -47,8 +47,12 @@ export function parseOdds(c: Json): Odds | undefined {
     draw: pick(ml.draw) ?? parseAmerican(o.drawOdds?.moneyLine),
     spread: num(o.spread),
     total: num(o.overUnder),
-    over: parseAmerican(o.total?.over?.close?.odds),
-    under: parseAmerican(o.total?.under?.close?.odds),
+    over: parseAmerican(o.total?.over?.close?.odds ?? o.overOdds),
+    under: parseAmerican(o.total?.under?.close?.odds ?? o.underOdds),
+    spreadHomeLine: num(o.pointSpread?.home?.close?.line ?? o.pointSpread?.home?.open?.line),
+    spreadHomeOdds: parseAmerican(o.pointSpread?.home?.close?.odds ?? o.pointSpread?.home?.open?.odds),
+    spreadAwayLine: num(o.pointSpread?.away?.close?.line ?? o.pointSpread?.away?.open?.line),
+    spreadAwayOdds: parseAmerican(o.pointSpread?.away?.close?.odds ?? o.pointSpread?.away?.open?.odds),
   };
   if (odds.home === undefined && odds.away === undefined && odds.total === undefined) return undefined;
   return odds;
@@ -64,6 +68,30 @@ function parseStatus(st: Json): { status: Status; detail: string; completed: boo
     clock: st?.displayClock,
     period: num(st?.period),
   };
+}
+
+const SOCCER_STATS: Record<string, keyof MatchStats> = {
+  wonCorners: 'corners', shotsOnTarget: 'sot', totalShots: 'shots', foulsCommitted: 'fouls', possessionPct: 'possession',
+};
+
+function parseMatchStats(t: Json, details: Json[] | undefined): MatchStats | undefined {
+  const st: MatchStats = {};
+  let any = false;
+  for (const s of t.statistics || []) {
+    const k = SOCCER_STATS[s.name];
+    const v = num(s.value ?? s.displayValue);
+    if (k && v !== undefined) {
+      st[k] = v;
+      any = true;
+    }
+  }
+  if (!any) return undefined;
+  if (Array.isArray(details)) {
+    const id = String(t.team?.id ?? t.id);
+    st.yellow = details.filter((d: Json) => d.yellowCard && String(d.team?.id) === id).length;
+    st.red = details.filter((d: Json) => d.redCard && String(d.team?.id) === id).length;
+  }
+  return st;
 }
 
 function parseSide(t: Json, sport: string): Side {
@@ -90,6 +118,12 @@ function parseSide(t: Json, sport: string): Side {
   };
 }
 
+function withStats(side: Side, t: Json, c: Json, sport: string): Side {
+  if (sport !== 'soccer') return side;
+  const stats = parseMatchStats(t, c.details);
+  return stats ? { ...side, stats } : side;
+}
+
 export function parseScoreboard(league: League, json: Json): Match[] {
   const out: Match[] = [];
   for (const e of json?.events || []) {
@@ -112,8 +146,8 @@ export function parseScoreboard(league: League, json: Json): Match[] {
       completed: st.completed,
       clock: st.clock,
       period: st.period,
-      home: parseSide(h, league.sport),
-      away: parseSide(a, league.sport),
+      home: withStats(parseSide(h, league.sport), h, c, league.sport),
+      away: withStats(parseSide(a, league.sport), a, c, league.sport),
       neutral: !!c.neutralSite,
       venue: c.venue?.fullName,
       city: c.venue?.address?.city,
@@ -252,6 +286,24 @@ export function seasonName(json: Json): string {
   };
   walk(json);
   return name;
+}
+
+/** Días de partido ya pasados según el calendario de la liga (AAAAMMDD), los más recientes primero. */
+export function pastCalendarDays(json: Json, now: Date, maxDays: number): string[] {
+  const lg = json?.leagues?.[0];
+  const raw: Json[] = lg?.calendar || [];
+  const dates: string[] = [];
+  for (const c of raw) {
+    if (typeof c === 'string') dates.push(c);
+    else if (c?.entries) for (const e of c.entries) if (e?.startDate) dates.push(e.startDate);
+  }
+  const lo = new Date(now.getTime() - maxDays * 86400_000).toISOString();
+  const hi = now.toISOString();
+  const days = new Set<string>();
+  for (const d of dates) {
+    if (d >= lo && d <= hi) days.add(d.slice(0, 10).replace(/-/g, ''));
+  }
+  return [...days].sort().reverse();
 }
 
 export function scoreboardSeasonYear(json: Json): number | undefined {

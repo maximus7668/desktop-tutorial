@@ -8,7 +8,10 @@ import { buildPrompt, getSampler } from './ai';
 import { ConfidenceBadge, FormChips, HitMark, LeagueLogo, ProbRail, StatusPill, TeamLogo } from './common';
 import { dec, longDate, odds2, outcomeCode, outcomeLabel, pct, pickSentence, timeOf } from './format';
 import { Icon } from './icons';
-import { slipPickFor } from './slipPick';
+import { mlKey, slipPickFor } from './slipPick';
+import { BetBox } from './BetBox';
+import { SoccerMoreMarkets, UsMoreMarkets } from './MoreMarkets';
+import { evaluate, qualifies } from '../model/bets';
 
 interface Props {
   m: Match;
@@ -104,12 +107,16 @@ export function MatchDetail({ m, p, tables, onClose }: Props) {
           )}
         </section>
 
+        {!tennis && <BetBox m={m} p={p} />}
+
         <PickButtons m={m} p={p} />
 
         <OddsTable m={m} p={p} />
 
         {p.soccer && <SoccerMarkets m={m} p={p} />}
+        {p.soccer && <SoccerMoreMarkets m={m} p={p} tables={tables} />}
         {!p.threeWay && !tennis && <UsMarkets m={m} p={p} />}
+        {!p.threeWay && !tennis && <UsMoreMarkets m={m} p={p} />}
         {p.tennis && <TennisSets m={m} p={p} />}
 
         <section className="panel">
@@ -155,7 +162,7 @@ function PickButtons({ m, p }: { m: Match; p: Prediction }) {
     <section className="pick-buttons" aria-label="Añadir a la combinada">
       {opts.map((o) => {
         const pr = o === 'home' ? p.pHome : o === 'draw' ? p.pDraw : p.pAway;
-        const on = slip.has(m.id, o);
+        const on = slip.has(m.id, mlKey(o));
         return (
           <button key={o} type="button" className={`pick-btn ${on ? 'is-on' : ''} ${p.pick === o ? 'is-pick' : ''}`} onClick={() => slip.toggle(slipPickFor(m, p, o))} aria-pressed={on}>
             <span className="pick-btn-top">
@@ -211,8 +218,9 @@ function OddsTable({ m, p }: { m: Match; p: Prediction }) {
               <th>Cuota mercado</th>
               {cols.map((o) => {
                 const d = mk(o);
-                const val = p.value?.outcome === o;
-                return <td key={o} className={val ? 'is-value' : ''}>{d ? odds2(d) : '—'}{val && <small> +{Math.round(p.value!.ev * 100)} %</small>}</td>;
+                const b = d ? evaluate({ key: `ml:${o}`, market: '', label: '', prob: get(p, o)!, push: 0, odds: d }) : undefined;
+                const val = !!b && m.status === 'pre' && qualifies(b);
+                return <td key={o} className={val ? 'is-value' : ''}>{d ? odds2(d) : '—'}{val && <small> +{Math.round(b!.ev * 100)} %</small>}</td>;
               })}
             </tr>
           </tbody>

@@ -5,13 +5,14 @@ import { ConfidenceBadge, HitMark, ProbRail, StatusPill, TeamLogo } from './comm
 import { odds2, outcomeLabel, pct } from './format';
 import { americanToDecimal } from '../model/odds';
 import { Icon } from './icons';
-import { slipPickFor } from './slipPick';
+import { mlKey, slipPickFor } from './slipPick';
+import type { Bet } from '../model/bets';
 
-export function MatchCard({ m, p, onOpen }: { m: Match; p: Prediction; onOpen: (id: string) => void }) {
+export function MatchCard({ m, p, bet, onOpen }: { m: Match; p: Prediction; bet?: Bet; onOpen: (id: string) => void }) {
   const slip = useSlip();
   const showScore = m.status !== 'pre' && m.home.score !== undefined && m.away.score !== undefined;
   const ok = hit(m, p);
-  const inSlip = slip.has(m.id, p.pick);
+  const inSlip = slip.has(m.id, mlKey(p.pick));
   const tennis = m.sport === 'tennis';
   const pickTeam = p.pick === 'home' ? m.home : p.pick === 'away' ? m.away : undefined;
   const marketOdds = m.odds ? (p.pick === 'home' ? m.odds.home : p.pick === 'away' ? m.odds.away : m.odds.draw) : undefined;
@@ -54,12 +55,12 @@ export function MatchCard({ m, p, onOpen }: { m: Match; p: Prediction; onOpen: (
         <ProbRail m={m} p={p} />
         <div className="match-tags">
           {m.status === 'post' ? <HitMark ok={ok} /> : <ConfidenceBadge c={p.confidence} short />}
-          {p.value && m.status === 'pre' && (
-            <span className="tag tag-value" title="La probabilidad de Delfos supera la que implica la cuota">
-              <Icon name="spark" size={13} /> Valor {outcomeLabel(m, p.value.outcome)} @{odds2(p.value.decimal)}
+          {bet && (
+            <span className="tag tag-value" title={`Apuesta recomendada: valor esperado +${Math.round(bet.ev * 100)} %`}>
+              <Icon name="spark" size={13} /> <span className="tag-text">{bet.label}</span> @{odds2(bet.odds)}
             </span>
           )}
-          {marketOdds !== undefined && !p.value && m.status === 'pre' && (
+          {marketOdds !== undefined && !bet && m.status === 'pre' && (
             <span className="tag tag-odds" title="Cuota del mercado para el pronóstico">@{odds2(americanToDecimal(marketOdds))}</span>
           )}
           {m.status === 'pre' && (

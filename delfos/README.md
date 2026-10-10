@@ -8,6 +8,8 @@ Cada partido muestra la probabilidad de cada resultado, el marcador más probabl
 
 - **Pronósticos del día** con selector de fecha (resultados de días pasados y calendario de la semana), filtros por deporte y competición, «Confianza alta» y «Con valor».
 - **El Oráculo del día**: los tres pronósticos más sólidos de competiciones distintas, combinables con un toque.
+- **Apuesta recomendada**: en cada partido con cuotas, la selección (ganador, hándicap o total) cuya cuota paga más de lo que vale según Delfos, con valor esperado, cuota mínima y stake prudente (¼ de Kelly, máximo 2 % de la banca). Si ninguna cuota tiene valor, lo dice. Las mejores del día aparecen en «Apuestas recomendadas» y en la «Combinada de valor».
+- **Más mercados**: córners, tarjetas, tiros a puerta, tiros y faltas (esperados por equipo, quién tendrá más, líneas de más/menos con cuota justa y una «línea Delfos»), posesión esperada, goles por equipo, portería a cero, margen de victoria, primera parte y descanso/final. En EE. UU., totales por equipo y líneas alternativas.
 - **Ficha de partido**: probabilidades 1X2, marcador, cuotas justas frente a cuotas del mercado, mapa de marcadores, mercados de goles, hándicap y totales (EE. UU.), sets (tenis), racha, lanzadores o porteros probables y una explicación de por qué.
 - **Mi combinada**: probabilidad conjunta, cuota justa, cuota de mercado y valor esperado. Se guarda en el navegador.
 - **Clasificaciones** de todas las ligas, rankings ATP/WTA y mundial de F1 (pilotos y constructores).
@@ -36,8 +38,9 @@ Todo sale de los servicios públicos de ESPN (`site.api.espn.com`): calendario, 
 | NBA, WNBA, NFL, MLB, NHL | Diferencia de puntos por partido encogida hacia la temporada anterior, ventaja de campo y distribución normal del margen. |
 | Tenis | Puntos del ranking (Bradley-Terry) y reparto en sets. |
 | F1 | Plackett-Luce simulado: puntos por carrera, forma reciente, sesiones del fin de semana y abandonos. |
+| Córners, tarjetas, tiros, faltas | Tendencia a favor y en contra de cada equipo en su liga (últimos 75 días) frente a la media, factor campo de la liga y binomial negativa. El reparto entre equipos de córners y tiros se corrige con el dominio que anticipan los goles esperados. |
 
-Con cuotas, el pronóstico final mezcla mercado (65 %) y modelo (35 %); en fútbol los goles esperados se reajustan para que la matriz cuadre con ese resultado. Detalle completo en la pantalla «Método» y en `src/model/`.
+Con cuotas, el pronóstico final mezcla mercado (65 %) y modelo (35 %); en fútbol los goles esperados se reajustan para que la matriz cuadre con ese resultado. La apuesta recomendada (`src/model/bets.ts`) exige un valor esperado de al menos +4 %, una probabilidad mínima del 33 % y una cuota máxima de 4,5. Detalle completo en la pantalla «Método» y en `src/model/`.
 
 ## Uso
 
@@ -69,8 +72,8 @@ LIVE=1 npx vitest run src/data/live.test.ts
 
 ```
 src/
-  data/      leagues.ts (catálogo), espn.ts (normalizador), source.ts (directo o instantánea), types.ts
-  model/     soccer.ts, us.ts, tennis.ts, f1.ts, odds.ts, predict.ts (+ pruebas)
+  data/      leagues.ts (catálogo), espn.ts (normalizador), source.ts (directo o instantánea), teamStats.ts (córners, tarjetas…), types.ts
+  model/     soccer.ts, us.ts, tennis.ts, f1.ts, odds.ts, predict.ts, props.ts (más mercados), bets.ts (apuesta recomendada) (+ pruebas)
   ui/        pantallas y componentes (Forecasts, MatchDetail, Slip, Standings, Performance, F1View, Method…)
   styles/    app.css (tokens de color y tema claro/oscuro)
 scripts/     snapshot.ts (instantánea), artifact.ts (empaquetado para Artifact)

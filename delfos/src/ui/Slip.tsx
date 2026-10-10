@@ -4,8 +4,8 @@ import { useSlip } from '../state';
 import { Empty, LeagueLogo } from './common';
 import { dateTime, odds2, pct } from './format';
 import { Icon } from './icons';
-import { featuredPicks, type Scored } from './Forecasts';
-import { slipPickFor } from './slipPick';
+import { featuredPicks, topBets, type Scored } from './Forecasts';
+import { slipPickFor, slipPickForBet } from './slipPick';
 
 export function Slip({ scored, compact = false }: { scored: Scored[]; compact?: boolean }) {
   const slip = useSlip();
@@ -18,6 +18,8 @@ export function Slip({ scored, compact = false }: { scored: Scored[]; compact?: 
     const best = featuredPicks(scored, 3).filter((x) => x.p.pickProb >= 0.55);
     slip.replace(best.map((x) => slipPickFor(x.m, x.p, x.p.pick)));
   };
+  const valueBets = topBets(scored, 3);
+  const suggestValue = () => slip.replace(valueBets.map((x) => slipPickForBet(x.m, x.bet!)));
 
   return (
     <div className={`slip ${compact ? 'slip-compact' : ''}`}>
@@ -69,6 +71,11 @@ export function Slip({ scored, compact = false }: { scored: Scored[]; compact?: 
       <button type="button" className="btn btn-gold wide" onClick={suggest} disabled={scored.length === 0}>
         <Icon name="wand" size={16} /> Combinada del Oráculo
       </button>
+      {valueBets.length >= 2 && (
+        <button type="button" className="btn btn-ghost wide" onClick={suggestValue}>
+          <Icon name="spark" size={16} /> Combinada de valor ({valueBets.length} apuestas)
+        </button>
+      )}
       <p className="muted tiny">Juego responsable +18 · Delfos no acepta apuestas.</p>
     </div>
   );

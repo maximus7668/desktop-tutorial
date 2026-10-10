@@ -1,3 +1,4 @@
+import { KELLY_FRACTION, MAX_ODDS, MAX_STAKE, MIN_EV, MIN_PROB } from '../model/bets';
 import { MARKET_WEIGHT } from '../model/predict';
 import { LogoMark } from './icons';
 
@@ -65,14 +66,40 @@ export function Method() {
           (un 75 % el mercado si hay pocos datos propios). En fútbol, los goles esperados se reajustan para que la matriz de marcadores cuadre
           con ese pronóstico final.
         </p>
+      </section>
+
+      <section className="panel prose">
+        <h2>6. La apuesta recomendada</h2>
         <p>
-          <b>Valor</b> significa que la probabilidad de Delfos multiplicada por la cuota supera 1,05, es decir, que el precio paga al menos un 5 %
-          más de lo que el riesgo merece. Solo se marca en resultados con al menos un 30 % de probabilidad.
+          Para cada partido se revisan todas las cuotas disponibles: ganador, hándicap y total de goles o puntos. Cada selección tiene un
+          <b> valor esperado</b> = probabilidad de Delfos × cuota − 1. La recomendada es la que más rinde según el criterio de Kelly, siempre que
+          el valor esperado sea de al menos un {Math.round(MIN_EV * 100)} %, la probabilidad de al menos un {Math.round(MIN_PROB * 100)} % y la cuota no pase de {MAX_ODDS.toLocaleString('es-ES')}.
+          Nada de golpes a cuotas altísimas, nada en pretemporada ni con datos escasos.
+        </p>
+        <p>
+          Los hándicaps y los totales que el modelo no ha ajustado al mercado se mezclan también con su propia cuota sin margen, con el mismo peso
+          que el 1X2, para que una diferencia del modelo no se convierta sola en un valor exagerado. El <b>stake</b> sugerido es un {KELLY_FRACTION === 0.25 ? 'cuarto' : KELLY_FRACTION} de Kelly,
+          con un máximo del {MAX_STAKE} % de la banca, y la <b>cuota mínima</b> indica hasta dónde puede bajar el precio antes de que deje de tener valor.
         </p>
       </section>
 
       <section className="panel prose">
-        <h2>6. Confianza</h2>
+        <h2>7. Córners, tarjetas, tiros y faltas</h2>
+        <p>
+          Se suman los partidos de cada equipo en su liga de los últimos 75 días: córners, tarjetas (amarillas y rojas), tiros a puerta, tiros y faltas,
+          a favor y en contra. El valor esperado de un partido combina lo que genera un equipo con lo que concede el rival, frente a la media de la liga,
+          y con el factor campo medido en esa misma liga. En córners, tiros y tiros a puerta, el reparto entre los dos equipos se corrige además con el dominio
+          que anticipan los goles esperados, porque con pocas jornadas las medias propias todavía bailan. Las probabilidades de cada línea salen de una binomial negativa, más dispersa que una Poisson
+          porque estos conteos varían mucho de un partido a otro (sobre todo las tarjetas, que dependen del árbitro).
+        </p>
+        <p>
+          Las casas no publican aquí cuotas de estos mercados, así que Delfos muestra la probabilidad y la cuota justa: tiene sentido solo si te ofrecen una cuota claramente mayor.
+          De la matriz de goles salen también goles por equipo, portería a cero, margen de victoria, la primera parte y descanso/final.
+        </p>
+      </section>
+
+      <section className="panel prose">
+        <h2>8. Confianza</h2>
         <p>
           En fútbol la confianza es alta desde un 60 % para el resultado elegido y media desde un 46 %. En deportes sin empate, alta desde un 70 %
           y media desde un 58 %. Si faltan datos se rebaja un escalón. La página de rendimiento muestra cuánto acierta cada nivel.

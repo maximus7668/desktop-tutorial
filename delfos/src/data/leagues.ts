@@ -37,6 +37,11 @@ export const LEAGUES: League[] = [
   { id: 'f1', slug: 'racing/f1', sport: 'racing', name: 'Fórmula 1', short: 'F1', region: 'Mundial', order: 70, logo: 'https://a.espncdn.com/i/teamlogos/leagues/500/f1.png' },
 ];
 
+/** Ligas nacionales de fútbol (tienen clasificación y estadísticas de temporada propias). */
+export const DOMESTIC_SOCCER = ['esp.1', 'eng.1', 'ita.1', 'ger.1', 'fra.1', 'por.1', 'ned.1', 'bra.1', 'arg.1', 'mex.1', 'usa.1', 'esp.2'];
+/** Competiciones entre equipos de ligas distintas. */
+export const CROSS_SOCCER = ['uefa.champions', 'uefa.europa', 'uefa.europa.conf', 'conmebol.libertadores', 'uefa.nations'];
+
 export const LEAGUE_BY_ID: Record<string, League> = Object.fromEntries(LEAGUES.map((l) => [l.id, l]));
 
 export interface SportInfo {

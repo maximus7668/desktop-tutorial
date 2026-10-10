@@ -4,10 +4,11 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import sharp from 'sharp';
 import {
-  parseF1, parseRankings, parseScoreboard, parseStandings, parseTennis, rankingsUrl, resizedLogo,
+  parseF1, parseRankings, parseScoreboard, parseStandings, parseTennis, pastCalendarDays, rankingsUrl, resizedLogo,
   scoreboardSeasonYear, scoreboardUrl, seasonName, standingsUrl,
 } from '../src/data/espn';
-import { LEAGUES, LEAGUE_BY_ID } from '../src/data/leagues';
+import { DOMESTIC_SOCCER, LEAGUES, LEAGUE_BY_ID } from '../src/data/leagues';
+import { aggregate, type LeagueAgg } from '../src/data/teamStats';
 import type { LeagueTable, Match } from '../src/data/types';
 
 const PAST = Number(process.env.PAST_DAYS ?? 8);
@@ -87,6 +88,21 @@ async function main() {
     };
   });
 
+  console.log('Estadísticas de temporada (córners, tarjetas, tiros)…');
+  const soccerStats: Record<string, LeagueAgg> = {};
+  await pool(DOMESTIC_SOCCER, 4, async (id) => {
+    const l = LEAGUE_BY_ID[id];
+    const cur = await get(scoreboardUrl(l.slug));
+    if (!cur) return;
+    const ds = pastCalendarDays(cur, now, 75);
+    const ms = await pool(ds, 8, async (d) => {
+      const j = await get(scoreboardUrl(l.slug, d));
+      return j ? parseScoreboard(l, j) : [];
+    });
+    soccerStats[id] = aggregate(id, ms.flat());
+    console.log(`  ${id}: ${soccerStats[id].games} partidos con estadísticas`);
+  });
+
   console.log('Fórmula 1…');
   const [f1sb, f1st] = await Promise.all([get(scoreboardUrl('racing/f1')), get(standingsUrl('racing/f1'))]);
   const f1 = f1sb && f1st ? parseF1(f1sb, f1st) : null;
@@ -123,7 +139,7 @@ async function main() {
   });
   console.log(`Logos embebidos: ${Object.keys(logos).length} (${Math.round(bytes / 1024)} KB)`);
 
-  const data = { generatedAt: now.toISOString(), matches, tables, f1, rankings, logos };
+  const data = { generatedAt: now.toISOString(), matches, tables, f1, rankings, soccerStats, logos };
   await mkdir(new URL('../.cache/', import.meta.url), { recursive: true });
   const json = JSON.stringify(data);
   await writeFile(new URL('../.cache/snapshot.ts', import.meta.url), `export default JSON.parse(${JSON.stringify(json)});\n`);

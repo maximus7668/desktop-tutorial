@@ -26,6 +26,17 @@ export interface Team {
   alt?: string;
 }
 
+/** Estadísticas de un equipo en un partido jugado (fútbol). */
+export interface MatchStats {
+  corners?: number;
+  sot?: number;
+  shots?: number;
+  fouls?: number;
+  possession?: number;
+  yellow?: number;
+  red?: number;
+}
+
 export interface Side {
   team: Team;
   score?: number;
@@ -41,6 +52,8 @@ export interface Side {
   probable?: string;
   /** Sets ganados en tenis o marcadores parciales */
   linescores?: number[];
+  /** Estadísticas del partido (solo fútbol, partidos jugados o en juego) */
+  stats?: MatchStats;
 }
 
 export interface Odds {
@@ -54,6 +67,11 @@ export interface Odds {
   total?: number;
   over?: number;
   under?: number;
+  /** Hándicap con sus cuotas (en fútbol suele ser ±0,5) */
+  spreadHomeLine?: number;
+  spreadHomeOdds?: number;
+  spreadAwayLine?: number;
+  spreadAwayOdds?: number;
 }
 
 export interface Match {

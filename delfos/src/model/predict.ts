@@ -1,8 +1,8 @@
 // Punto de entrada de los pronósticos: combina el modelo estadístico de cada
 // deporte con las cuotas del mercado cuando las hay.
-import { LEAGUE_BY_ID } from '../data/leagues';
+import { CROSS_SOCCER, LEAGUE_BY_ID } from '../data/leagues';
 import type { LeagueTable, Match, Outcome, TeamStats } from '../data/types';
-import { americanToDecimal, devig } from './odds';
+import { devig } from './odds';
 import {
   expectedGoals, fitLambdas, formFactor, leagueAverages, scoreMatrix, strengthOf, summarize,
   type MatrixSummary, type SoccerStrength,
@@ -25,8 +25,9 @@ export interface Prediction {
   expected?: { home: number; away: number };
   market?: { pHome: number; pDraw: number; pAway: number; provider: string };
   model: { pHome: number; pDraw: number; pAway: number };
-  value?: { outcome: Outcome; decimal: number; ev: number };
-  soccer?: MatrixSummary & { matrix: number[][] };
+  soccer?: MatrixSummary & { matrix: number[][]; lh: number; la: number };
+  /** EE. UU.: margen y total esperados con sus dispersiones, para calcular cualquier línea */
+  us?: { margin: number; total: number; sigma: number; sigmaTotal: number };
   totals?: { line: number; pOver: number; expected: number };
   spread?: { line: number; pCover: number };
   tennis?: { sets: { a: number; b: number; p: number }[]; bestOf: number };
@@ -42,7 +43,7 @@ export interface PredictContext {
 /** Peso del mercado en el pronóstico final cuando hay cuotas. */
 export const MARKET_WEIGHT = 0.65;
 
-const CROSS = new Set(['uefa.champions', 'uefa.europa', 'uefa.europa.conf', 'conmebol.libertadores', 'uefa.nations']);
+const CROSS = new Set(CROSS_SOCCER);
 const LEAGUE_COEF: Record<string, number> = {
   'eng.1': 1, 'esp.1': 0.97, 'ita.1': 0.93, 'ger.1': 0.93, 'fra.1': 0.88, 'por.1': 0.82, 'ned.1': 0.8,
   'bra.1': 0.84, 'arg.1': 0.78, 'mex.1': 0.74, 'usa.1': 0.72, 'esp.2': 0.72,
@@ -74,19 +75,6 @@ function confidenceOf(p: number, threeWay: boolean, quality: Prediction['quality
   if (quality === 'escasa' && c === 'alta') c = 'media';
   else if (quality === 'escasa') c = 'baja';
   return c;
-}
-
-function bestValue(probs: Record<Outcome, number>, odds: Record<Outcome, number | undefined>) {
-  let best: Prediction['value'];
-  for (const k of ['home', 'draw', 'away'] as Outcome[]) {
-    const a = odds[k];
-    if (a === undefined || !probs[k]) continue;
-    const d = americanToDecimal(a);
-    const ev = probs[k] * d - 1;
-    // Solo valor "razonable": nada de golpes a cuotas altísimas.
-    if (ev >= 0.05 && probs[k] >= 0.3 && (!best || ev > best.ev)) best = { outcome: k, decimal: d, ev };
-  }
-  return best;
 }
 
 function argmax3(h: number, d: number, a: number): Outcome {
@@ -195,8 +183,7 @@ function predictSoccer(m: Match, ctx: PredictContext): Prediction {
     expected: { home: sum.xgHome, away: sum.xgAway },
     market,
     model,
-    value: m.odds ? bestValue({ home: pHome, draw: pDraw, away: pAway }, { home: m.odds.home, draw: m.odds.draw, away: m.odds.away }) : undefined,
-    soccer: { ...sum, matrix },
+    soccer: { ...sum, matrix, lh: fitted.lh, la: fitted.la },
     totals: { line: 2.5, pOver: sum.pOver25, expected: sum.xgHome + sum.xgAway },
     doubleChance,
     factors,
@@ -272,11 +259,11 @@ function predictUs(m: Match, ctx: PredictContext): Prediction {
     expected: { home: eh, away: ea },
     market,
     model: { pHome: pModel, pDraw: 0, pAway: 1 - pModel },
-    value: m.odds ? bestValue({ home: pHome, draw: 0, away: pAway }, { home: m.odds.home, draw: undefined, away: m.odds.away }) : undefined,
     totals: m.odds?.total !== undefined
       ? { line: m.odds.total, pOver: phi((total - m.odds.total) / TOTAL_SIGMA[key]), expected: total }
       : { line: Math.round(total * 2) / 2, pOver: 0.5, expected: total },
     spread: m.odds?.spread !== undefined ? { line: m.odds.spread, pCover: phi((margin + m.odds.spread) / p.sigma) } : undefined,
+    us: { margin, total, sigma: p.sigma, sigmaTotal: TOTAL_SIGMA[key] },
     factors,
     quality: preseason ? 'escasa' : quality,
   };

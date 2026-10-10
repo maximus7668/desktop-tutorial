@@ -3,13 +3,14 @@ import { LEAGUE_BY_ID, SPORTS } from '../data/leagues';
 import { addDays, dayKey, MODE, snapshotDays } from '../data/source';
 import type { Match, SportId } from '../data/types';
 import { predict, type Prediction } from '../model/predict';
+import { recommendBet, type Bet } from '../model/bets';
 import type { DayState } from '../state';
 import { useSlip } from '../state';
 import { ConfidenceBadge, Empty, LeagueLogo, ProbRail, StatusPill, TeamLogo } from './common';
-import { dayLabel, outcomeLabel, pct, pickSentence, plural } from './format';
+import { dayLabel, odds2, pct, pickSentence, plural } from './format';
 import { Icon, SportIcon } from './icons';
 import { MatchCard } from './MatchCard';
-import { slipPickFor } from './slipPick';
+import { mlKey, slipPickFor, slipPickForBet } from './slipPick';
 import { F1View } from './F1View';
 
 export type SportFilter = SportId | 'all';
@@ -27,15 +28,17 @@ interface Props {
 export interface Scored {
   m: Match;
   p: Prediction;
+  bet?: Bet;
 }
 
 export function useScored(data: DayState): Scored[] {
   return useMemo(() => {
     const ctx = { tables: data.tables };
     return data.matches
-      .map((m) => {
+      .map((m): Scored | null => {
         try {
-          return { m, p: predict(m, ctx) };
+          const p = predict(m, ctx);
+          return { m, p, bet: recommendBet(m, p) };
         } catch {
           return null;
         }
@@ -108,7 +111,7 @@ export function Forecasts({ day, setDay, sport, setSport, data, onOpen, onReload
   const leagues = [...new Set(bySport.map((s) => s.m.leagueId))].sort((a, b) => (LEAGUE_BY_ID[a]?.order ?? 99) - (LEAGUE_BY_ID[b]?.order ?? 99));
   const activeLeague = leagues.includes(league) ? league : 'all';
   let list = bySport.filter((s) => activeLeague === 'all' || s.m.leagueId === activeLeague);
-  if (onlyValue) list = list.filter((s) => s.p.value && s.m.status === 'pre');
+  if (onlyValue) list = list.filter((s) => s.bet);
   if (onlyHigh) list = list.filter((s) => s.p.confidence === 'alta');
 
   const groups = useMemo(() => {
@@ -146,6 +149,7 @@ export function Forecasts({ day, setDay, sport, setSport, data, onOpen, onReload
           )}
 
           <Featured scored={bySport} onOpen={onOpen} />
+          <ValueBets scored={bySport} onOpen={onOpen} />
 
           {leagues.length > 1 && (
             <nav className="leagues" aria-label="Competiciones">
@@ -199,7 +203,7 @@ export function Forecasts({ day, setDay, sport, setSport, data, onOpen, onReload
                     <span className="group-n">{items.length}</span>
                   </header>
                   <div className="group-list">
-                    {items.map((s) => <MatchCard key={s.m.id} m={s.m} p={s.p} onOpen={onOpen} />)}
+                    {items.map((s) => <MatchCard key={s.m.id} m={s.m} p={s.p} bet={s.bet} onOpen={onOpen} />)}
                   </div>
                 </section>
               );
@@ -232,7 +236,7 @@ function Featured({ scored, onOpen }: { scored: Scored[]; onOpen: (id: string) =
   const picks = featuredPicks(scored);
   if (picks.length === 0) return null;
   const combo = picks.reduce((s, x) => s * x.p.pickProb, 1);
-  const allIn = picks.every((x) => slip.has(x.m.id, x.p.pick));
+  const allIn = picks.every((x) => slip.has(x.m.id, mlKey(x.p.pick)));
   return (
     <section className="oracle" aria-labelledby="oracle-title">
       <div className="oracle-head">
@@ -245,7 +249,7 @@ function Featured({ scored, onOpen }: { scored: Scored[]; onOpen: (id: string) =
           className={`btn ${allIn ? 'btn-ghost' : 'btn-gold'}`}
           onClick={() => {
             if (allIn) picks.forEach((x) => slip.remove(x.m.id));
-            else picks.forEach((x) => !slip.has(x.m.id, x.p.pick) && slip.toggle(slipPickFor(x.m, x.p, x.p.pick)));
+            else picks.forEach((x) => !slip.has(x.m.id, mlKey(x.p.pick)) && slip.toggle(slipPickFor(x.m, x.p, x.p.pick)));
           }}
         >
           {allIn ? 'Quitar de la combinada' : `Combinar los ${picks.length} · ${pct(combo)}`}
@@ -276,7 +280,7 @@ function Featured({ scored, onOpen }: { scored: Scored[]; onOpen: (id: string) =
               <ProbRail m={m} p={p} labels={false} />
               <span className="oracle-foot">
                 <ConfidenceBadge c={p.confidence} short />
-                <span className="muted">{p.value ? `Valor en ${outcomeLabel(m, p.value.outcome)}` : `Marcador ${p.score.home}–${p.score.away}`}</span>
+                <span className="muted">Marcador {p.score.home}–{p.score.away}</span>
               </span>
             </button>
           );
@@ -285,3 +289,56 @@ function Featured({ scored, onOpen }: { scored: Scored[]; onOpen: (id: string) =
     </section>
   );
 }
+
+/** Las mejores apuestas del día por valor (Kelly), una por partido. */
+export function topBets(scored: Scored[], n = 3): Scored[] {
+  return scored.filter((s) => s.bet).sort((a, b) => b.bet!.kelly - a.bet!.kelly).slice(0, n);
+}
+
+function ValueBets({ scored, onOpen }: { scored: Scored[]; onOpen: (id: string) => void }) {
+  const slip = useSlip();
+  const top = topBets(scored);
+  const total = scored.filter((s) => s.bet).length;
+  if (top.length === 0) return null;
+  return (
+    <section className="value-bets" aria-labelledby="vb-title">
+      <div className="vb-head">
+        <div>
+          <span className="eyebrow">Cuota frente a probabilidad</span>
+          <h2 id="vb-title">Apuestas recomendadas</h2>
+        </div>
+        <span className="muted small">{plural(total, 'partido con valor', 'partidos con valor')} hoy</span>
+      </div>
+      <div className="vb-list">
+        {top.map(({ m, bet }) => {
+          const b = bet!;
+          const l = LEAGUE_BY_ID[m.leagueId];
+          const on = slip.has(m.id, b.key);
+          return (
+            <article key={m.id} className="vb-item">
+              <button type="button" className="vb-main" onClick={() => onOpen(m.id)}>
+                <span className="vb-match">
+                  {l && (l.logo ? <LeagueLogo league={l} size={16} /> : <span className="tour-badge sm">{l.short}</span>)}
+                  <span>{m.home.team.short} – {m.away.team.short}</span>
+                  <StatusPill m={m} />
+                </span>
+                <span className="vb-pick">{b.label}</span>
+                <span className="vb-nums">
+                  <span><small>Cuota</small><b>{odds2(b.odds)}</b></span>
+                  <span><small>Delfos</small><b>{pct(b.prob)}</b></span>
+                  <span><small>Valor</small><b className="good">+{Math.round(b.ev * 100)} %</b></span>
+                  <span><small>Stake</small><b>{b.stake.toLocaleString('es-ES')} %</b></span>
+                </span>
+              </button>
+              <button type="button" className={`add-btn ${on ? 'is-on' : ''}`} onClick={() => slip.toggle(slipPickForBet(m, b))} aria-pressed={on} title={on ? 'Quitar de la combinada' : 'Añadir a la combinada'}>
+                <Icon name={on ? 'check' : 'plus'} size={15} />
+              </button>
+            </article>
+          );
+        })}
+      </div>
+      <p className="muted tiny">Valor = probabilidad de Delfos × cuota − 1. Stake en % de la banca (un cuarto de Kelly, máximo 2 %). Una apuesta con valor también se pierde a menudo. +18.</p>
+    </section>
+  );
+}
+

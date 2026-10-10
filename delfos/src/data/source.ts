@@ -1,10 +1,11 @@
 // Fuente de datos: en directo desde ESPN (web) o instantánea embebida (Artifact).
 import snapshot from '@snapshot';
 import {
-  emptyTable, parseF1, parseRankings, parseScoreboard, parseStandings, parseTennis, rankingsUrl,
+  emptyTable, parseF1, parseRankings, parseScoreboard, parseStandings, parseTennis, pastCalendarDays, rankingsUrl,
   resizedLogo, scoreboardSeasonYear, scoreboardUrl, seasonName, standingsUrl,
 } from './espn';
-import { LEAGUES, LEAGUE_BY_ID } from './leagues';
+import { DOMESTIC_SOCCER, LEAGUES, LEAGUE_BY_ID } from './leagues';
+import { aggregate, type LeagueAgg } from './teamStats';
 import type { F1Data, LeagueTable, Match, RankEntry } from './types';
 
 export interface SnapshotData {
@@ -13,6 +14,7 @@ export interface SnapshotData {
   tables: Record<string, LeagueTable>;
   f1: F1Data | null;
   rankings: Record<string, RankEntry[]>;
+  soccerStats: Record<string, LeagueAgg>;
   logos: Record<string, string>;
 }
 
@@ -210,6 +212,45 @@ export async function loadF1(): Promise<F1Data | null> {
     getJson(standingsUrl(l.slug), 3 * 3600_000, true),
   ]);
   return parseF1(sb, st);
+}
+
+/** Días hacia atrás que se suman para las estadísticas de temporada. */
+export const STATS_WINDOW_DAYS = 75;
+const statsInflight = new Map<string, Promise<LeagueAgg | null>>();
+
+/** Córners, tarjetas, tiros… de cada equipo en su liga nacional. */
+export function loadSoccerStats(leagueId: string): Promise<LeagueAgg | null> {
+  if (SNAP) return Promise.resolve(SNAP.soccerStats?.[leagueId] ?? null);
+  if (!DOMESTIC_SOCCER.includes(leagueId)) return Promise.resolve(null);
+  const hit = statsInflight.get(leagueId);
+  if (hit) return hit;
+  const job = (async () => {
+    const key = `delfos:stats:${leagueId}`;
+    try {
+      const raw = store()?.getItem(key);
+      if (raw) {
+        const c = JSON.parse(raw) as { at: number; data: LeagueAgg };
+        if (Date.now() - c.at < 6 * 3600_000) return c.data;
+      }
+    } catch {
+      /* sin caché */
+    }
+    const l = LEAGUE_BY_ID[leagueId];
+    const cur = await getJson(scoreboardUrl(l.slug), 10 * 60_000);
+    const days = pastCalendarDays(cur, new Date(), STATS_WINDOW_DAYS);
+    const parts = await pool(days, 8, (d) =>
+      getJson(scoreboardUrl(l.slug, d), 6 * 3600_000).then((j) => parseScoreboard(l, j)).catch(() => [] as Match[]),
+    );
+    const agg = aggregate(leagueId, parts.flat());
+    try {
+      store()?.setItem(key, JSON.stringify({ at: Date.now(), data: agg }));
+    } catch {
+      /* sin espacio */
+    }
+    return agg;
+  })().catch(() => null);
+  statsInflight.set(leagueId, job);
+  return job;
 }
 
 /** Días disponibles en la instantánea (o null si hay datos en directo). */
