@@ -7,6 +7,17 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-10 · Precios súper competitivos sin quitar ElevenLabs v4 (aprobado por el dueño)** · El dueño pidió un
+precio muy competitivo manteniendo la voz ElevenLabs v4. Coste real medido en las llamadas de Retell: ~0,14 €/min
+(Retell 0,055 $ + ElevenLabs v4 Turbo 0,08 $ + gpt-5.6-luna ~0,012 $ + Twilio 0,004 $) y ~3,3 $/mes por número ·
+Nueva tabla: **Esencial 29 €/100 min (nuevo), Básico 39 €/200, Negocio 79 €/450, Pro 139 €/800, minuto extra
+0,20 €** (antes 49/89/149 y 0,25). Por debajo de heydiga en todos los tramos (49/200 configurándolo tú, 99/500,
+169/900) y la entrada más baja con montaje incluido. Margen al 100 % de uso: 38/18/15/17 %. Cambiado en panel
+(planes.ts con MINUTO_EXTRA único), web (cuatro planes, «desde 29 €»), agentes de demo (saliente v3, visita v2),
+hoja y guion de visita. Plantillas de sector v19/v7/v9/v8/v8/v7: siguen con eleven_v4_turbo; cuelgan a los 24 s de
+silencio (antes 30) y máx. 10 min (antes 15) para no gastar minutos en llamadas abandonadas. Sin clientes de
+pago afectados (solo la demo de DEIKA, que sigue en Básico 200 min).
+
 **2026-10-09 · Mantenimiento hecho por Claude (aprobado por el dueño)** · 945: agente v6 con máx. 5 min y sin la
 dirección de Madrid. Revisión diaria 9 h (Twilio < 5 $, ElevenLabs < 3.000 caracteres, Retell sin saldo → aviso por
 Telegram). Cadenas y franquicias → «No encaja» (lista por nombre + campo `esCadena` del investigador). Privacidad

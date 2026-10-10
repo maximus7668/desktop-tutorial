@@ -9,10 +9,14 @@
 - Panel para clientes: repo `maximus7668/deika-panel` (PWA en Cloudflare Workers + D1; agenda de
   Cal.com, llamadas de Retell vía n8n, avisos push, recepción, plan).
 - Precios (sin IVA, sin alta, sin permanencia, baja con 1 mes de aviso):
-  - Básico 49 €/mes, 200 min
-  - Negocio 89 €/mes, 450 min
-  - Pro 149 €/mes, 800 min
-  - Minuto extra: 0,25 €
+  - Esencial 29 €/mes, 100 min
+  - Básico 39 €/mes, 200 min
+  - Negocio 79 €/mes, 450 min
+  - Pro 139 €/mes, 800 min
+  - Minuto extra: 0,20 €
+  - Desde el 10/10/2026. Coste real por minuto con la voz ElevenLabs v4 Turbo: ~0,14 € (Retell 0,055 $ +
+    voz 0,08 $ + IA gpt-5.6-luna ~0,012 $ con el recargo de prompt largo + Twilio 0,004 $), más ~3,3 $/mes
+    por número. Margen con los minutos gastados al 100 %: 38 / 18 / 15 / 17 %. No bajar de ~0,17 €/min.
   - Primer mes con garantía: si se da de baja en el primer mes, se devuelve la cuota de ese mes (una vez por
     negocio, primera alta, sin incluir minutos de más). Decidido el 09/10/2026.
 - Cliente piloto: un taller (Talleres Gasteiz). Sectores objetivo: taller, peluquería/estética,
@@ -97,7 +101,7 @@ sensible**. No se busca una IA que lo haga todo sin control.
 - Integraciones con 2-3 programas de citas del sector.
 - Formulario corto: nombre, teléfono, tipo de negocio.
 - Valorar prueba de 14 días o cobro por cita agendada.
-- Revisar margen del plan Básico (voz + telefonía + modelo + montaje).
+- Margen revisado el 10/10/2026 con costes reales de Retell y Twilio (ver precios arriba).
 
 **Panel**
 - Dashboard en euros ("18 citas = 2.700 € estimados").

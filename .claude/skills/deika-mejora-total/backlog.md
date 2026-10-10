@@ -17,6 +17,7 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 (nada)
 
 ## Por hacer
+- M-014 · verde · costes · Recortar el prompt (~4.400 tokens) y las descripciones de herramientas de las plantillas por debajo de 4.000 tokens: quita el recargo por prompt largo de Retell (~0,005 €/min) y baja la latencia. Solo con saldo en Retell para probar llamadas antes de publicar.
 
 ## Hecho
 (Formato: `M-001 · fecha · qué se hizo · commit · cómo se comprobó`.)
@@ -33,13 +34,14 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - M-011 · 09/10 · Cron: cada tarea aislada; si una falla, las demás siguen y llega aviso a Telegram · panel bd900f8 · tipos y tests.
 - M-012 · 09/10 · Plazos de conservación de la privacidad (leads 12 meses, «no contactar» solo lo imprescindible, investigaciones 12 meses) el día 1 de cada mes; **desactivado** hasta RETENCION=activa (mientras, solo avisa de cuántos tocaría) · privacidad actualizada con el seguimiento de visitas · panel d2f3b9a · consultas probadas en D1 local con todas las migraciones.
 
+- M-013 · 10/10 · **Precios súper competitivos con ElevenLabs v4** (pedido y aprobado por el dueño): coste real medido en Retell y Twilio (~0,14 €/min); tabla nueva Esencial 29/100, Básico 39/200, Negocio 79/450, Pro 139/800, extra 0,20 €; panel, web, agentes de demo, hoja y guion de visita, memoria. Plantillas de sector: eleven_v4_turbo intacto, cuelgan a los 24 s de silencio y máx. 10 min · panel 0becf38 y 12017f2 · tests (124) con comprobación de que ningún plan baja del coste; capturas de precios en móvil, tableta y ordenador.
 - 10/10 · **Desplegado todo lo anterior**: migración 0019 en remoto, panel (versión 67695593) y web. Verificado en producción: 404 real, robots, sitemap, cabeceras, datos estructurados, privacidad nueva, API protegida (401 sin sesión) y columnas nuevas en D1.
 
 ## Propuestas rojas (esperan al dueño)
 - R-001 · Comparativa honesta con heydiga en la web (más minutos por euro, montaje incluido, local de Vitoria). Riesgo: nombrar a un competidor exige datos exactos y fechados (publicidad comparativa, Ley 3/1991 art. 10). Alternativa segura: «qué mirar al elegir una recepcionista con IA» sin nombres.
 - R-002 · Atender en inglés y francés en las recepcionistas de los clientes (turistas, Vitoria Green Capital). Cambia agentes de clientes que pagan → solo con su permiso, uno a uno.
 - R-004 · Activar los plazos de conservación (RETENCION=activa): borra solicitudes de prueba de hace más de 12 meses sin contrato y recorta datos de «no contactar» e investigaciones viejas. Lo pide la propia política de privacidad (art. 5.1.e RGPD). Riesgo: borrado irreversible (D1 Time Travel cubre 30 días).
-- R-005 · Programa «trae a otro negocio» (p. ej. un mes gratis a los dos). Toca precios → decisión del dueño.
+- R-005 · Programa «trae a otro negocio» (p. ej. un mes gratis a los dos). Toca precios → decisión del dueño. Con los precios del 10/10 el margen es más estrecho: un mes gratis en Esencial cuesta ~18 €.
 - R-003 · Escuchar el webhook de estados de WhatsApp para mandar el SMS cuando el número no tenga WhatsApp. Se hace cuando WhatsApp esté activo.
 
 ## Pendiente del dueño
