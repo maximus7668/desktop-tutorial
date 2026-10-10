@@ -42,6 +42,11 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - R-002 · Atender en inglés y francés en las recepcionistas de los clientes (turistas, Vitoria Green Capital). Cambia agentes de clientes que pagan → solo con su permiso, uno a uno.
 - R-004 · Activar los plazos de conservación (RETENCION=activa): borra solicitudes de prueba de hace más de 12 meses sin contrato y recorta datos de «no contactar» e investigaciones viejas. Lo pide la propia política de privacidad (art. 5.1.e RGPD). Riesgo: borrado irreversible (D1 Time Travel cubre 30 días).
 - R-005 · Programa «trae a otro negocio» (p. ej. un mes gratis a los dos). Toca precios → decisión del dueño. Con los precios del 10/10 el margen es más estrecho: un mes gratis en Esencial cuesta ~18 €.
+- R-006 · Bajar el coste por minuto sin quitar la voz ElevenLabs v4 (precios comprobados el 10/10/2026; el agente dice ~454 caracteres por minuto de llamada, medido en 18 llamadas reales):
+  - Hoy, Retell: 0,055 $ infraestructura + 0,08 $ voz v4 Turbo + ~0,012 $ IA + 0,004 $ Twilio ≈ 0,15 $/min (~0,14 €).
+  - A) ElevenAgents (gestionado por ElevenLabs): 0,08 $/min con la voz y la transcripción incluidas, más la IA aparte (~0,005–0,01 $) y Twilio ≈ 0,09 $/min (−40 %). Los silencios de más de 10 s se cobran con un 95 % de descuento. Tiene Twilio nativo, SIP, herramientas webhook, variables por llamada y transferencia. Esfuerzo: 1–2 semanas. Datos en la UE solo con Enterprise.
+  - B) Plataforma propia de código abierto (Pipecat o LiveKit Agents) en un servidor de la UE: voz v4 Turbo directa 0,04 $/1.000 caracteres (~0,018 $/min) + transcripción Deepgram o Scribe ~0,0065 $ + IA ~0,005 $ + servidor ~0,003 $ + Twilio 0,004 $ ≈ 0,037 $/min (−75 %). Con Pipecat Cloud o LiveKit Cloud en vez de servidor propio, +0,01 $/min. Esfuerzo: prototipo en 1–2 semanas; para producción, 4–6 semanas con monitorización, grabaciones y paso automático a Retell si cae el servidor.
+  - Ahorro por cada 1.000 min/mes: A ~55 €, B ~105 €. Recomendado: probar A con la plantilla de taller, y B cuando haya volumen (unos 30 clientes) o como prototipo en paralelo.
 - R-003 · Escuchar el webhook de estados de WhatsApp para mandar el SMS cuando el número no tenga WhatsApp. Se hace cuando WhatsApp esté activo.
 
 ## Pendiente del dueño
