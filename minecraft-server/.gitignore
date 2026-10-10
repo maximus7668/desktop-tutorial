@@ -1,0 +1,22 @@
+# Se descargan o se generan al arrancar (start.bat / start.sh)
+fabric-server-launch.jar
+fabric-server-launcher.properties
+fabric-installer-*.jar
+server.jar
+libraries/
+versions/
+.fabric/
+
+# Datos del servidor y del mundo
+world/
+logs/
+crash-reports/
+usercache.json
+ops.json
+banned-ips.json
+banned-players.json
+backup-*.zip
+backup-*.tar.gz
+
+# Mods: los .jar no se suben (solo mods/LEEME.txt)
+mods/*.jar

@@ -1,0 +1,23 @@
+CARPETA DE MODS
+===============
+
+Aqui van los mods de Fabric (archivos .jar).
+
+Este servidor usa:
+  - Minecraft      1.21.11
+  - Fabric Loader  0.19.5
+
+Cada mod que pongas aqui TIENE QUE SER COMPATIBLE con Minecraft 1.21.11
+y con Fabric (no sirven mods de Forge ni de NeoForge). Al descargar un mod
+(por ejemplo de modrinth.com o curseforge.com), filtra por:
+  - Version del juego: 1.21.11
+  - Loader: Fabric
+
+Casi todos los mods de Fabric necesitan tambien "Fabric API": descargala
+para 1.21.11 y ponla en esta misma carpeta.
+
+Los mods que sean de servidor y cliente (anaden bloques, objetos, mobs...)
+tambien los tienen que instalar los jugadores en su Minecraft, con las
+mismas versiones.
+
+Despues de anadir o quitar mods, reinicia el servidor.
