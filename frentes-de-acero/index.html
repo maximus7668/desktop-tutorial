@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Frentes de Acero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="tb-nation" id="tbNation"></div>
+    <div class="tb-date" id="tbDate" data-tip="Cada turno es un mes. La guerra termina en agosto de 1945."></div>
+    <div class="tb-res" id="tbRes"></div>
+    <div class="tb-actions">
+      <button class="btn ghost icon" id="btnHelp" title="Cómo se juega" aria-label="Cómo se juega">?</button>
+      <button class="btn ghost" id="btnMenu">Menú</button>
+      <button class="btn primary" id="btnEnd">Terminar turno <span aria-hidden="true">▸</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="mapWrap" aria-label="Mapa">
+      <svg id="map" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa de Europa en 1939">
+        <defs>
+          <pattern id="occ" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="2" height="5" fill="rgba(255,255,255,.28)"></rect>
+          </pattern>
+          <pattern id="waste" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+            <rect width="6" height="6" class="waste-bg"></rect><rect width="1" height="6" class="waste-line"></rect>
+          </pattern>
+        </defs>
+        <rect id="sea" x="-2000" y="-2000" width="5000" height="5000"></rect>
+        <path id="grat"></path>
+        <path id="wasteland" fill="url(#waste)"></path>
+        <g id="gRegions"></g>
+        <g id="gOcc"></g>
+        <g id="gSea"></g>
+        <g id="gHl"></g>
+        <g id="gCities"></g>
+        <g id="gLabels"></g>
+        <g id="gBattles"></g>
+        <g id="gCounters"></g>
+        <g id="gPills"></g>
+      </svg>
+      <div class="map-ui top-left">
+        <div class="seg" id="modeSeg" role="group" aria-label="Vista del mapa">
+          <button data-mode="paises" class="on">Países</button><button data-mode="bandos">Bandos</button>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="map-ui bottom-right zoom">
+        <button class="btn ghost icon" id="zIn" aria-label="Acercar">+</button>
+        <button class="btn ghost icon" id="zOut" aria-label="Alejar">−</button>
+        <button class="btn ghost icon" id="zHome" aria-label="Ver mi país">⌂</button>
+      </div>
+      <aside id="advisor" class="map-ui bottom-left" aria-live="polite"></aside>
+      <div id="toast" role="status"></div>
+    </section>
+
+    <section id="side">
+      <nav class="tabs" id="tabs" role="tablist">
+        <button data-tab="region" role="tab">Región</button>
+        <button data-tab="build" role="tab">Producir</button>
+        <button data-tab="focus" role="tab">Focos</button>
+        <button data-tab="war" role="tab">Guerra</button>
+      </nav>
+      <div id="panel"></div>
+    </section>
+  </main>
+</div>
+
+<div id="modal" class="modal" hidden><div class="modal-card" id="modalCard" role="dialog" aria-modal="true"></div></div>
+<div id="busy" hidden><div class="busy-card"><div class="spinner"></div><p>Las demás naciones mueven sus ejércitos…</p></div></div>
+<div id="tut" hidden><div id="tutRing"></div><div id="tutCard" role="dialog"></div></div>
+<div id="tip" role="tooltip" hidden></div>
+
+<script src="js/map.js"></script>
+<script src="js/data.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

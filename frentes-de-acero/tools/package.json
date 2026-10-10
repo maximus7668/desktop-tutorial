@@ -1,0 +1,7 @@
+{
+  "name": "frentes-de-acero-tools",
+  "private": true,
+  "type": "module",
+  "scripts": { "map": "node build-map.mjs", "sim": "node simulate.mjs" },
+  "devDependencies": { "d3-geo": "^3.1.1", "topojson-client": "^3.1.0", "world-atlas": "^2.0.2" }
+}
