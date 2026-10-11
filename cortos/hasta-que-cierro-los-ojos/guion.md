@@ -73,7 +73,7 @@ aunque el prompt no los nombraba. Se devolvieron los créditos.
 
 ## 4. Planos
 
-En el montaje, cada plano dura entre 1,2 y 2,5 s. Se generan de 4 s, que es el mínimo habitual.
+En el montaje, cada plano dura entre 1,2 y 2,5 s. Con Wan 3.0 se generan de 3 s (el mínimo es 2) para tener margen al cortar.
 
 | # | Tiempo | Audio | Plano |
 |---|---|---|---|
@@ -219,3 +219,26 @@ in darkness.
 - **En TikTok:** publica usando el sonido desde la app («Usar este sonido» en el sonido de @.thgcc) y baja a 0 el
   audio del vídeo. Así queda enlazado y acreditado.
 - **En Instagram o YouTube:** subir el audio descargado puede hacer que lo silencien o lo reclamen.
+
+## 8. Estado de producción
+
+| Fecha | Plano | Modelo | Coste | Resultado |
+|---|---|---|---|---|
+| 12/10 | 2 | vidIQ → Seedance 2 Fast | 0 (devuelto) | Rechazado por copyright. |
+| 12/10 | 2 | Higgsfield → Wan 3.0 (`alibaba/wan-3.0/text-to-video`, 3 s, 720p, 9:16, sin audio) | ≈0,30 $ | **Bien.** |
+
+**Plano 2 con Wan 3.0:**
+- Ellie es reconocible y su cara no cambia en todo el plano.
+- Salen la lágrima, la guitarra, la luz cian y la lluvia en la ventana.
+- **Pero tiene aspecto de cinemática realista del juego, con poca textura de pintura.**
+- La referencia de Ellie (19) es el fotograma del segundo 1,5 de ese plano.
+
+**Precios de Higgsfield (estimados por su API el 12/10):**
+- Wan 3.0: 0,10 $/s a 720p (0,05 $ a 480p, 0,20 $ a 1080p).
+- Kling 3.0 Standard sin sonido: 4,03 créditos (0,25 $) por 3 s.
+- Kling 3.0 Turbo: 5,38 créditos (0,34 $) por 3 s.
+
+**Pendiente:**
+1. Decidir el look: realista del juego, como ha salido, o más pintado.
+2. Generar los otros 10 planos, unos 3 $ con Wan 3.0 a 720p, sin contar repeticiones.
+3. El dueño debe cambiar la clave de la API cuando termine (se pegó en el chat).
