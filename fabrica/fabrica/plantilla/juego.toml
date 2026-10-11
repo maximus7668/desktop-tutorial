@@ -79,9 +79,11 @@ tecnica = "Zettai... Reido."
 victoria = "Demasiado lento."
 derrota = "Imposible... me has... alcanzado..."
 
-# Los efectos y la música salen mejor descritos en inglés.
+# Efectos de sonido. Los id coinciden con los que usa el juego (juego/scripts/autoload/sonidos.gd):
+# si la fábrica entrega uno, el juego lo usa en lugar del sintetizado.
+# Salen mejor descritos en inglés. «bucle = true» para los que suenan sin parar.
 [[sonidos]]
-id = "golpe_debil"
+id = "golpe"
 descripcion = "Quick anime punch impact, snappy and light, with a short whoosh"
 duracion = 0.6
 
@@ -96,9 +98,14 @@ descripcion = "Arm block deflecting a punch, dull impact with energy shield crac
 duracion = 0.6
 
 [[sonidos]]
-id = "rafaga_ki"
+id = "aire"
+descripcion = "Fast punch swing whooshing through the air, short and sharp"
+duracion = 0.5
+
+[[sonidos]]
+id = "rafaga"
 descripcion = "Anime energy blast fired from the palm, bright whoosh with electric sizzle"
-duracion = 1.2
+duracion = 1.0
 
 [[sonidos]]
 id = "explosion"
@@ -106,9 +113,14 @@ descripcion = "Huge anime energy explosion with rumbling debris and long tail"
 duracion = 3.0
 
 [[sonidos]]
-id = "aura"
-descripcion = "Powering up anime aura, roaring energy flames rising in intensity"
-duracion = 4.0
+id = "impacto"
+descripcion = "Body slamming hard into rocky ground, heavy crunch and falling rubble"
+duracion = 1.5
+
+[[sonidos]]
+id = "paso"
+descripcion = "Super fast dash, air displacement whoosh with a quick rising pitch"
+duracion = 0.5
 
 [[sonidos]]
 id = "teletransporte"
@@ -116,9 +128,32 @@ descripcion = "Instant teleport, sharp air displacement zip with faint shimmer"
 duracion = 0.6
 
 [[sonidos]]
-id = "choque_rayos"
+id = "super"
+descripcion = "Charging an ultimate energy attack, rising power hum building to a peak"
+duracion = 2.0
+
+[[sonidos]]
+id = "ko"
+descripcion = "Final knockout blow, massive impact with echo and debris settling"
+duracion = 2.5
+
+[[sonidos]]
+id = "carga"
+descripcion = "Powering up anime aura, steady roaring energy flames"
+duracion = 4.0
+bucle = true
+
+[[sonidos]]
+id = "rayo"
+descripcion = "Continuous giant energy beam firing, steady roaring stream with crackles"
+duracion = 4.0
+bucle = true
+
+[[sonidos]]
+id = "choque"
 descripcion = "Two giant energy beams clashing, sustained crackling roar with pulsing bass"
 duracion = 5.0
+bucle = true
 
 [[musica]]
 id = "tema_combate"

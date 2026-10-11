@@ -20,7 +20,7 @@ _CLAVES = {
     "juego": ("nombre", "estilo"),
     "fabrica": ("proveedores", "aprobar", "intentos_max"),
     "personaje": ("id", "nombre", "descripcion", "voz", "voz_id", "animaciones", "frases"),
-    "sonido": ("id", "descripcion", "duracion"),
+    "sonido": ("id", "descripcion", "duracion", "bucle"),
     "musica": ("id", "descripcion", "duracion", "instrumental"),
 }
 
@@ -45,6 +45,7 @@ class Sonido:
     id: str
     descripcion: str
     duracion: float | None
+    bucle: bool = False  # sonido continuo (aura, rayo...): tiene que poder repetirse sin corte
 
 
 @dataclass(frozen=True)
@@ -165,10 +166,14 @@ def _sonido(datos: object, i: int) -> Sonido:
     sid = _id(s.get("id"), f"{donde}: id")
     donde = f"sonido '{sid}'"
     _sin_claves_raras(s, "sonido", donde)
+    bucle = s.get("bucle", False)
+    if not isinstance(bucle, bool):
+        raise ErrorDiseno(f"{donde}: bucle tiene que ser true o false")
     return Sonido(
         id=sid,
         descripcion=_texto(s.get("descripcion"), f"{donde}: descripcion"),
         duracion=_duracion(s.get("duracion"), f"{donde}: duracion"),
+        bucle=bucle,
     )
 
 

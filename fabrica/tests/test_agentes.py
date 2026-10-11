@@ -71,6 +71,14 @@ class TestElevenLabs(unittest.TestCase):
         self.assertEqual(cuerpo["duration_seconds"], 0.6)
         self.assertEqual(cuerpo["model_id"], "eleven_text_to_sound_v2")
 
+    def test_sonido_en_bucle(self):
+        t = tarea("sonido", "sonido/carga", descripcion="aura", duracion=4.0, bucle=True)
+        self.agente.generar(self.ctx(t))
+        self.assertIs(self.http.llamadas[0][1]["loop"], True)
+        t = tarea("sonido", "sonido/golpe", descripcion="punch", duracion=0.6)
+        self.agente.generar(self.ctx(t))
+        self.assertNotIn("loop", self.http.llamadas[1][1])
+
     def test_sonido_demasiado_largo(self):
         t = tarea("sonido", "sonido/lluvia", descripcion="rain", duracion=45.0)
         with self.assertRaisesRegex(ErrorAgente, "de 0,5 a 30 segundos"):

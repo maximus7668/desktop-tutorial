@@ -74,6 +74,13 @@ def main(argv: list[str] | None = None) -> int:
     ordenes.add_parser(
         "exportar", parents=[comun], help="escribe el índice de lo aprobado para importarlo en el motor"
     )
+    montar = ordenes.add_parser(
+        "montar", parents=[comun], help="copia lo aprobado al proyecto de Godot (recursos_fabrica/)"
+    )
+    montar.add_argument("--juego", required=True, type=Path, help="carpeta del proyecto de Godot (la que tiene project.godot)")
+    montar.add_argument(
+        "--incluir-simulados", action="store_true", help="copia también el relleno del agente simulado"
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -100,6 +107,16 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Índice escrito en {ruta}")
             if pendientes:
                 print(f"Ojo: {pendientes} tareas aún no están aprobadas y no aparecen en el índice.")
+            return 0
+        if args.orden == "montar":
+            montaje = director.montar(args.juego, args.incluir_simulados)
+            print(f"Copiados {len(montaje.copiados)} recursos a {montaje.destino}")
+            if montaje.omitidos:
+                print(
+                    f"Sin copiar {len(montaje.omitidos)} recursos de relleno del agente simulado"
+                    " (el juego usa los suyos). Para copiarlos igualmente: --incluir-simulados"
+                )
+            print("Abre el proyecto en Godot para que importe los archivos nuevos.")
             return 0
     except (ErrorDiseno, ErrorRegistro, ErrorOrden) as e:
         print(f"Error: {e}", file=sys.stderr)

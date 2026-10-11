@@ -49,6 +49,12 @@ class TestDiseno(unittest.TestCase):
         with self.assertRaisesRegex(ErrorDiseno, r"Falta \[juego\]"):
             diseno('[fabrica]\naprobar = []\n')
 
+    def test_bucle_solo_cambia_la_huella_de_su_sonido(self):
+        normal = {t.id: t.huella for t in planificar(diseno())}
+        con_bucle = {t.id: t.huella for t in planificar(diseno(MINIMO.replace("duracion = 0.6", "duracion = 0.6\nbucle = true")))}
+        self.assertNotEqual(normal["sonido/impacto"], con_bucle["sonido/impacto"])
+        self.assertEqual(normal["ren/voz/grito"], con_bucle["ren/voz/grito"])
+
     def test_duracion_negativa(self):
         with self.assertRaisesRegex(ErrorDiseno, "mayor que 0"):
             diseno(MINIMO.replace("duracion = 0.6", "duracion = -1"))

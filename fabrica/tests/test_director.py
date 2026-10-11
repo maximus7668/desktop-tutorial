@@ -139,3 +139,64 @@ class TestDirector(ConProyecto):
         informe = d.ejecutar(maximo=1)
         self.assertEqual(len(informe.hechas), 1)
         self.assertTrue(informe.limite_alcanzado)
+
+
+class TestMontar(ConProyecto):
+    def preparar_juego(self):
+        juego = self.carpeta / "juego"
+        juego.mkdir()
+        (juego / "project.godot").write_text("config_version=5\n", encoding="utf-8")
+        return juego
+
+    def completar(self):
+        d = Director(self.carpeta, agentes={"simulado": Grabador()})
+        d.ejecutar()
+        d.aprobar_todo()
+        d.ejecutar()
+        return d
+
+    def test_sin_simulados_no_copia_relleno(self):
+        d = self.completar()
+        juego = self.preparar_juego()
+        montaje = d.montar(juego)
+        self.assertEqual(montaje.copiados, [])
+        self.assertIn("ren/rig", montaje.omitidos)
+        indice = json.loads((juego / "recursos_fabrica" / "indice.json").read_text(encoding="utf-8"))
+        self.assertEqual(indice["personajes"]["ren"], {"nombre": "Ren"})
+        self.assertEqual(indice["sonidos"], {})
+
+    def test_con_simulados_copia_y_usa_rutas_de_godot(self):
+        d = self.completar()
+        juego = self.preparar_juego()
+        d.montar(juego, incluir_simulados=True)
+        indice = json.loads((juego / "recursos_fabrica" / "indice.json").read_text(encoding="utf-8"))
+        modelo = indice["personajes"]["ren"]["modelo"][0]
+        self.assertEqual(modelo, "res://recursos_fabrica/ren/rig/modelo_rig.gltf")
+        self.assertTrue((juego / "recursos_fabrica" / "ren" / "rig" / "modelo_rig.gltf").is_file())
+        self.assertEqual(indice["sonidos"]["impacto"], ["res://recursos_fabrica/sonido/impacto/impacto.wav"])
+        self.assertEqual(list(indice["personajes"]["ren"]["voces"]), ["grito"])
+
+    def test_rehace_la_carpeta_y_no_deja_restos(self):
+        d = self.completar()
+        juego = self.preparar_juego()
+        d.montar(juego, incluir_simulados=True)
+        sobrante = juego / "recursos_fabrica" / "viejo.txt"
+        sobrante.write_text("x", encoding="utf-8")
+        d.montar(juego, incluir_simulados=True)
+        self.assertFalse(sobrante.exists())
+        self.assertEqual(list(juego.glob(".recursos_fabrica.tmp")), [])
+
+    def test_no_toca_una_carpeta_que_no_es_suya(self):
+        d = self.completar()
+        juego = self.preparar_juego()
+        ajena = juego / "recursos_fabrica"
+        ajena.mkdir()
+        (ajena / "mio.txt").write_text("importante", encoding="utf-8")
+        with self.assertRaisesRegex(ErrorOrden, "no lo creó la fábrica"):
+            d.montar(juego)
+        self.assertTrue((ajena / "mio.txt").exists())
+
+    def test_exige_un_proyecto_de_godot(self):
+        d = self.completar()
+        with self.assertRaisesRegex(ErrorOrden, "project.godot"):
+            d.montar(self.carpeta)

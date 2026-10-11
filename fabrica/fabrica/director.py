@@ -18,8 +18,19 @@ from .plan import Tarea, planificar
 from .registro import APROBADO, ERROR, ESPERANDO, PENDIENTE, RECHAZADO, SIN_AGENTE, Entrada, Registro
 
 
+CARPETA_MONTAJE = "recursos_fabrica"
+MARCA_MONTAJE = ".fabrica"
+
+
 class ErrorOrden(ValueError):
     """Orden que no se puede cumplir: un id que no existe, aprobar algo que no espera aprobación..."""
+
+
+@dataclass
+class Montaje:
+    destino: Path
+    copiados: list[str] = field(default_factory=list)
+    omitidos: list[str] = field(default_factory=list)  # aprobados, pero hechos por el agente simulado
 
 
 @dataclass
@@ -155,6 +166,72 @@ class Director:
         ruta = self.carpeta / "indice_recursos.json"
         ruta.write_text(json.dumps(indice, ensure_ascii=False, indent=2), encoding="utf-8")
         return ruta
+
+    def montar(self, juego: Path, incluir_simulados: bool = False) -> Montaje:
+        """Copia lo aprobado al proyecto de Godot, en recursos_fabrica/, con el índice que lee el juego.
+
+        La carpeta es de la fábrica: se rehace entera cada vez. Lo hecho por el agente simulado no
+        se copia salvo que se pida, porque el cuerpo provisional del juego se ve mejor que el relleno.
+        """
+        juego = Path(juego)
+        if not (juego / "project.godot").is_file():
+            raise ErrorOrden(f"{juego} no es un proyecto de Godot: no tiene project.godot.")
+        destino = juego / CARPETA_MONTAJE
+        if destino.exists() and not (destino / MARCA_MONTAJE).exists():
+            raise ErrorOrden(
+                f"{destino} ya existe y no lo creó la fábrica; no lo toco. Muévelo o bórralo a mano."
+            )
+        temporal = juego / f".{CARPETA_MONTAJE}.tmp"
+        shutil.rmtree(temporal, ignore_errors=True)
+        temporal.mkdir()
+        (temporal / MARCA_MONTAJE).write_text(
+            "Carpeta generada por «python -m fabrica montar». Se rehace entera cada vez: no edites aquí.\n",
+            encoding="utf-8",
+        )
+        montaje = Montaje(destino=destino)
+
+        def copiar(id_: str) -> list[str]:
+            e = self.entrada(id_)
+            if e.estado != APROBADO:
+                return []
+            if e.agente == "simulado" and not incluir_simulados:
+                montaje.omitidos.append(id_)
+                return []
+            rutas = []
+            for relativa in e.archivos:
+                dentro = Path(relativa).relative_to("recursos")
+                final = temporal / dentro
+                final.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(self.carpeta / relativa, final)
+                rutas.append(f"res://{CARPETA_MONTAJE}/{dentro.as_posix()}")
+            montaje.copiados.append(id_)
+            return rutas
+
+        personajes: dict[str, dict] = {}
+        for p in self.diseno.personajes:
+            datos: dict = {"nombre": p.nombre}
+            for clave, id_ in (("concepto", f"{p.id}/concepto"), ("modelo", f"{p.id}/rig")):
+                rutas = copiar(id_)
+                if rutas:
+                    datos[clave] = rutas
+            animaciones = {a: r for a in p.animaciones if (r := copiar(f"{p.id}/animacion/{a}"))}
+            voces = {f: r for f, _ in p.frases if (r := copiar(f"{p.id}/voz/{f}"))}
+            if animaciones:
+                datos["animaciones"] = animaciones
+            if voces:
+                datos["voces"] = voces
+            personajes[p.id] = datos
+        indice = {
+            "juego": self.diseno.nombre,
+            "montado": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "personajes": personajes,
+            "sonidos": {s.id: r for s in self.diseno.sonidos if (r := copiar(f"sonido/{s.id}"))},
+            "musica": {m.id: r for m in self.diseno.musica if (r := copiar(f"musica/{m.id}"))},
+        }
+        (temporal / "indice.json").write_text(json.dumps(indice, ensure_ascii=False, indent=2), encoding="utf-8")
+        shutil.rmtree(destino, ignore_errors=True)
+        temporal.rename(destino)
+        return montaje
 
     # --- interno ---------------------------------------------------------------------------
 

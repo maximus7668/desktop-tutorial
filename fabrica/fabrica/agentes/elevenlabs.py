@@ -98,6 +98,8 @@ class AgenteElevenLabs:
                     f"ElevenLabs hace efectos de 0,5 a 30 segundos y «{ctx.tarea.nombre}» pide {duracion:g}."
                 )
             cuerpo["duration_seconds"] = duracion
+        if datos.get("bucle"):
+            cuerpo["loop"] = True  # solo lo admite eleven_text_to_sound_v2, el modelo que se usa
         return f"{API}/v1/sound-generation?output_format={FORMATO}", cuerpo, 120.0, ""
 
     def _musica(self, ctx: Contexto) -> tuple[str, dict, float, str]:

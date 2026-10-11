@@ -78,7 +78,10 @@ def planificar(d: Diseno) -> list[Tarea]:
             )
 
     for s in d.sonidos:
-        nueva(f"sonido/{s.id}", "sonido", f"Efecto de sonido «{s.id}»", descripcion=s.descripcion, duracion=s.duracion)
+        datos_sonido: dict = {"descripcion": s.descripcion, "duracion": s.duracion}
+        if s.bucle:
+            datos_sonido["bucle"] = True  # solo si está, para no cambiar la huella de los demás
+        nueva(f"sonido/{s.id}", "sonido", f"Efecto de sonido «{s.id}»", **datos_sonido)
     for m in d.musica:
         nueva(
             f"musica/{m.id}", "musica", f"Música «{m.id}»",

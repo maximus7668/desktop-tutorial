@@ -53,6 +53,17 @@ En Linux o macOS puede que tengas que escribir `python3` en lugar de `python`.
 Los tipos que esperan tu visto bueno se eligen en `juego.toml` (`[fabrica] aprobar`). Por defecto:
 concepto, modelo 3D, animaciones y voces.
 
+## Llevar los recursos al motor
+
+```
+python -m fabrica montar -p mi_juego --juego ruta/al/proyecto_godot
+```
+
+Copia todo lo aprobado a `recursos_fabrica/` dentro del proyecto de Godot, con un
+`indice.json` que dice qué archivo es cada cosa (rutas `res://`). La carpeta es de la
+fábrica: se rehace entera cada vez y, si ya existe una que no creó la fábrica, no la toca.
+Lo hecho por el agente simulado no se copia salvo con `--incluir-simulados`.
+
 ## Cambiar el diseño
 
 Edita `juego.toml` y vuelve a ejecutar. Cada tarea guarda una huella de lo que se pidió: si
@@ -68,6 +79,8 @@ no sus voces ni los efectos de sonido. Si añades una animación, solo se hace e
    - Linux o macOS: `export ELEVENLABS_API_KEY="tu_clave"`
 3. En `juego.toml`, cambia `voz`, `sonido` y `musica` a `"elevenlabs"` en `[fabrica.proveedores]`.
 4. Para las voces, pon en cada personaje el `voz_id` de una voz de tu biblioteca de ElevenLabs.
+
+Los sonidos con `bucle = true` (aura, rayo...) se piden a ElevenLabs para que se repitan sin corte.
 
 La clave nunca se guarda en el proyecto. Los efectos tienen que durar de 0,5 a 30 segundos y la
 música de 3 segundos a 10 minutos (límites de la API). Si no hay clave, esas tareas quedan como
