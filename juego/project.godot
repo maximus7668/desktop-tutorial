@@ -1,0 +1,33 @@
+; Proyecto de Godot 4. Ábrelo desde el gestor de proyectos de Godot (Importar -> esta carpeta).
+
+config_version=5
+
+[application]
+
+config/name="Ryūsei Clash"
+config/description="Juego de lucha 3D en arenas abiertas con estética anime."
+run/main_scene="res://escenas/principal.tscn"
+config/features=PackedStringArray("4.7", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Partida="*res://scripts/autoload/partida.gd"
+Recursos="*res://scripts/autoload/recursos.gd"
+Sonidos="*res://scripts/autoload/sonidos.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[physics]
+
+common/physics_ticks_per_second=60
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+anti_aliasing/quality/msaa_3d=2
