@@ -10,6 +10,7 @@ from . import Contexto, ErrorAgente, Resultado
 class AgenteCopiar:
     nombre = "copiar"
     tipos = frozenset({"limpieza"})
+    AJUSTES: tuple[str, ...] = ()
 
     def disponible(self) -> str | None:
         return None

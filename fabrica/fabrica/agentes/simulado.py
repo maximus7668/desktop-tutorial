@@ -22,6 +22,7 @@ _MAX_SEGUNDOS = 8.0  # el relleno de una canción de 3 minutos no necesita durar
 class AgenteSimulado:
     nombre = "simulado"
     tipos = frozenset({"concepto", "modelo3d", "limpieza", "rig", "animacion", "voz", "sonido", "musica"})
+    AJUSTES: tuple[str, ...] = ()
 
     def disponible(self) -> str | None:
         return None

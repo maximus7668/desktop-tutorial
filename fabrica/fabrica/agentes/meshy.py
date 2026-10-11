@@ -53,6 +53,7 @@ NOMBRES = {
 class AgenteMeshy:
     nombre = "meshy"
     tipos = frozenset({"concepto", "modelo3d", "rig", "animacion"})
+    AJUSTES: tuple[str, ...] = ("modelo_imagen", "caras", "limite")
 
     def __init__(
         self,
@@ -65,6 +66,10 @@ class AgenteMeshy:
         modelo_imagen: str = "nano-banana-2",
         caras: int = 30000,
     ):
+        if isinstance(caras, bool) or not isinstance(caras, int) or not 100 <= caras <= 300000:
+            raise ValueError("caras tiene que ser un número entre 100 y 300000")
+        if not isinstance(modelo_imagen, str) or not modelo_imagen:
+            raise ValueError("modelo_imagen tiene que ser el nombre de un modelo de imagen de Meshy")
         self._clave = (clave if clave is not None else os.environ.get(VARIABLE_CLAVE, "")).strip()
         self._api = Cliente("Meshy", API, {"Authorization": f"Bearer {self._clave}"}, transporte)
         self._dormir = dormir

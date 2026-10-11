@@ -69,11 +69,20 @@ def _resumen(respuesta: bytes) -> str:
     texto = respuesta.decode("utf-8", "replace").strip()
     try:
         datos = json.loads(texto)
-        if isinstance(datos, dict):
-            texto = str(datos.get("message") or datos.get("detail") or datos.get("error") or texto)
     except json.JSONDecodeError:
-        pass
-    return texto[:300] or "(sin detalle)"
+        return texto[:300] or "(sin detalle)"
+    if isinstance(datos, dict):
+        error = datos.get("error")
+        if isinstance(error, dict):
+            texto = ": ".join(str(x) for x in (error.get("message"), error.get("details")) if x) or texto
+            for nodo in (datos.get("node_errors") or {}).values():
+                errores = nodo.get("errors") if isinstance(nodo, dict) else None
+                if errores:
+                    texto += f" ({errores[0].get('message', '')}: {errores[0].get('details', '')})"
+                    break
+        else:
+            texto = str(datos.get("message") or datos.get("detail") or error or texto)
+    return texto[:400] or "(sin detalle)"
 
 
 def clave_intento(ctx: Contexto) -> str:

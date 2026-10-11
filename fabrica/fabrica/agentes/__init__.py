@@ -27,6 +27,7 @@ class Contexto:
     intento: int = 1
     memoria: dict = field(default_factory=dict)  # se guarda en el registro aunque el agente falle
     memorias: dict[str, dict] = field(default_factory=dict)  # memoria de cada dependencia (solo leer)
+    proyecto: Path | None = None  # carpeta del proyecto (para rutas relativas de los ajustes)
 
     def archivo(self, nombre: str) -> Path:
         return self.carpeta / nombre
@@ -45,6 +46,8 @@ class ErrorAgente(RuntimeError):
 class Agente(Protocol):
     nombre: str
     tipos: frozenset[str]
+    # Ajustes que admite en [fabrica.<nombre>] de juego.toml (llegan como argumentos al crearlo).
+    AJUSTES: tuple[str, ...]
 
     def disponible(self) -> str | None:
         """None si puede trabajar; si no, el motivo (por ejemplo, que falta una clave de API)."""
@@ -54,6 +57,7 @@ class Agente(Protocol):
 
 def proveedores() -> dict[str, Callable[[], Agente]]:
     from .blender import AgenteBlender
+    from .comfyui import AgenteComfyUI
     from .copiar import AgenteCopiar
     from .elevenlabs import AgenteElevenLabs
     from .meshy import AgenteMeshy
@@ -63,6 +67,7 @@ def proveedores() -> dict[str, Callable[[], Agente]]:
         AgenteSimulado.nombre: AgenteSimulado,
         AgenteCopiar.nombre: AgenteCopiar,
         AgenteBlender.nombre: AgenteBlender,
+        AgenteComfyUI.nombre: AgenteComfyUI,
         AgenteElevenLabs.nombre: AgenteElevenLabs,
         AgenteMeshy.nombre: AgenteMeshy,
     }

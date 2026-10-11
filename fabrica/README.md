@@ -19,7 +19,7 @@ juego.toml ──► director ──► agente de concepto ──► agente 3D �
 | Parte | Agentes disponibles |
 |---|---|
 | Director, plan, registro, aprobaciones, montaje en Godot | Hecho |
-| Arte conceptual | **Meshy** (texto a imagen) o simulado |
+| Arte conceptual | **ComfyUI** (en tu PC), **Meshy** (texto a imagen) o simulado |
 | Modelo 3D | **Meshy** (imagen a 3D) o simulado |
 | Limpieza del modelo | **Blender** (en tu PC), `copiar` (lo pasa tal cual) o simulado |
 | Esqueleto (rig) | **Meshy** o simulado |
@@ -111,6 +111,33 @@ Cómo encadena el trabajo:
 Si Meshy tarda más de 15 minutos, la tarea queda apuntada: en la siguiente ejecución se
 recoge sin pedirla (ni pagarla) otra vez. Si Meshy la rechaza, se pide de nuevo.
 
+## Arte conceptual con ComfyUI (gratis, en tu PC)
+
+ComfyUI genera imágenes en tu propia tarjeta gráfica, con el modelo y los LoRA que elijas
+(por ejemplo, un modelo anime y un LoRA entrenado con tu estilo para que todos los personajes
+salgan coherentes).
+
+1. Instala ComfyUI (comfy.org) y pon un modelo SDXL en `ComfyUI/models/checkpoints`.
+2. Ábrelo (tiene que estar en marcha cuando ejecutes la fábrica).
+3. En `juego.toml`: `concepto = "comfyui"` y, en `[fabrica.comfyui]`, el nombre del archivo
+   del modelo: `modelo = "animagine-xl-4.0.safetensors"`.
+
+Sin más, usa un flujo básico de texto a imagen incluido en la fábrica. Para usar el tuyo
+(con LoRA, ControlNet, etc.): en ComfyUI, **Flujo de trabajo → Exportar (API)**, guárdalo en
+la carpeta del proyecto y ponlo en `flujo = "flujos/mi_flujo.json"`. Escribe estas marcas donde
+quieras que la fábrica ponga cada cosa: `{{PROMPT}}`, `{{NEGATIVO}}`, `{{SEMILLA}}`,
+`{{MODELO}}`, `{{ANCHO}}`, `{{ALTO}}`.
+
+El texto que se envía junta el `estilo` del juego, la `descripcion` del personaje y
+«cuerpo entero, de frente, en pose A, fondo blanco» (lo que mejor pasa luego a 3D). Si
+rechazas una imagen, tu motivo se añade y cambia la semilla.
+
+## Ajustes de cada proveedor
+
+Cada proveedor admite ajustes en su propia tabla de `juego.toml` (`[fabrica.comfyui]`,
+`[fabrica.meshy]`, `[fabrica.blender]`; la plantilla trae ejemplos). Un ajuste mal escrito se
+avisa al empezar, antes de gastar nada. Si cambias uno, se rehace solo lo que hace ese proveedor.
+
 ## Limpiar los modelos con Blender (gratis)
 
 1. Instala Blender desde blender.org (probado con Blender 5.2 LTS).
@@ -158,9 +185,9 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 
 ## Próximos agentes
 
-1. **Arte conceptual con ComfyUI** en tu PC, con un LoRA entrenado con tu estilo.
-2. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
-3. **Director con Claude**: de una idea escrita al `juego.toml` completo.
+1. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
+2. **Director con Claude**: de una idea escrita al `juego.toml` completo.
+3. **Panel visual** para usar la fábrica sin la línea de comandos.
 
 ## Pruebas
 

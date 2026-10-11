@@ -5,7 +5,7 @@ from __future__ import annotations
 import difflib
 import re
 import tomllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 # Cadena de producción de un personaje, más los recursos sueltos.
@@ -69,6 +69,7 @@ class Diseno:
     proveedores: dict[str, str]
     aprobar: frozenset[str]
     intentos_max: int
+    ajustes: dict[str, dict] = field(default_factory=dict)  # [fabrica.<proveedor>] -> sus ajustes
 
 
 def cargar(ruta: Path) -> Diseno:
@@ -89,7 +90,16 @@ def validar(datos: dict) -> Diseno:
     juego = _tabla(datos.get("juego"), "[juego]", obligatoria=True)
     _sin_claves_raras(juego, "juego", "[juego]")
     fabrica = _tabla(datos.get("fabrica"), "[fabrica]")
-    _sin_claves_raras(fabrica, "fabrica", "[fabrica]")
+    ajustes: dict[str, dict] = {}
+    for clave, valor in fabrica.items():
+        if clave in _CLAVES["fabrica"]:
+            continue
+        if not isinstance(valor, dict):
+            raise ErrorDiseno(
+                f"[fabrica]: no conozco la clave '{clave}'.{_sugerencia(clave, _CLAVES['fabrica'])}"
+                f" Los ajustes de un proveedor van en su propia tabla, por ejemplo [fabrica.{clave}]"
+            )
+        ajustes[clave] = dict(valor)
 
     proveedores = dict.fromkeys(TIPOS, "simulado")
     for tipo, nombre in _tabla(fabrica.get("proveedores"), "[fabrica.proveedores]").items():
@@ -130,6 +140,7 @@ def validar(datos: dict) -> Diseno:
         proveedores=proveedores,
         aprobar=frozenset(aprobar),
         intentos_max=intentos,
+        ajustes=ajustes,
     )
 
 

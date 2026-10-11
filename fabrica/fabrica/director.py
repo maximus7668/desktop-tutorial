@@ -59,6 +59,9 @@ class Director:
 
         self.registro = Registro(self.carpeta / "registro.json")
         self._reconciliar()
+        if self._fabricas is not None:
+            for nombre in sorted(set(self.diseno.proveedores.values()) | set(self.diseno.ajustes)):
+                self._agente(nombre)  # si un ajuste está mal, el error sale ya, no a mitad del trabajo
 
     # --- consultas -------------------------------------------------------------------------
 
@@ -251,6 +254,7 @@ class Director:
             intento=e.intentos + 1,
             memoria=e.memoria,
             memorias={d: dict(self.entrada(d).memoria) for d in tarea.deps},
+            proyecto=self.carpeta,
         )
         e.intentos += 1
         e.agente = agente.nombre
@@ -371,6 +375,15 @@ class Director:
 
     def _validar_proveedores(self) -> None:
         conocidos = sorted(self._fabricas if self._fabricas is not None else self._agentes)
+        for nombre, ajustes in self.diseno.ajustes.items():
+            if self._tipos_de(nombre) is None:
+                raise ErrorDiseno(f"[fabrica.{nombre}]: no existe ese proveedor. Hay: {', '.join(conocidos)}")
+            if self._fabricas is not None:
+                admitidos = getattr(self._fabricas[nombre], "AJUSTES", ())
+                for clave in ajustes:
+                    if clave not in admitidos:
+                        lista = ", ".join(admitidos) if admitidos else "ninguno"
+                        raise ErrorDiseno(f"[fabrica.{nombre}]: no conozco el ajuste '{clave}'. Admite: {lista}")
         for tipo, nombre in self.diseno.proveedores.items():
             tipos = self._tipos_de(nombre)
             if tipos is None:
@@ -392,5 +405,8 @@ class Director:
 
     def _agente(self, nombre: str) -> Agente:
         if nombre not in self._agentes:
-            self._agentes[nombre] = self._fabricas[nombre]()
+            try:
+                self._agentes[nombre] = self._fabricas[nombre](**self.diseno.ajustes.get(nombre, {}))
+            except (TypeError, ValueError) as e:
+                raise ErrorDiseno(f"[fabrica.{nombre}]: {e}") from None
         return self._agentes[nombre]

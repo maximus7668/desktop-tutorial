@@ -21,6 +21,7 @@ intentos_max = 3
 
 # Quién hace cada tipo de recurso.
 #   "simulado"   crea archivos de relleno: sirve para probar el flujo completo gratis.
+#   "comfyui"    concepto con ComfyUI en tu PC (gratis; usa tu modelo y tus LoRA, ver más abajo).
 #   "meshy"      hace concepto, modelo3d, rig y animacion de verdad (variable MESHY_API_KEY).
 #   "blender"    limpieza con Blender en tu PC (gratis): altura, origen en los pies, menos polígonos.
 #   "copiar"     limpieza: pasa el modelo tal cual al paso siguiente (si aún no usas Blender).
@@ -35,6 +36,21 @@ animacion = "simulado"
 voz = "simulado"
 sonido = "simulado"
 musica = "simulado"
+
+# Ajustes de cada proveedor, en su propia tabla. Si cambias uno, se rehace lo que hace ese
+# proveedor. Ejemplos (quita el # para usarlos):
+#
+# [fabrica.comfyui]
+# modelo = "animagine-xl-4.0.safetensors"  # un archivo de tu carpeta ComfyUI/models/checkpoints
+# flujo = "flujos/mi_flujo.json"           # opcional: tu propio flujo, exportado en formato API
+# servidor = "http://127.0.0.1:8188"
+#
+# [fabrica.meshy]
+# modelo_imagen = "nano-banana-2"          # modelo para el arte conceptual
+# caras = 30000                            # polígonos del modelo 3D
+#
+# [fabrica.blender]
+# max_caras = 60000
 
 [[personajes]]
 id = "ren"

@@ -42,6 +42,7 @@ def _post(url: str, cuerpo: dict, cabeceras: dict, espera: float) -> bytes:
 class AgenteElevenLabs:
     nombre = "elevenlabs"
     tipos = frozenset({"voz", "sonido", "musica"})
+    AJUSTES: tuple[str, ...] = ()
 
     def __init__(self, clave: str | None = None, http: Http | None = None):
         self._clave = (clave if clave is not None else os.environ.get(VARIABLE_CLAVE, "")).strip()

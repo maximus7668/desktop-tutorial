@@ -18,6 +18,7 @@ class Tarea:
     requiere_aprobacion: bool
     deps: tuple[str, ...] = ()
     datos: dict = field(default_factory=dict, compare=False)
+    ajustes: dict = field(default_factory=dict, compare=False)  # los de [fabrica.<proveedor>]
 
     @property
     def nombre(self) -> str:
@@ -26,11 +27,10 @@ class Tarea:
     @property
     def huella(self) -> str:
         """Cambia cuando cambia lo que se pide, para rehacer solo lo afectado."""
-        base = json.dumps(
-            {"tipo": self.tipo, "proveedor": self.proveedor, "deps": self.deps, "datos": self.datos},
-            sort_keys=True,
-            ensure_ascii=False,
-        )
+        pedido = {"tipo": self.tipo, "proveedor": self.proveedor, "deps": self.deps, "datos": self.datos}
+        if self.ajustes:
+            pedido["ajustes"] = self.ajustes  # solo si hay, para no cambiar la huella de los demás
+        base = json.dumps(pedido, sort_keys=True, ensure_ascii=False)
         return hashlib.sha256(base.encode("utf-8")).hexdigest()[:16]
 
 
@@ -48,6 +48,7 @@ def planificar(d: Diseno) -> list[Tarea]:
                 requiere_aprobacion=tipo in d.aprobar,
                 deps=deps,
                 datos=datos,
+                ajustes=d.ajustes.get(d.proveedores[tipo], {}),
             )
         )
         return id_

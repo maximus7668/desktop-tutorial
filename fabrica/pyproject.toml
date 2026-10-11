@@ -16,4 +16,4 @@ fabrica = "fabrica.cli:main"
 include = ["fabrica*"]
 
 [tool.setuptools.package-data]
-fabrica = ["plantilla/*.toml"]
+fabrica = ["plantilla/*.toml", "plantilla/flujos/*.json"]

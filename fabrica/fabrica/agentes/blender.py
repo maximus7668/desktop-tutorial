@@ -39,8 +39,11 @@ def buscar_blender() -> str | None:
 class AgenteBlender:
     nombre = "blender"
     tipos = frozenset({"limpieza"})
+    AJUSTES: tuple[str, ...] = ("ejecutable", "max_caras", "limite")
 
     def __init__(self, ejecutable: str | None = None, ejecutar=subprocess.run, max_caras: int = 60000, limite: float = 900.0):
+        if isinstance(max_caras, bool) or not isinstance(max_caras, int) or max_caras < 100:
+            raise ValueError("max_caras tiene que ser un número de caras (100 o más)")
         self._ejecutable = ejecutable if ejecutable is not None else buscar_blender()
         self._ejecutar = ejecutar
         self.max_caras = max_caras
