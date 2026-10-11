@@ -1,0 +1,133 @@
+# Documento de diseño que lee la fábrica.
+# Cada vez que cambies algo aquí y ejecutes, la fábrica rehace solo lo afectado
+# (y lo que dependía de ello): si cambias la descripción de un personaje, se rehace
+# su arte conceptual, su modelo y sus animaciones, pero no sus voces.
+#
+# Los id usan minúsculas sin acentos, números y _ (por ejemplo "golpe_fuerte").
+
+[juego]
+nombre = "Ryūsei Clash"
+estilo = """
+Juego de lucha 3D en arenas abiertas con estética anime y cel-shading: sombras planas,
+contorno negro grueso, colores saturados, pelo en mechones puntiagudos, proporciones
+heroicas, auras de energía brillantes. Personajes y técnicas originales, de ninguna serie existente.
+"""
+
+[fabrica]
+# Tipos de recurso que esperan tu visto bueno antes de que la fábrica siga con lo que depende de ellos.
+aprobar = ["concepto", "modelo3d", "animacion", "voz"]
+# Reintentos automáticos cuando un agente falla varias veces seguidas.
+intentos_max = 3
+
+# Quién hace cada tipo de recurso.
+#   "simulado"   crea archivos de relleno: sirve para probar el flujo completo gratis.
+#   "elevenlabs" hace voz, sonido y musica de verdad (define antes la variable ELEVENLABS_API_KEY).
+[fabrica.proveedores]
+concepto = "simulado"
+modelo3d = "simulado"
+limpieza = "simulado"
+rig = "simulado"
+animacion = "simulado"
+voz = "simulado"
+sonido = "simulado"
+musica = "simulado"
+
+[[personajes]]
+id = "ren"
+nombre = "Ren Kagura"
+descripcion = """
+Luchador de fuego de 19 años, atlético. Pelo negro en mechones puntiagudos con las puntas rojas,
+cinta blanca en la frente con los extremos largos, chaqueta de combate naranja sin mangas con ribete
+dorado, pantalón oscuro, vendas blancas en manos y antebrazos. Ojos ámbar, mirada desafiante.
+Aura de fuego naranja.
+"""
+voz = "Chico joven, enérgico y temerario; grita con fuerza al lanzar técnicas."
+voz_id = ""  # ID de una voz de tu biblioteca de ElevenLabs
+animaciones = [
+  "guardia", "correr", "volar", "esquivar",
+  "golpe_debil", "golpe_fuerte", "patada",
+  "cargar_ki", "rafaga_ki", "tecnica_guren", "recibir_golpe", "derribado",
+]
+
+[personajes.frases]
+entrada = "¡Vamos allá! ¡Enséñame todo lo que tienes!"
+cargar = "¡Arde... arde más!"
+tecnica = "¡Guren... Bakuha!"
+victoria = "Mientras arda este puño, no pienso caer."
+derrota = "Todavía... no he terminado..."
+
+[[personajes]]
+id = "yuki"
+nombre = "Yuki Shirane"
+descripcion = """
+Luchadora de hielo de 20 años, esbelta y precisa. Pelo plateado largo recogido en una coleta alta
+con las puntas azul hielo, abrigo de combate azul marino con ribetes cian, medias oscuras, botas
+blancas. Ojos cian, expresión serena. Aura de cristales de hielo.
+"""
+voz = "Mujer joven, calmada y segura; habla bajo y corta las frases con frialdad."
+voz_id = ""
+animaciones = [
+  "guardia", "correr", "volar", "esquivar",
+  "golpe_debil", "golpe_fuerte", "patada",
+  "cargar_ki", "rafaga_hielo", "teletransporte", "tecnica_zettai", "recibir_golpe", "derribado",
+]
+
+[personajes.frases]
+entrada = "Terminemos con esto rápido."
+cargar = "El frío no perdona."
+tecnica = "Zettai... Reido."
+victoria = "Demasiado lento."
+derrota = "Imposible... me has... alcanzado..."
+
+# Los efectos y la música salen mejor descritos en inglés.
+[[sonidos]]
+id = "golpe_debil"
+descripcion = "Quick anime punch impact, snappy and light, with a short whoosh"
+duracion = 0.6
+
+[[sonidos]]
+id = "golpe_fuerte"
+descripcion = "Heavy anime punch impact with deep bass thump and shockwave crack"
+duracion = 1.0
+
+[[sonidos]]
+id = "bloqueo"
+descripcion = "Arm block deflecting a punch, dull impact with energy shield crackle"
+duracion = 0.6
+
+[[sonidos]]
+id = "rafaga_ki"
+descripcion = "Anime energy blast fired from the palm, bright whoosh with electric sizzle"
+duracion = 1.2
+
+[[sonidos]]
+id = "explosion"
+descripcion = "Huge anime energy explosion with rumbling debris and long tail"
+duracion = 3.0
+
+[[sonidos]]
+id = "aura"
+descripcion = "Powering up anime aura, roaring energy flames rising in intensity"
+duracion = 4.0
+
+[[sonidos]]
+id = "teletransporte"
+descripcion = "Instant teleport, sharp air displacement zip with faint shimmer"
+duracion = 0.6
+
+[[sonidos]]
+id = "choque_rayos"
+descripcion = "Two giant energy beams clashing, sustained crackling roar with pulsing bass"
+duracion = 5.0
+
+[[musica]]
+id = "tema_combate"
+descripcion = "Energetic anime battle theme, electric guitars, fast drums, orchestral hits, 160 bpm"
+duracion = 90
+instrumental = true
+
+[[musica]]
+id = "menu"
+descripcion = "Calm but heroic anime menu theme, synth pads, light drums, hopeful melody"
+duracion = 60
+instrumental = true
