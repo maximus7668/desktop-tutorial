@@ -14,6 +14,8 @@ tu idea ──► Claude ──► juego.toml ──► director ──► conce
                                     todo queda en recursos/ y en registro.json
 ```
 
+**¿Primera vez?** Sigue la [guía paso a paso para montarlo en tu PC](GUIA.md).
+
 ## Estado actual
 
 | Parte | Agentes disponibles |
@@ -262,7 +264,8 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 
 ## Próximos pasos
 
-1. **Guía paso a paso** para instalarlo todo en el PC.
+1. **Escenarios**: las arenas de combate (cielo 360° y objetos del escenario).
+2. **Interfaz**: retratos de los personajes para los menús y la selección.
 
 ## Pruebas
 
