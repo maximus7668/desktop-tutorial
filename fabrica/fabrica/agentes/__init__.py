@@ -31,6 +31,9 @@ class Contexto:
     memorias: dict[str, dict] = field(default_factory=dict)  # memoria de cada dependencia (solo leer)
     proyecto: Path | None = None  # carpeta del proyecto (para rutas relativas de los ajustes)
     rechazos: int = 0  # veces que se mandó rehacer (tú o el revisor): cada vez es un pedido nuevo
+    # Guarda el registro ya. Quien encarga un trabajo remoto la llama al apuntar su id en memoria:
+    # si la fábrica se cierra mientras espera, el encargo se recoge luego sin pagarlo otra vez.
+    guardar: Callable[[], None] = lambda: None
 
     def archivo(self, nombre: str) -> Path:
         return self.carpeta / nombre

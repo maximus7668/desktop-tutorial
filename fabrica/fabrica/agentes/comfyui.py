@@ -112,6 +112,7 @@ class AgenteComfyUI:
             if not id_tarea:
                 raise ErrorAgente("ComfyUI no devolvió el id del trabajo.")
             memoria.update({"tarea": id_tarea, "clave": clave})
+            ctx.guardar()
 
         historia = esperar(
             lambda: self._api.json("GET", f"/history/{id_tarea}"),

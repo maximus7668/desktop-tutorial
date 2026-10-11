@@ -40,6 +40,7 @@ class Informe:
     errores: list[str] = field(default_factory=list)
     sin_agente: list[str] = field(default_factory=list)
     limite_alcanzado: bool = False
+    detenido: bool = False  # se paró a petición (seguir devolvió False)
 
 
 class Director:
@@ -86,12 +87,14 @@ class Director:
         maximo: int | None = None,
         al_terminar: Callable[[Tarea, Entrada], None] | None = None,
         al_revisar: Callable[[Tarea, Veredicto, int, int], None] | None = None,
+        seguir: Callable[[], bool] | None = None,
     ) -> Informe:
         """Genera, en orden, todo lo que tenga sus dependencias aprobadas.
 
         Lo de los tipos de [fabrica] revisar pasa antes por el revisor: si ve fallos, se rehace con
         su corrección. al_revisar recibe cada veredicto: tarea, veredicto, número de la vez que se
-        rehace por él (0 si no se rehace) y máximo de veces.
+        rehace por él (0 si no se rehace) y máximo de veces. Si seguir() devuelve False, para antes
+        de empezar la siguiente tarea.
         """
         informe = Informe()
         for tarea in self.tareas:
@@ -110,6 +113,9 @@ class Director:
                 continue
             if maximo is not None and len(informe.hechas) + len(informe.errores) >= maximo:
                 informe.limite_alcanzado = True
+                break
+            if seguir is not None and not seguir():
+                informe.detenido = True
                 break
             self._producir(tarea, e, agente, revisor, al_revisar)
             (informe.errores if e.estado == ERROR else informe.hechas).append(tarea.id)
@@ -356,6 +362,7 @@ class Director:
             memorias={d: dict(self.entrada(d).memoria) for d in tarea.deps},
             proyecto=self.carpeta,
             rechazos=e.rechazos,
+            guardar=self.registro.guardar,
         )
         e.intentos += 1
         e.agente = agente.nombre

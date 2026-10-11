@@ -35,6 +35,14 @@ class TestDirector(ConProyecto):
         self.assertEqual(indice["personajes"]["ren"]["modelo"], ["recursos/ren/rig/modelo_rig.gltf"])
         self.assertEqual(indice["personajes"]["ren"]["animaciones"]["golpe"], ["recursos/ren/animacion/golpe/golpe.json"])
 
+    def test_parar_entre_tareas(self):
+        d = self.director()
+        self.assertTrue(d.ejecutar(seguir=lambda: False).detenido)
+        self.assertEqual(d.entrada("ren/concepto").estado, PENDIENTE)
+        respuestas = iter([True, False])
+        informe = d.ejecutar(seguir=lambda: next(respuestas))
+        self.assertEqual((informe.hechas, informe.detenido), (["ren/concepto"], True))
+
     def test_el_registro_sobrevive_entre_ejecuciones(self):
         self.director().ejecutar()
         otra_vez = self.director()

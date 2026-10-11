@@ -236,6 +236,7 @@ class AgenteMeshy:
             if not isinstance(id_tarea, str) or not id_tarea:
                 raise ErrorAgente("Meshy no devolvió el id de la tarea.")
             memoria.update({"tarea": id_tarea, "clave": clave, "ruta": ruta})
+            ctx.guardar()
         datos = esperar(
             lambda: self._api.json("GET", f"{ruta}/{id_tarea}"),
             _situacion, "Meshy", self.intervalo, self.limite, self._dormir, self._reloj,

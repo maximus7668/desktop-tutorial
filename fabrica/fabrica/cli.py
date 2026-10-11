@@ -70,6 +70,9 @@ def main(argv: list[str] | None = None) -> int:
     idear.add_argument("--archivo", type=Path, help="lee la idea de un archivo de texto")
     idear.add_argument("--modelo", default=MODELO, help=f"modelo de Claude (por defecto {MODELO})")
     idear.add_argument("--esfuerzo", default="high", choices=ESFUERZOS, help="cuánto piensa Claude (por defecto high)")
+    panel = ordenes.add_parser("panel", parents=[comun], help="abre el panel visual en el navegador (sin órdenes)")
+    panel.add_argument("--puerto", type=int, default=8765, help="puerto en tu PC (por defecto 8765)")
+    panel.add_argument("--sin-navegador", action="store_true", help="no abre el navegador solo")
     ordenes.add_parser("plan", parents=[comun], help="muestra todas las tareas y de qué dependen")
     ejecutar = ordenes.add_parser("ejecutar", parents=[comun], help="genera todo lo que se pueda hacer ya")
     ejecutar.add_argument("--max", type=int, metavar="N", help="como mucho N tareas en esta vuelta")
@@ -99,6 +102,8 @@ def main(argv: list[str] | None = None) -> int:
             return _nuevo(args.carpeta)
         if args.orden == "idear":
             return _idear(args.carpeta, " ".join(args.idea), args.archivo, args.modelo, args.esfuerzo)
+        if args.orden == "panel":
+            return _panel(args.proyecto, args.puerto, not args.sin_navegador)
         director = Director(args.proyecto)
         if args.orden == "plan":
             return _plan(director)
@@ -184,6 +189,26 @@ def _idear(carpeta: Path, idea: str, archivo: Path | None, modelo: str, esfuerzo
     print(f"  1. Léelo y cambia lo que quieras: {destino}")
     print(f"  2. python -m fabrica plan -p {carpeta}")
     print(f"  3. python -m fabrica ejecutar -p {carpeta}")
+    return 0
+
+
+def _panel(carpeta: Path, puerto: int, abrir: bool) -> int:
+    import webbrowser
+
+    from .panel import Panel, servidor
+
+    srv = servidor(Panel(carpeta), puerto)
+    url = f"http://127.0.0.1:{srv.server_address[1]}"
+    print(f"Panel de la fábrica en {url}")
+    print("Déjalo abierto mientras lo uses. Para cerrarlo: Ctrl+C")
+    if abrir:
+        webbrowser.open(url)
+    try:
+        srv.serve_forever()
+    except KeyboardInterrupt:
+        print("\nPanel cerrado. Lo que quedó a medias se retoma al volver a ejecutar.")
+    finally:
+        srv.server_close()
     return 0
 
 

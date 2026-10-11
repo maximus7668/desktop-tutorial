@@ -201,6 +201,42 @@ class TestMeshy(unittest.TestCase):
 
 
 class TestMemoriaEnElRegistro(ConProyecto):
+    def test_el_id_remoto_queda_guardado_en_cuanto_se_pide(self):
+        carpeta = self.carpeta
+
+        class AgenteQueEspera:
+            nombre = "simulado"
+            tipos = frozenset({"concepto", "modelo3d", "limpieza", "rig", "animacion", "voz", "sonido", "musica"})
+            visto: dict = {}
+
+            def disponible(self):
+                return None
+
+            def generar(self, ctx):
+                ctx.memoria["tarea"] = "remota-7"
+                ctx.guardar()  # lo que hace Meshy al recibir el id, antes de esperar
+                en_disco = json.loads((carpeta / "registro.json").read_text(encoding="utf-8"))
+                self.visto = en_disco["tareas"][ctx.tarea.id]["memoria"]
+                raise ErrorAgente("Meshy sigue trabajando")
+
+        agente = AgenteQueEspera()
+        Director(self.carpeta, agentes={"simulado": agente}).ejecutar(maximo=1)
+        self.assertEqual(agente.visto, {"tarea": "remota-7"})
+
+    def test_meshy_guarda_al_pedir(self):
+        guardados = []
+        api = MeshyFalso({"/openapi/v1/text-to-image": [
+            {"status": "SUCCEEDED", "image_urls": ["https://archivos/concepto.png"]},
+        ]})
+        reloj = Reloj()
+        agente = AgenteMeshy(clave="k", transporte=api, dormir=reloj.dormir, reloj=reloj)
+        t = tarea("concepto", "ren/concepto", personaje="Ren", descripcion="x", estilo="y")
+        memoria: dict = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            agente.generar(Contexto(tarea=t, juego="", estilo="", carpeta=Path(tmp), memoria=memoria,
+                                    guardar=lambda: guardados.append(dict(memoria))))
+        self.assertEqual(guardados[0]["tarea"], "t1")
+
     def test_la_memoria_se_guarda_aunque_falle_y_se_borra_al_cambiar_el_diseno(self):
         class AgenteQueRecuerda:
             nombre = "simulado"

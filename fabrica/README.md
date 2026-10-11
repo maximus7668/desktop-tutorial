@@ -46,6 +46,27 @@ python -m fabrica estado -p mi_juego     # cómo va cada tarea
 
 En Linux o macOS puede que tengas que escribir `python3` en lugar de `python`.
 
+## Panel visual (sin escribir órdenes)
+
+```
+python -m fabrica panel -p mi_juego
+```
+
+Se abre el navegador con el panel de la fábrica. Desde ahí:
+
+- **Empiezas el proyecto** si aún no existe: contándole tu idea a Claude o con el ejemplo.
+- **Ejecutar** y **Parar** (para al terminar la tarea en curso).
+- Ves cada recurso: las imágenes, las voces y la música se escuchan ahí mismo y los modelos 3D
+  se giran con el ratón (el visor 3D se descarga de internet la primera vez).
+- **Aprobar** o **Rechazar** cada cosa escribiendo qué cambiar, o aprobar todo de golpe.
+- **Diseño**: editas `juego.toml`; al guardar se comprueba todo y no se toca nada si hay un error.
+- **Llevar a Godot**: copia lo aprobado a tu proyecto de Godot.
+
+Déjalo abierto mientras lo uses (se cierra con Ctrl+C en la terminal). Solo escucha en tu PC
+(127.0.0.1), solo enseña archivos de la carpeta `recursos/` del proyecto y no acepta órdenes que
+vengan de otras webs. Si cierras mientras trabaja, lo que estaba a medias se retoma al volver a
+ejecutar, y los encargos ya pedidos a Meshy o ComfyUI se recogen sin pagarlos otra vez.
+
 ## El ciclo de trabajo
 
 1. **`ejecutar`**: el director genera, en orden, todo lo que tiene sus dependencias aprobadas.
@@ -241,8 +262,7 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 
 ## Próximos pasos
 
-1. **Panel visual** para usar la fábrica sin la línea de comandos.
-2. **Guía paso a paso** para instalarlo todo en el PC.
+1. **Guía paso a paso** para instalarlo todo en el PC.
 
 ## Pruebas
 

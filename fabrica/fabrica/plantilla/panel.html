@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fábrica de recursos</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 30 16 16 30 2 16Z' fill='%23f76707'/%3E%3C/svg%3E">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.1/dist/model-viewer.min.js"></script>
+<style>
+:root {
+  --fondo: #f5f4f1;
+  --superficie: #ffffff;
+  --superficie-2: #faf9f7;
+  --texto: #1d1c1a;
+  --suave: #67635c;
+  --borde: #e3e0d9;
+  --acento: #e8590c;
+  --acento-texto: #ffffff;
+  --acento-suave: #fff1e6;
+  --sombra: 0 1px 2px rgb(0 0 0 / .05), 0 4px 16px rgb(0 0 0 / .04);
+  --ok: #2b8a3e;        --ok-fondo: #e6f4ea;
+  --espera: #b35c00;    --espera-fondo: #fff3d6;
+  --pendiente: #6c6a66; --pendiente-fondo: #efeee9;
+  --rehacer: #5f3dc4;   --rehacer-fondo: #efeaff;
+  --error: #c92a2a;     --error-fondo: #ffe8e8;
+  --sin: #8a6100;       --sin-fondo: #fff8db;
+  --codigo: #1d1c1a;    --codigo-fondo: #f1efea;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #141414;
+    --superficie: #1d1d1c;
+    --superficie-2: #232322;
+    --texto: #ecebe8;
+    --suave: #a19d95;
+    --borde: #34332f;
+    --acento: #ff8a3d;
+    --acento-texto: #1a0d00;
+    --acento-suave: #3a2416;
+    --sombra: 0 1px 2px rgb(0 0 0 / .4);
+    --ok: #69db7c;        --ok-fondo: #1c3323;
+    --espera: #ffc078;    --espera-fondo: #3d2c12;
+    --pendiente: #b3afa7; --pendiente-fondo: #2b2a28;
+    --rehacer: #b197fc;   --rehacer-fondo: #2c2340;
+    --error: #ff8787;     --error-fondo: #3f1d1d;
+    --sin: #ffd43b;       --sin-fondo: #39310f;
+    --codigo: #ecebe8;    --codigo-fondo: #191918;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+button, input, textarea { font: inherit; color: inherit; }
+button {
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  border-radius: 8px;
+  padding: 7px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+button:hover:not(:disabled) { border-color: var(--suave); }
+button:disabled { opacity: .45; cursor: default; }
+button.primario { background: var(--acento); border-color: var(--acento); color: var(--acento-texto); font-weight: 600; }
+button.primario:hover:not(:disabled) { filter: brightness(1.06); border-color: var(--acento); }
+button.peligro { color: var(--error); }
+button.mini { padding: 4px 10px; font-size: 13px; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+a { color: inherit; }
+
+.barra {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;
+  padding: 12px 20px;
+  background: color-mix(in srgb, var(--fondo) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--borde);
+}
+.marca { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marca svg { flex: none; }
+.marca h1 { margin: 0; font-size: 17px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.marca small { color: var(--suave); font-size: 12px; display: block; font-weight: 400; }
+.resumen { display: flex; flex-wrap: wrap; gap: 6px; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+
+.insignia, .chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 999px; padding: 2px 10px; font-size: 12.5px; font-weight: 600; white-space: nowrap;
+}
+.insignia::before, .chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.aprobado { color: var(--ok); background: var(--ok-fondo); }
+.esperando_aprobacion { color: var(--espera); background: var(--espera-fondo); }
+.pendiente { color: var(--pendiente); background: var(--pendiente-fondo); }
+.rechazado { color: var(--rehacer); background: var(--rehacer-fondo); }
+.error { color: var(--error); background: var(--error-fondo); }
+.sin_agente { color: var(--sin); background: var(--sin-fondo); }
+
+.marco { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 20px; padding: 18px 20px 40px; align-items: start; }
+@media (max-width: 1000px) { .marco { grid-template-columns: minmax(0, 1fr); } }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.filtros button { border-radius: 999px; padding: 5px 14px; font-size: 14px; }
+.filtros button[aria-pressed="true"] { background: var(--texto); color: var(--fondo); border-color: var(--texto); }
+
+.grupo { margin-bottom: 26px; }
+.grupo > h2 { font-size: 15px; margin: 0 0 10px; color: var(--suave); font-weight: 650; letter-spacing: .02em; text-transform: uppercase; }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; align-items: start; }
+
+.tarjeta {
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 12px;
+  padding: 13px 14px; box-shadow: var(--sombra);
+  display: flex; flex-direction: column; gap: 8px; min-width: 0;
+}
+.tarjeta[data-estado="esperando_aprobacion"] { border-color: color-mix(in srgb, var(--espera) 45%, var(--borde)); }
+.tarjeta[data-estado="error"] { border-color: color-mix(in srgb, var(--error) 45%, var(--borde)); }
+.tarjeta .cab { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 8px; }
+.tarjeta h3 { margin: 0; font-size: 14.5px; font-weight: 620; flex: 1 1 150px; }
+.meta { margin: 0; color: var(--suave); font-size: 12.5px; overflow-wrap: anywhere; }
+.nota { margin: 0; font-size: 13.5px; overflow-wrap: anywhere; }
+.motivo { margin: 0; font-size: 13px; color: var(--rehacer); }
+.espera { margin: 0; font-size: 13px; color: var(--suave); }
+.vistas { display: flex; flex-direction: column; gap: 8px; }
+.vistas .imagen { display: block; border-radius: 8px; overflow: hidden; background: var(--superficie-2); border: 1px solid var(--borde); }
+.vistas img { display: block; width: 100%; max-height: 300px; object-fit: contain; }
+.vistas audio { width: 100%; height: 36px; }
+.vistas .archivo { font-size: 13px; color: var(--suave); }
+.visor { border: 1px dashed var(--borde); border-radius: 8px; background: var(--superficie-2); }
+.visor button { width: 100%; border: 0; background: transparent; padding: 14px; color: var(--suave); }
+.visor model-viewer { width: 100%; height: 280px; display: block; border-radius: 8px; --poster-color: transparent; }
+.visor p { margin: 8px 12px; font-size: 13px; color: var(--suave); }
+.botones { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.rechazo { display: flex; flex-direction: column; gap: 8px; }
+.rechazo textarea { width: 100%; min-height: 70px; resize: vertical; border: 1px solid var(--borde); border-radius: 8px; padding: 8px 10px; background: var(--superficie-2); }
+
+.lateral { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 12px; }
+@media (max-width: 1000px) { .lateral { position: static; } }
+.caja { background: var(--superficie); border: 1px solid var(--borde); border-radius: 12px; padding: 13px 14px; box-shadow: var(--sombra); }
+.caja h2 { margin: 0 0 8px; font-size: 14px; }
+.caja p { margin: 0 0 6px; font-size: 13.5px; color: var(--suave); }
+#mensajes {
+  margin: 0; max-height: 52vh; overflow: auto; font: 12.5px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace;
+  white-space: pre-wrap; overflow-wrap: anywhere; color: var(--codigo); background: var(--codigo-fondo);
+  border-radius: 8px; padding: 10px;
+}
+.trabajando { display: none; align-items: center; gap: 10px; font-weight: 600; color: var(--acento); }
+body[data-trabajo]:not([data-trabajo=""]) .trabajando { display: flex; }
+.giro { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; animation: giro .8s linear infinite; }
+@keyframes giro { to { transform: rotate(1turn); } }
+@media (prefers-reduced-motion: reduce) { .giro { animation: none; } }
+
+.aviso-error { background: var(--error-fondo); color: var(--error); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.vacio { color: var(--suave); padding: 30px 0; text-align: center; }
+
+.bienvenida { max-width: 860px; margin: 30px auto; padding: 0 20px; }
+.bienvenida h2 { font-size: 26px; margin: 0 0 6px; }
+.bienvenida > p { color: var(--suave); margin: 0 0 22px; }
+.opciones { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .opciones { grid-template-columns: 1fr; } }
+.opcion { background: var(--superficie); border: 1px solid var(--borde); border-radius: 14px; padding: 18px; box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 10px; }
+.opcion h3 { margin: 0; font-size: 17px; }
+.opcion p { margin: 0; color: var(--suave); font-size: 14px; }
+.opcion textarea { width: 100%; min-height: 150px; resize: vertical; border: 1px solid var(--borde); border-radius: 10px; padding: 10px 12px; background: var(--superficie-2); }
+
+dialog { border: 1px solid var(--borde); border-radius: 14px; padding: 0; background: var(--superficie); color: var(--texto); box-shadow: 0 20px 60px rgb(0 0 0 / .25); width: min(960px, calc(100vw - 32px)); }
+dialog::backdrop { background: rgb(0 0 0 / .35); }
+dialog form { display: flex; flex-direction: column; gap: 12px; padding: 18px; }
+dialog h2 { margin: 0; font-size: 18px; }
+dialog p { margin: 0; color: var(--suave); font-size: 14px; }
+dialog textarea { width: 100%; height: min(62vh, 640px); resize: vertical; font: 13px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace; border: 1px solid var(--borde); border-radius: 10px; padding: 10px 12px; background: var(--codigo-fondo); color: var(--codigo); }
+dialog input[type="text"] { width: 100%; border: 1px solid var(--borde); border-radius: 8px; padding: 8px 10px; background: var(--superficie-2); }
+dialog .pie { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; align-items: center; }
+dialog .pie .izquierda { margin-right: auto; }
+dialog .fallo { color: var(--error); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; }
+label.casilla { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+
+#avisos { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 8px; z-index: 20; width: min(560px, calc(100vw - 32px)); }
+.toast { background: var(--texto); color: var(--fondo); border-radius: 10px; padding: 10px 14px; box-shadow: 0 8px 30px rgb(0 0 0 / .2); font-size: 14px; overflow-wrap: anywhere; }
+.toast.mal { background: var(--error); color: #fff; }
+#desconectado { display: none; background: var(--error); color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; }
+body.sin-conexion #desconectado { display: block; }
+[hidden] { display: none !important; }
+@media (max-width: 600px) {
+  .barra { padding: 10px 16px; }
+  .marco { padding: 14px 16px 30px; }
+  .acciones { margin-left: 0; }
+}
+</style>
+</head>
+<body data-trabajo="">
+<div id="desconectado">Sin conexión con la fábrica. ¿Has cerrado la terminal donde la abriste?</div>
+
+<header class="barra">
+  <div class="marca">
+    <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 30 16 16 30 2 16Z" fill="var(--acento)"/><path d="M16 9 23 16 16 23 9 16Z" fill="var(--superficie)"/></svg>
+    <h1><span id="nombre">Fábrica de recursos</span><small id="carpeta"></small></h1>
+  </div>
+  <div class="resumen" id="resumen"></div>
+  <div class="acciones" id="acciones-proyecto" hidden>
+    <button class="primario" id="b-ejecutar" title="Genera todo lo que ya se puede hacer">▶ Ejecutar</button>
+    <button id="b-parar" hidden title="Termina la tarea en curso y se detiene">■ Parar</button>
+    <button id="b-aprobar-todo">✓ Aprobar todo lo que espera</button>
+    <button id="b-diseno" title="Edita juego.toml">Diseño</button>
+    <button id="b-godot">Llevar a Godot</button>
+  </div>
+</header>
+
+<section class="bienvenida" id="bienvenida" hidden>
+  <h2>Empieza tu juego</h2>
+  <p id="bienvenida-carpeta"></p>
+  <div class="opciones">
+    <form class="opcion" id="f-idear">
+      <h3>Cuéntale tu idea a Claude</h3>
+      <p>Escribe el diseño completo: estilo, personajes con su aspecto, voz, animaciones y frases, efectos de sonido y música. Tarda unos minutos y necesita la clave de Claude (ANTHROPIC_API_KEY).</p>
+      <textarea id="idea" placeholder="Por ejemplo: un juego de lucha en arenas abiertas con 6 guerreros que dominan los elementos, estilo anime con cel-shading, combates aéreos muy rápidos y técnicas especiales espectaculares."></textarea>
+      <div class="botones"><button class="primario" id="b-idear">Escribir el diseño con Claude</button></div>
+    </form>
+    <div class="opcion">
+      <h3>Empezar con el ejemplo</h3>
+      <p>Dos luchadores de ejemplo, sus sonidos y su música. Con el agente simulado puedes probar todo el recorrido gratis y sin claves.</p>
+      <div class="botones"><button id="b-nuevo">Usar el ejemplo</button></div>
+    </div>
+  </div>
+  <div class="caja" style="margin-top:16px" id="caja-idear" hidden>
+    <div class="trabajando"><span class="giro"></span><span>Claude está escribiendo el diseño…</span></div>
+  </div>
+</section>
+
+<div class="marco" id="proyecto" hidden>
+  <main>
+    <div class="aviso-error" id="error-diseno" hidden></div>
+    <nav class="filtros" id="filtros" aria-label="Filtrar tareas"></nav>
+    <div id="grupos"></div>
+    <p class="vacio" id="vacio" hidden>Nada que mostrar con este filtro.</p>
+  </main>
+  <aside class="lateral">
+    <div class="caja">
+      <div class="trabajando"><span class="giro"></span><span id="que-hace">Trabajando…</span></div>
+      <h2>Actividad</h2>
+      <pre id="mensajes">Pulsa «Ejecutar» para que la fábrica empiece.</pre>
+    </div>
+    <div class="caja">
+      <h2>Cómo va esto</h2>
+      <p>1. <b>Ejecutar</b> genera todo lo que ya se puede hacer.</p>
+      <p>2. Revisa lo que <b>espera tu visto bueno</b>: apruébalo o recházalo diciendo qué cambiar.</p>
+      <p>3. Vuelve a ejecutar: sigue con lo que dependía de eso.</p>
+      <p>4. Cuando esté todo, <b>Llevar a Godot</b>.</p>
+    </div>
+  </aside>
+</div>
+
+<dialog id="d-diseno">
+  <form method="dialog">
+    <h2>Diseño del juego (juego.toml)</h2>
+    <p>Al guardar se comprueba todo. En la próxima ejecución se rehace solo lo que cambie.</p>
+    <textarea id="texto-diseno" spellcheck="false"></textarea>
+    <div class="fallo" id="fallo-diseno" hidden></div>
+    <div class="pie">
+      <button value="cancelar" formnovalidate>Cancelar</button>
+      <button class="primario" id="b-guardar-diseno" value="guardar">Guardar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="d-godot">
+  <form method="dialog">
+    <h2>Llevar lo aprobado a Godot</h2>
+    <p>Copia todo lo aprobado a la carpeta <b>recursos_fabrica</b> de tu proyecto de Godot, con un índice para el juego.</p>
+    <input type="text" id="ruta-godot" placeholder="Carpeta del proyecto de Godot (la que tiene project.godot)">
+    <label class="casilla"><input type="checkbox" id="simulados"> Copiar también el relleno del agente simulado</label>
+    <div class="fallo" id="fallo-godot" hidden></div>
+    <div class="pie">
+      <button class="izquierda" id="b-exportar" value="exportar" title="Escribe indice_recursos.json en el proyecto de la fábrica">¿Otro motor? Exportar el índice</button>
+      <button value="cancelar" formnovalidate>Cancelar</button>
+      <button class="primario" id="b-montar" value="montar">Copiar</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="avisos" aria-live="polite"></div>
+
+<script>
+"use strict";
+const ETIQUETAS = {
+  aprobado: "Aprobado", esperando_aprobacion: "Espera tu visto bueno", pendiente: "Pendiente",
+  rechazado: "Se rehará", error: "Error", sin_agente: "Sin agente",
+};
+const RESUMEN = ["esperando_aprobacion", "error", "sin_agente", "rechazado", "pendiente", "aprobado"];
+const FILTROS = [
+  ["todo", "Todo", () => true],
+  ["espera", "Esperan tu visto bueno", t => t.estado === "esperando_aprobacion"],
+  ["problemas", "Con problemas", t => ["error", "sin_agente"].includes(t.estado)],
+  ["aprobado", "Aprobado", t => t.estado === "aprobado"],
+];
+const $ = id => document.getElementById(id);
+let estado = null, temporizador = null, filtro = leer("filtro") || "todo";
+let ultimosFiltros = "", ultimosMensajes = "";  // para no rehacer lo que no cambió (y no perder el foco)
+const tarjetas = new Map();   // id de tarea -> {firma, el}
+const secciones = new Map();  // id de grupo -> {el, rejilla}
+
+function leer(clave) { try { return localStorage.getItem("fabrica." + clave); } catch { return null; } }
+function guardar(clave, valor) { try { localStorage.setItem("fabrica." + clave, valor); } catch {} }
+
+function el(etiqueta, atributos = {}, ...hijos) {
+  const nodo = document.createElement(etiqueta);
+  for (const [clave, valor] of Object.entries(atributos)) {
+    if (valor === false || valor == null) continue;
+    if (clave.startsWith("on")) nodo.addEventListener(clave.slice(2), valor);
+    else nodo.setAttribute(clave, valor === true ? "" : valor);
+  }
+  for (const hijo of hijos.flat()) if (hijo != null) nodo.append(hijo);  // texto siempre como texto
+  return nodo;
+}
+
+async function api(ruta, datos = {}) {
+  const respuesta = await fetch(ruta, {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "X-Fabrica": "1"},
+    body: JSON.stringify(datos),
+  });
+  const cuerpo = await respuesta.json().catch(() => ({}));
+  if (!respuesta.ok) throw new Error(cuerpo.error || `Error ${respuesta.status}`);
+  return cuerpo;
+}
+
+function aviso(texto, mal = false) {
+  const t = el("div", {class: "toast" + (mal ? " mal" : ""), role: mal ? "alert" : "status"}, texto);
+  $("avisos").append(t);
+  setTimeout(() => t.remove(), mal ? 9000 : 4500);
+}
+
+// Hace una acción y avisa de cómo fue. Devuelve la respuesta, o null si falló.
+async function hacer(ruta, datos, exito) {
+  try {
+    const r = await api(ruta, datos);
+    if (exito) aviso(typeof exito === "function" ? exito(r) : exito);
+    return r;
+  } catch (e) {
+    aviso(e.message, true);
+    return null;
+  } finally {
+    refrescar();
+  }
+}
+
+async function refrescar() {
+  clearTimeout(temporizador);
+  try {
+    const r = await fetch("/api/estado", {cache: "no-store"});
+    estado = await r.json();
+    if (!r.ok) throw new Error(estado.error);
+    document.body.classList.remove("sin-conexion");
+    pintar();
+  } catch {
+    document.body.classList.add("sin-conexion");
+  }
+  temporizador = setTimeout(refrescar, estado && estado.trabajo ? 1200 : 4000);
+}
+
+function pintar() {
+  const ocupado = Boolean(estado.trabajo);
+  document.body.dataset.trabajo = estado.trabajo || "";
+  $("carpeta").textContent = estado.carpeta;
+  const hayProyecto = estado.existe && !estado.error;
+  $("bienvenida").hidden = estado.existe;
+  $("proyecto").hidden = !estado.existe;
+  $("acciones-proyecto").hidden = !estado.existe;
+  $("caja-idear").hidden = estado.trabajo !== "idear";
+  $("b-idear").disabled = ocupado;
+  $("b-nuevo").disabled = ocupado;
+  $("bienvenida-carpeta").textContent = `Proyecto nuevo en ${estado.carpeta}`;
+  $("error-diseno").hidden = !estado.error;
+  $("error-diseno").textContent = estado.error ? `El diseño tiene algo que corregir:\n${estado.error}\n\nÁbrelo con el botón «Diseño».` : "";
+  $("nombre").textContent = estado.juego || "Fábrica de recursos";
+  document.title = estado.juego ? `${estado.juego} · Fábrica` : "Fábrica de recursos";
+
+  const resumen = estado.resumen || {};
+  $("resumen").replaceChildren(...RESUMEN.filter(s => resumen[s]).map(s =>
+    el("span", {class: "chip " + s, title: ETIQUETAS[s]}, `${resumen[s]} ${ETIQUETAS[s].toLowerCase()}`)));
+  $("b-ejecutar").disabled = ocupado || !hayProyecto;
+  $("b-parar").hidden = estado.trabajo !== "ejecutar";
+  $("b-aprobar-todo").disabled = ocupado || !resumen.esperando_aprobacion;
+  $("b-godot").disabled = ocupado || !hayProyecto;
+  $("que-hace").textContent = estado.trabajo === "idear" ? "Claude está escribiendo el diseño…" : "Trabajando…";
+
+  const mensajes = $("mensajes"), texto = estado.mensajes.join("\n");
+  if (texto && texto !== ultimosMensajes) {
+    const abajo = mensajes.scrollTop + mensajes.clientHeight >= mensajes.scrollHeight - 8;
+    mensajes.textContent = ultimosMensajes = texto;
+    if (abajo) mensajes.scrollTop = mensajes.scrollHeight;
+  }
+
+  pintarTareas(estado.grupos || [], ocupado);
+}
+
+function pintarTareas(grupos, ocupado) {
+  const todas = grupos.flatMap(g => g.tareas);
+  const cuentas = FILTROS.map(([, , cumple]) => todas.filter(cumple).length);
+  const claveFiltros = JSON.stringify([filtro, cuentas]);
+  if (claveFiltros !== ultimosFiltros) {
+    ultimosFiltros = claveFiltros;
+    $("filtros").replaceChildren(...FILTROS.map(([clave, texto], i) =>
+      el("button", {"aria-pressed": String(filtro === clave), onclick: () => { filtro = clave; guardar("filtro", clave); pintar(); }},
+        clave === "todo" ? texto : `${texto} (${cuentas[i]})`)));
+  }
+  const cumple = (FILTROS.find(f => f[0] === filtro) || FILTROS[0])[2];
+  const vivas = new Set();
+  let visibles = 0;
+  const contenedor = $("grupos");
+  for (const [i, grupo] of grupos.entries()) {
+    let seccion = secciones.get(grupo.id);
+    if (!seccion) {
+      const rejilla = el("div", {class: "rejilla"});
+      seccion = {el: el("section", {class: "grupo"}, el("h2", {}, grupo.titulo), rejilla), rejilla};
+      secciones.set(grupo.id, seccion);
+    }
+    seccion.el.querySelector("h2").textContent = grupo.titulo;
+    if (contenedor.children[i] !== seccion.el) contenedor.insertBefore(seccion.el, contenedor.children[i] || null);
+    let enGrupo = 0;
+    for (const [j, t] of grupo.tareas.entries()) {
+      vivas.add(t.id);
+      const firma = JSON.stringify(t) + ocupado;
+      let tarjeta = tarjetas.get(t.id);
+      if (!tarjeta || (tarjeta.firma !== firma && !tarjeta.el.dataset.ocupada)) {
+        const nueva = pintarTarjeta(t, ocupado);
+        if (tarjeta) tarjeta.el.replaceWith(nueva);
+        tarjeta = {firma, el: nueva};
+        tarjetas.set(t.id, tarjeta);
+      }
+      if (seccion.rejilla.children[j] !== tarjeta.el) seccion.rejilla.insertBefore(tarjeta.el, seccion.rejilla.children[j] || null);
+      tarjeta.el.hidden = !cumple(t);
+      if (!tarjeta.el.hidden) enGrupo++;
+    }
+    seccion.el.hidden = enGrupo === 0;
+    visibles += enGrupo;
+  }
+  for (const [id, tarjeta] of tarjetas) if (!vivas.has(id)) { tarjeta.el.remove(); tarjetas.delete(id); }
+  for (const [id, seccion] of secciones) if (!grupos.some(g => g.id === id)) { seccion.el.remove(); secciones.delete(id); }
+  $("vacio").hidden = visibles > 0 || !grupos.length;
+}
+
+function pintarTarjeta(t, ocupado) {
+  const tarjeta = el("article", {class: "tarjeta", "data-estado": t.estado},
+    el("div", {class: "cab"}, el("h3", {}, t.titulo), el("span", {class: "insignia " + t.estado}, ETIQUETAS[t.estado] || t.estado)),
+    el("p", {class: "meta"}, [t.id, t.proveedor, t.revisa_claude ? "revisa Claude" : null].filter(Boolean).join(" · ")));
+  if (t.nota) tarjeta.append(el("p", {class: "nota"}, t.nota));
+  if (t.motivo && t.estado !== "aprobado" && !t.nota.includes(t.motivo)) tarjeta.append(el("p", {class: "motivo"}, `Cambio pedido: ${t.motivo}`));
+  if (t.espera_a.length) tarjeta.append(el("p", {class: "espera"}, `Espera a: ${t.espera_a.join(", ")}`));
+  if (t.archivos.length) tarjeta.append(vistas(t));
+  const botones = el("div", {class: "botones"});
+  if (t.estado === "esperando_aprobacion") {
+    botones.append(el("button", {class: "primario mini", disabled: ocupado, onclick: () =>
+      hacer("/api/aprobar", {ids: [t.id]}, "Aprobado. Pulsa Ejecutar para seguir con lo que dependía de esto.")}, "✓ Aprobar"));
+  }
+  if (t.estado === "esperando_aprobacion" || t.estado === "aprobado") {
+    botones.append(el("button", {class: "mini peligro", disabled: ocupado, onclick: () => abrirRechazo(tarjeta, t)}, "Rechazar…"));
+  }
+  if (botones.children.length) tarjeta.append(botones);
+  return tarjeta;
+}
+
+function vistas(t) {
+  const caja = el("div", {class: "vistas"});
+  for (const a of t.archivos) {
+    if (a.clase === "imagen") {
+      caja.append(el("a", {class: "imagen", href: a.url, target: "_blank", rel: "noopener", title: a.nombre},
+        el("img", {src: a.url, alt: `${t.titulo}: ${a.nombre}`, loading: "lazy"})));
+    } else if (a.clase === "audio") {
+      caja.append(el("audio", {controls: true, preload: "none", src: a.url, title: a.nombre}));
+    } else if (a.clase === "modelo") {
+      caja.append(visor(a));
+    } else {
+      caja.append(el("a", {class: "archivo", href: a.url, target: "_blank", rel: "noopener"}, a.nombre));
+    }
+  }
+  return caja;
+}
+
+function visor(a) {
+  const caja = el("div", {class: "visor"});
+  const boton = el("button", {onclick: () => {
+    if (!customElements.get("model-viewer")) {
+      caja.replaceChildren(el("p", {}, "El visor 3D se descarga de internet la primera vez y ahora no está disponible. ",
+        el("a", {href: a.url, download: a.nombre}, "Descargar el modelo")));
+      return;
+    }
+    caja.replaceChildren(el("model-viewer", {src: a.url, alt: a.nombre, "camera-controls": true, "auto-rotate": true,
+      autoplay: true, "shadow-intensity": "1", "interaction-prompt": "none"}));
+  }}, `Ver en 3D · ${a.nombre}`);
+  caja.append(boton);
+  return caja;
+}
+
+function abrirRechazo(tarjeta, t) {
+  if (tarjeta.querySelector(".rechazo")) return;
+  tarjeta.dataset.ocupada = "1";
+  const botones = tarjeta.querySelector(".botones");
+  if (botones) botones.hidden = true;
+  const texto = el("textarea", {placeholder: "¿Qué hay que cambiar? El agente lo recibe tal cual (por ejemplo: el pelo más largo y la chaqueta roja)."});
+  const cerrar = () => {
+    delete tarjeta.dataset.ocupada;
+    if (botones) botones.hidden = false;
+    formulario.remove();
+    refrescar();
+  };
+  const enviar = async () => {
+    const r = await hacer("/api/rechazar", {id: t.id, motivo: texto.value},
+      r => r.afectadas.length
+        ? `Se rehará con tu motivo en la próxima ejecución, y también ${r.afectadas.length === 1 ? "1 cosa que dependía" : r.afectadas.length + " cosas que dependían"} de ello.`
+        : "Se rehará con tu motivo en la próxima ejecución.");
+    if (r) cerrar();
+  };
+  texto.addEventListener("keydown", e => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) enviar(); });
+  const formulario = el("div", {class: "rechazo"}, texto,
+    el("div", {class: "botones"},
+      el("button", {class: "primario mini", onclick: enviar}, "Rehacer con este cambio"),
+      el("button", {class: "mini", onclick: cerrar}, "Cancelar")));
+  tarjeta.append(formulario);
+  texto.focus();
+}
+
+$("b-ejecutar").addEventListener("click", () => hacer("/api/ejecutar", {}, "La fábrica se ha puesto a trabajar."));
+$("b-parar").addEventListener("click", () => hacer("/api/parar", {}, "Parará al terminar la tarea en curso."));
+$("b-aprobar-todo").addEventListener("click", () => {
+  const n = (estado.resumen || {}).esperando_aprobacion || 0;
+  if (!confirm(`¿Aprobar las ${n} cosas que esperan tu visto bueno?`)) return;
+  hacer("/api/aprobar", {todo: true}, r => `Aprobadas ${r.aprobadas.length}. Pulsa Ejecutar para seguir.`);
+});
+$("b-nuevo").addEventListener("click", () => hacer("/api/nuevo", {}, "Proyecto creado con el ejemplo."));
+$("f-idear").addEventListener("submit", e => {
+  e.preventDefault();
+  hacer("/api/idear", {idea: $("idea").value}, "Claude se ha puesto a escribir el diseño.");
+});
+
+$("b-diseno").addEventListener("click", async () => {
+  try {
+    const r = await fetch("/api/diseno", {cache: "no-store"});
+    const datos = await r.json();
+    if (!r.ok) throw new Error(datos.error);
+    const texto = $("texto-diseno");
+    texto.value = datos.texto;
+    $("fallo-diseno").hidden = true;
+    $("d-diseno").showModal();
+    texto.setSelectionRange(0, 0);
+    texto.scrollTop = 0;
+  } catch (e) { aviso(e.message, true); }
+});
+$("b-guardar-diseno").addEventListener("click", async e => {
+  e.preventDefault();
+  try {
+    await api("/api/diseno", {texto: $("texto-diseno").value});
+    $("d-diseno").close();
+    aviso("Diseño guardado. En la próxima ejecución se rehace solo lo que cambió.");
+  } catch (error) {
+    $("fallo-diseno").textContent = error.message;
+    $("fallo-diseno").hidden = false;
+  }
+  refrescar();
+});
+
+$("b-godot").addEventListener("click", () => {
+  $("ruta-godot").value = leer("godot") || "";
+  $("fallo-godot").hidden = true;
+  $("d-godot").showModal();
+});
+$("b-montar").addEventListener("click", async e => {
+  e.preventDefault();
+  const ruta = $("ruta-godot").value;
+  try {
+    const r = await api("/api/montar", {juego: ruta, incluir_simulados: $("simulados").checked});
+    guardar("godot", ruta);
+    $("d-godot").close();
+    aviso(`Copiados ${r.copiados} recursos a ${r.destino}` + (r.omitidos ? ` (${r.omitidos} de relleno sin copiar)` : "") + ". Abre el proyecto en Godot.");
+  } catch (error) {
+    $("fallo-godot").textContent = error.message;
+    $("fallo-godot").hidden = false;
+  }
+  refrescar();
+});
+$("b-exportar").addEventListener("click", async e => {
+  e.preventDefault();
+  try {
+    const r = await api("/api/exportar");
+    $("d-godot").close();
+    aviso(`Índice escrito en ${r.ruta}`);
+  } catch (error) {
+    $("fallo-godot").textContent = error.message;
+    $("fallo-godot").hidden = false;
+  }
+});
+
+refrescar();
+</script>
+</body>
+</html>
