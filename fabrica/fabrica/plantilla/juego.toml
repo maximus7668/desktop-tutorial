@@ -22,6 +22,7 @@ intentos_max = 3
 # Quién hace cada tipo de recurso.
 #   "simulado"   crea archivos de relleno: sirve para probar el flujo completo gratis.
 #   "meshy"      hace concepto, modelo3d, rig y animacion de verdad (variable MESHY_API_KEY).
+#   "blender"    limpieza con Blender en tu PC (gratis): altura, origen en los pies, menos polígonos.
 #   "copiar"     limpieza: pasa el modelo tal cual al paso siguiente (si aún no usas Blender).
 #   "elevenlabs" hace voz, sonido y musica de verdad (variable ELEVENLABS_API_KEY).
 # Cada generación real gasta créditos de tu cuenta en ese servicio.

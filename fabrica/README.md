@@ -21,7 +21,7 @@ juego.toml ──► director ──► agente de concepto ──► agente 3D �
 | Director, plan, registro, aprobaciones, montaje en Godot | Hecho |
 | Arte conceptual | **Meshy** (texto a imagen) o simulado |
 | Modelo 3D | **Meshy** (imagen a 3D) o simulado |
-| Limpieza del modelo | `copiar` (lo pasa tal cual) o simulado |
+| Limpieza del modelo | **Blender** (en tu PC), `copiar` (lo pasa tal cual) o simulado |
 | Esqueleto (rig) | **Meshy** o simulado |
 | Animaciones | **Meshy** (biblioteca de acciones) o simulado |
 | Voces, efectos de sonido, música | **ElevenLabs** o simulado |
@@ -111,6 +111,22 @@ Cómo encadena el trabajo:
 Si Meshy tarda más de 15 minutos, la tarea queda apuntada: en la siguiente ejecución se
 recoge sin pedirla (ni pagarla) otra vez. Si Meshy la rechaza, se pide de nuevo.
 
+## Limpiar los modelos con Blender (gratis)
+
+1. Instala Blender desde blender.org (probado con Blender 5.2 LTS).
+2. Pon `limpieza = "blender"` en `[fabrica.proveedores]`.
+
+La fábrica lo encuentra sola en las rutas de instalación habituales; si no, define la variable
+`BLENDER` con la ruta a `blender.exe`. Blender se abre sin ventana y:
+
+- pone el modelo a la `altura` del personaje, centrado y con los pies en el suelo;
+- lo deja en una sola malla y con las normales coherentes;
+- lo reduce a 60 000 caras como mucho si viene más pesado;
+- guarda `modelo_limpio.glb` y una vista previa `vista.png` para revisarlo.
+
+Si el modelo ya trae esqueleto, no toca sus transformaciones (rompería el rig): solo lo
+exporta y hace la vista previa.
+
 ## Qué hay en la carpeta de un proyecto
 
 ```
@@ -142,10 +158,9 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 
 ## Próximos agentes
 
-1. **Limpieza con Blender**: escala, origen en los pies, menos polígonos y vista previa.
-2. **Arte conceptual con ComfyUI** en tu PC, con un LoRA entrenado con tu estilo.
-3. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
-4. **Director con Claude**: de una idea escrita al `juego.toml` completo.
+1. **Arte conceptual con ComfyUI** en tu PC, con un LoRA entrenado con tu estilo.
+2. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
+3. **Director con Claude**: de una idea escrita al `juego.toml` completo.
 
 ## Pruebas
 
@@ -153,3 +168,5 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 cd fabrica
 python -m unittest discover -s tests -t .
 ```
+
+La prueba con Blender de verdad solo se ejecuta si Blender está instalado.

@@ -53,6 +53,7 @@ class Agente(Protocol):
 
 
 def proveedores() -> dict[str, Callable[[], Agente]]:
+    from .blender import AgenteBlender
     from .copiar import AgenteCopiar
     from .elevenlabs import AgenteElevenLabs
     from .meshy import AgenteMeshy
@@ -61,6 +62,7 @@ def proveedores() -> dict[str, Callable[[], Agente]]:
     return {
         AgenteSimulado.nombre: AgenteSimulado,
         AgenteCopiar.nombre: AgenteCopiar,
+        AgenteBlender.nombre: AgenteBlender,
         AgenteElevenLabs.nombre: AgenteElevenLabs,
         AgenteMeshy.nombre: AgenteMeshy,
     }
