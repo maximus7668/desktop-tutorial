@@ -33,6 +33,9 @@ class Entrada:
     nota: str = ""
     motivo_rechazo: str = ""
     actualizado: str = ""
+    # Lo que el agente necesita recordar entre ejecuciones (por ejemplo, el id de una tarea
+    # remota para retomarla en vez de pagarla otra vez). Se borra si la tarea se rehace.
+    memoria: dict = field(default_factory=dict)
 
     def tocar(self) -> None:
         self.actualizado = datetime.now(timezone.utc).isoformat(timespec="seconds")

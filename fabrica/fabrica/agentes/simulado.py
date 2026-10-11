@@ -41,8 +41,9 @@ class AgenteSimulado:
             return Resultado([ruta], _nota("Caja del tamaño de un personaje en lugar del modelo.", ctx))
 
         if tarea.tipo in ("limpieza", "rig"):
-            ruta = ctx.archivo("modelo_limpio.gltf" if tarea.tipo == "limpieza" else "modelo_rig.gltf")
-            origen = next((a for archivos in ctx.entradas.values() for a in archivos if a.suffix == ".gltf"), None)
+            origen = next((a for archivos in ctx.entradas.values() for a in archivos if a.suffix in (".gltf", ".glb")), None)
+            extension = origen.suffix if origen is not None else ".gltf"
+            ruta = ctx.archivo(("modelo_limpio" if tarea.tipo == "limpieza" else "modelo_rig") + extension)
             if origen is not None:
                 shutil.copyfile(origen, ruta)
             else:

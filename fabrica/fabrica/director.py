@@ -249,6 +249,8 @@ class Director:
             entradas={d: [self.carpeta / a for a in self.entrada(d).archivos] for d in tarea.deps},
             motivo_rechazo=e.motivo_rechazo,
             intento=e.intentos + 1,
+            memoria=e.memoria,
+            memorias={d: dict(self.entrada(d).memoria) for d in tarea.deps},
         )
         e.intentos += 1
         e.agente = agente.nombre
@@ -340,6 +342,7 @@ class Director:
         e.intentos = 0
         e.errores_seguidos = 0
         e.nota = nota
+        e.memoria = {}
         e.tocar()
 
     def _expandir(self, ids: list[str]) -> list[str]:

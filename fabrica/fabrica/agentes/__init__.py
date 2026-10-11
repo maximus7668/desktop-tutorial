@@ -25,6 +25,8 @@ class Contexto:
     entradas: dict[str, list[Path]] = field(default_factory=dict)  # archivos de cada dependencia
     motivo_rechazo: str = ""  # lo que pediste cambiar la última vez
     intento: int = 1
+    memoria: dict = field(default_factory=dict)  # se guarda en el registro aunque el agente falle
+    memorias: dict[str, dict] = field(default_factory=dict)  # memoria de cada dependencia (solo leer)
 
     def archivo(self, nombre: str) -> Path:
         return self.carpeta / nombre
@@ -51,7 +53,14 @@ class Agente(Protocol):
 
 
 def proveedores() -> dict[str, Callable[[], Agente]]:
+    from .copiar import AgenteCopiar
     from .elevenlabs import AgenteElevenLabs
+    from .meshy import AgenteMeshy
     from .simulado import AgenteSimulado
 
-    return {AgenteSimulado.nombre: AgenteSimulado, AgenteElevenLabs.nombre: AgenteElevenLabs}
+    return {
+        AgenteSimulado.nombre: AgenteSimulado,
+        AgenteCopiar.nombre: AgenteCopiar,
+        AgenteElevenLabs.nombre: AgenteElevenLabs,
+        AgenteMeshy.nombre: AgenteMeshy,
+    }

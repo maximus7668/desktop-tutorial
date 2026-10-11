@@ -61,15 +61,20 @@ def planificar(d: Diseno) -> list[Tarea]:
             f"{p.id}/modelo3d", "modelo3d", f"Modelo 3D de {p.nombre}", (concepto,),
             personaje=p.nombre, descripcion=p.descripcion,
         )
+        # Los campos opcionales solo entran en los datos si se usan, para no cambiar la huella
+        # (y rehacer) las tareas de proyectos que no los tienen.
+        con_altura = {"altura": p.altura} if p.altura is not None else {}
         limpio = nueva(
             f"{p.id}/limpieza", "limpieza", f"Limpieza del modelo de {p.nombre}", (modelo,),
-            personaje=p.nombre,
+            personaje=p.nombre, **con_altura,
         )
-        rig = nueva(f"{p.id}/rig", "rig", f"Esqueleto de {p.nombre}", (limpio,), personaje=p.nombre)
+        rig = nueva(f"{p.id}/rig", "rig", f"Esqueleto de {p.nombre}", (limpio,), personaje=p.nombre, **con_altura)
+        acciones = dict(p.acciones)
         for animacion in p.animaciones:
+            con_accion = {"accion": acciones[animacion]} if animacion in acciones else {}
             nueva(
                 f"{p.id}/animacion/{animacion}", "animacion", f"Animación «{animacion}» de {p.nombre}", (rig,),
-                personaje=p.nombre, animacion=animacion,
+                personaje=p.nombre, animacion=animacion, **con_accion,
             )
         for frase, texto in p.frases:
             nueva(

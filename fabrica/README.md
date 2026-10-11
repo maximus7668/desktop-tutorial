@@ -16,11 +16,15 @@ juego.toml ──► director ──► agente de concepto ──► agente 3D �
 
 ## Estado actual
 
-| Parte | Agente disponible |
+| Parte | Agentes disponibles |
 |---|---|
-| Director, plan, registro, aprobaciones | Hecho |
-| Voces, efectos de sonido, música | **ElevenLabs (real)** o simulado |
-| Arte conceptual, modelo 3D, limpieza, rig, animación | Simulado (archivos de relleno) |
+| Director, plan, registro, aprobaciones, montaje en Godot | Hecho |
+| Arte conceptual | **Meshy** (texto a imagen) o simulado |
+| Modelo 3D | **Meshy** (imagen a 3D) o simulado |
+| Limpieza del modelo | `copiar` (lo pasa tal cual) o simulado |
+| Esqueleto (rig) | **Meshy** o simulado |
+| Animaciones | **Meshy** (biblioteca de acciones) o simulado |
+| Voces, efectos de sonido, música | **ElevenLabs** o simulado |
 
 El agente **simulado** crea archivos válidos pero falsos (una hoja SVG, una caja glTF del tamaño
 de un personaje, pitidos WAV...). Sirve para probar el flujo entero gratis y sin claves.
@@ -86,6 +90,27 @@ La clave nunca se guarda en el proyecto. Los efectos tienen que durar de 0,5 a 3
 música de 3 segundos a 10 minutos (límites de la API). Si no hay clave, esas tareas quedan como
 "sin agente" y el resto sigue. Ojo: cada generación gasta créditos de tu plan de ElevenLabs.
 
+## Activar arte, modelos 3D, esqueleto y animaciones reales (Meshy)
+
+1. Crea una cuenta en meshy.ai (las APIs necesitan un plan de pago) y copia tu clave de API.
+2. Defínela como `MESHY_API_KEY` (igual que la de ElevenLabs, más arriba).
+3. En `[fabrica.proveedores]` pon `concepto`, `modelo3d`, `rig` y `animacion` a `"meshy"`,
+   y `limpieza` a `"copiar"`.
+
+Cómo encadena el trabajo:
+
+- **Concepto:** imagen del personaje de frente y en pose A (la que mejor pasa a 3D).
+- **Modelo 3D:** usa esa imagen directamente en Meshy, sin volver a subirla.
+- **Esqueleto:** sube el modelo y usa la `altura` del personaje (1,75 m si no la pones).
+  Además entrega gratis andar y correr.
+- **Animaciones:** cada nombre del diseño se traduce a una acción de la biblioteca de Meshy
+  (`patada` → Roundhouse_Kick, `golpe_debil` → Right_Jab_from_Guard...). Para elegir otra,
+  recházala poniendo como motivo el número de la acción
+  (`rechazar ren/animacion/patada --motivo 215`), o fíjala en `[personajes.acciones]`.
+
+Si Meshy tarda más de 15 minutos, la tarea queda apuntada: en la siguiente ejecución se
+recoge sin pedirla (ni pagarla) otra vez. Si Meshy la rechaza, se pide de nuevo.
+
 ## Qué hay en la carpeta de un proyecto
 
 ```
@@ -117,13 +142,10 @@ carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas si
 
 ## Próximos agentes
 
-1. **Arte conceptual**: ComfyUI en tu PC con un LoRA entrenado con tu estilo.
-2. **Modelo 3D**: API de Tripo, Rodin o Meshy, a partir de la hoja del concepto.
-3. **Limpieza**: Blender sin ventana con un script de Python (escala, malla, texturas, exportar).
-4. **Rig**: esqueleto automático.
-5. **Animación**: poses clave y animación a saltos al estilo anime.
-6. **Revisión con Claude**: un agente que mira capturas de cada recurso y rechaza lo que salga mal antes de que llegue a ti.
-7. **Montaje en Godot**: importar `indice_recursos.json` en el proyecto del juego.
+1. **Limpieza con Blender**: escala, origen en los pies, menos polígonos y vista previa.
+2. **Arte conceptual con ComfyUI** en tu PC, con un LoRA entrenado con tu estilo.
+3. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
+4. **Director con Claude**: de una idea escrita al `juego.toml` completo.
 
 ## Pruebas
 

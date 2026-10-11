@@ -13,7 +13,8 @@ from unittest import mock
 from fabrica.agentes import Contexto, ErrorAgente
 from fabrica.agentes import elevenlabs
 from fabrica.agentes.elevenlabs import AgenteElevenLabs
-from fabrica.agentes.simulado import caja_gltf, escribir_tono, hoja_concepto
+from fabrica.agentes.copiar import AgenteCopiar
+from fabrica.agentes.simulado import AgenteSimulado, caja_gltf, escribir_tono, hoja_concepto
 from fabrica.plan import Tarea
 
 
@@ -136,3 +137,27 @@ class TestSimulado(unittest.TestCase):
         ET.fromstring(svg)
         self.assertIn("&lt;Ren &amp; Co&gt;", svg)
         self.assertIn("intento 2", svg)
+
+
+class TestPasarModelo(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.base = Path(self._tmp.name)
+        self.glb = self.base / "modelo.glb"
+        self.glb.write_bytes(b"glTF-binario")
+        self.salida = self.base / "salida"
+        self.salida.mkdir()
+
+    def ctx(self, tipo: str) -> Contexto:
+        t = Tarea(id=f"ren/{tipo}", tipo=tipo, titulo="", proveedor="x", requiere_aprobacion=False, datos={"personaje": "Ren"})
+        return Contexto(tarea=t, juego="", estilo="", carpeta=self.salida, entradas={"ren/modelo3d": [self.glb]})
+
+    def test_copiar_pasa_el_glb_tal_cual(self):
+        resultado = AgenteCopiar().generar(self.ctx("limpieza"))
+        self.assertEqual(resultado.archivos[0].read_bytes(), b"glTF-binario")
+
+    def test_el_simulado_conserva_un_glb_real(self):
+        resultado = AgenteSimulado().generar(self.ctx("limpieza"))
+        self.assertEqual(resultado.archivos[0].name, "modelo_limpio.glb")
+        self.assertEqual(resultado.archivos[0].read_bytes(), b"glTF-binario")

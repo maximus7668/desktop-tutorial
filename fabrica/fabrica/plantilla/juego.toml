@@ -21,7 +21,10 @@ intentos_max = 3
 
 # Quién hace cada tipo de recurso.
 #   "simulado"   crea archivos de relleno: sirve para probar el flujo completo gratis.
-#   "elevenlabs" hace voz, sonido y musica de verdad (define antes la variable ELEVENLABS_API_KEY).
+#   "meshy"      hace concepto, modelo3d, rig y animacion de verdad (variable MESHY_API_KEY).
+#   "copiar"     limpieza: pasa el modelo tal cual al paso siguiente (si aún no usas Blender).
+#   "elevenlabs" hace voz, sonido y musica de verdad (variable ELEVENLABS_API_KEY).
+# Cada generación real gasta créditos de tu cuenta en ese servicio.
 [fabrica.proveedores]
 concepto = "simulado"
 modelo3d = "simulado"
@@ -43,11 +46,17 @@ Aura de fuego naranja.
 """
 voz = "Chico joven, enérgico y temerario; grita con fuerza al lanzar técnicas."
 voz_id = ""  # ID de una voz de tu biblioteca de ElevenLabs
+altura = 1.78  # metros
 animaciones = [
   "guardia", "correr", "volar", "esquivar",
   "golpe_debil", "golpe_fuerte", "patada",
   "cargar_ki", "rafaga_ki", "tecnica_guren", "recibir_golpe", "derribado",
 ]
+
+# Opcional: qué acción de la biblioteca del proveedor usar para alguna animación
+# (en Meshy, el número de docs.meshy.ai/en/api/animation-library). Sin esto, se elige sola.
+[personajes.acciones]
+tecnica_guren = 214
 
 [personajes.frases]
 entrada = "¡Vamos allá! ¡Enséñame todo lo que tienes!"

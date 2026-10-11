@@ -19,7 +19,7 @@ _CLAVES = {
     "raiz": ("juego", "fabrica", "personajes", "sonidos", "musica"),
     "juego": ("nombre", "estilo"),
     "fabrica": ("proveedores", "aprobar", "intentos_max"),
-    "personaje": ("id", "nombre", "descripcion", "voz", "voz_id", "animaciones", "frases"),
+    "personaje": ("id", "nombre", "descripcion", "voz", "voz_id", "altura", "animaciones", "acciones", "frases"),
     "sonido": ("id", "descripcion", "duracion", "bucle"),
     "musica": ("id", "descripcion", "duracion", "instrumental"),
 }
@@ -38,6 +38,9 @@ class Personaje:
     voz_id: str
     animaciones: tuple[str, ...]
     frases: tuple[tuple[str, str], ...]
+    altura: float | None = None  # metros; la usan el esqueleto y la limpieza del modelo
+    # Animación -> acción concreta en la biblioteca del proveedor (en Meshy, su número).
+    acciones: tuple[tuple[str, int | str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -149,6 +152,16 @@ def _personaje(datos: object, i: int) -> Personaje:
         (_id(clave, f"{donde}: frases"), _texto(texto, f"{donde}: frases.{clave}"))
         for clave, texto in _tabla(p.get("frases"), f"{donde}: frases").items()
     )
+    acciones = []
+    for nombre, accion in _tabla(p.get("acciones"), f"{donde}: acciones").items():
+        if nombre not in animaciones:
+            raise ErrorDiseno(f"{donde}: acciones.{nombre} no corresponde a ninguna de sus animaciones")
+        if isinstance(accion, bool) or not isinstance(accion, (int, str)) or (isinstance(accion, int) and accion < 0):
+            raise ErrorDiseno(f"{donde}: acciones.{nombre} tiene que ser un número de acción o un texto")
+        acciones.append((nombre, accion.strip() if isinstance(accion, str) else accion))
+    altura = p.get("altura")
+    if altura is not None and (isinstance(altura, bool) or not isinstance(altura, (int, float)) or not 0.3 <= altura <= 10):
+        raise ErrorDiseno(f"{donde}: altura tiene que ser un número de metros entre 0,3 y 10")
     return Personaje(
         id=pid,
         nombre=_texto(p.get("nombre"), f"{donde}: nombre"),
@@ -157,6 +170,8 @@ def _personaje(datos: object, i: int) -> Personaje:
         voz_id=_texto(p.get("voz_id"), f"{donde}: voz_id", opcional=True),
         animaciones=animaciones,
         frases=frases,
+        altura=float(altura) if altura is not None else None,
+        acciones=tuple(acciones),
     )
 
 

@@ -55,6 +55,19 @@ class TestDiseno(unittest.TestCase):
         self.assertNotEqual(normal["sonido/impacto"], con_bucle["sonido/impacto"])
         self.assertEqual(normal["ren/voz/grito"], con_bucle["ren/voz/grito"])
 
+    def test_altura_y_acciones(self):
+        texto = MINIMO.replace('animaciones = ["golpe"]', 'animaciones = ["golpe"]\naltura = 1.8\nacciones = { golpe = 192 }')
+        p = diseno(texto).personajes[0]
+        self.assertEqual(p.altura, 1.8)
+        self.assertEqual(p.acciones, (("golpe", 192),))
+        tareas = {t.id: t for t in planificar(diseno(texto))}
+        self.assertEqual(tareas["ren/animacion/golpe"].datos["accion"], 192)
+        self.assertEqual(tareas["ren/rig"].datos["altura"], 1.8)
+        with self.assertRaisesRegex(ErrorDiseno, "no corresponde a ninguna"):
+            diseno(MINIMO.replace('animaciones = ["golpe"]', 'animaciones = ["golpe"]\nacciones = { patada = 207 }'))
+        with self.assertRaisesRegex(ErrorDiseno, "altura"):
+            diseno(MINIMO.replace('animaciones = ["golpe"]', 'animaciones = ["golpe"]\naltura = 0'))
+
     def test_duracion_negativa(self):
         with self.assertRaisesRegex(ErrorDiseno, "mayor que 0"):
             diseno(MINIMO.replace("duracion = 0.6", "duracion = -1"))
