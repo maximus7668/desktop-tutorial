@@ -197,6 +197,7 @@ class TestComfyUIPorRed(unittest.TestCase):
 
         self.servidor = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Manejador)
         threading.Thread(target=self.servidor.serve_forever, daemon=True).start()
+        self.addCleanup(self.servidor.server_close)
         self.addCleanup(self.servidor.shutdown)
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)

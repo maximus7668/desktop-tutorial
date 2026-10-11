@@ -4,6 +4,8 @@ Cada proveedor (simulado, elevenlabs...) es un agente intercambiable: el directo
 trabaja por dentro, solo le pasa un Contexto y recibe los archivos que ha creado. Para conectar
 una herramienta nueva basta con escribir una clase con `nombre`, `tipos`, `disponible()` y
 `generar()`, y añadirla en `proveedores()`.
+
+El revisor (Claude) no genera nada: mira lo que hacen los demás y manda rehacer lo que esté mal.
 """
 
 from __future__ import annotations
@@ -28,6 +30,7 @@ class Contexto:
     memoria: dict = field(default_factory=dict)  # se guarda en el registro aunque el agente falle
     memorias: dict[str, dict] = field(default_factory=dict)  # memoria de cada dependencia (solo leer)
     proyecto: Path | None = None  # carpeta del proyecto (para rutas relativas de los ajustes)
+    rechazos: int = 0  # veces que se mandó rehacer (tú o el revisor): cada vez es un pedido nuevo
 
     def archivo(self, nombre: str) -> Path:
         return self.carpeta / nombre
@@ -37,6 +40,28 @@ class Contexto:
 class Resultado:
     archivos: list[Path]
     nota: str = ""
+
+
+@dataclass
+class Revision:
+    """Lo que el revisor necesita para juzgar un recurso recién hecho."""
+
+    tarea: Tarea
+    juego: str
+    estilo: str
+    archivos: list[Path]  # lo que hay que revisar
+    referencias: list[Path] = field(default_factory=list)  # arte conceptual aprobado del personaje
+    ficha: dict = field(default_factory=dict)  # personaje: nombre, descripcion, altura
+    nota: str = ""  # lo que contó el agente que lo hizo
+    motivo_rechazo: str = ""  # el cambio que se pidió para esta versión
+
+
+@dataclass
+class Veredicto:
+    aprobado: bool
+    comentario: str = ""  # una frase para ti
+    problemas: list[str] = field(default_factory=list)  # para ti
+    correccion: str = ""  # para el agente que lo rehace (le llega como motivo del rechazo)
 
 
 class ErrorAgente(RuntimeError):
@@ -55,8 +80,21 @@ class Agente(Protocol):
     def generar(self, ctx: Contexto) -> Resultado: ...
 
 
-def proveedores() -> dict[str, Callable[[], Agente]]:
+class Revisor(Protocol):
+    nombre: str
+    tipos: frozenset[str]  # vacío: no hace recursos
+    AJUSTES: tuple[str, ...]
+    rehacer: int  # veces que puede mandar rehacer algo antes de pasártelo a ti
+
+    def disponible(self) -> str | None: ...
+
+    def revisar(self, revision: Revision) -> Veredicto | None:
+        """None si no hay nada que pueda mirar (por ejemplo, ninguna imagen)."""
+
+
+def proveedores() -> dict[str, Callable[..., Agente | Revisor]]:
     from .blender import AgenteBlender
+    from .claude import RevisorClaude
     from .comfyui import AgenteComfyUI
     from .copiar import AgenteCopiar
     from .elevenlabs import AgenteElevenLabs
@@ -70,4 +108,5 @@ def proveedores() -> dict[str, Callable[[], Agente]]:
         AgenteComfyUI.nombre: AgenteComfyUI,
         AgenteElevenLabs.nombre: AgenteElevenLabs,
         AgenteMeshy.nombre: AgenteMeshy,
+        RevisorClaude.nombre: RevisorClaude,
     }

@@ -86,8 +86,12 @@ def _resumen(respuesta: bytes) -> str:
 
 
 def clave_intento(ctx: Contexto) -> str:
-    """Cambia si cambia lo que se pide (diseño o motivo del rechazo): entonces hay que pedir de nuevo."""
-    return hashlib.sha256(f"{ctx.tarea.huella}|{ctx.motivo_rechazo}".encode("utf-8")).hexdigest()[:16]
+    """Cambia si cambia lo que se pide (diseño, motivo del rechazo o un rechazo nuevo, aunque repita
+    motivo): entonces hay que pedir de nuevo. Si no cambia, se retoma la tarea remota sin pagarla otra vez."""
+    base = f"{ctx.tarea.huella}|{ctx.motivo_rechazo}"
+    if ctx.rechazos:
+        base += f"|{ctx.rechazos}"
+    return hashlib.sha256(base.encode("utf-8")).hexdigest()[:16]
 
 
 def esperar(

@@ -70,6 +70,19 @@ class TestMeshy(unittest.TestCase):
     def ctx(self, t: Tarea, **extra) -> Contexto:
         return Contexto(tarea=t, juego="Prueba", estilo="anime", carpeta=self.carpeta, **extra)
 
+    def test_otro_rechazo_pide_otra_tarea_aunque_repita_el_motivo(self):
+        api = MeshyFalso({"/openapi/v1/text-to-image": [
+            {"status": "SUCCEEDED", "image_urls": ["https://archivos/concepto.png"]},
+        ]})
+        t = tarea("concepto", "ren/concepto", personaje="Ren", descripcion="x", estilo="y")
+        memoria: dict = {}
+        agente = self.agente(api)
+        agente.generar(self.ctx(t, memoria=memoria, motivo_rechazo="más alto", rechazos=1))
+        agente.generar(self.ctx(t, memoria=memoria, motivo_rechazo="más alto", rechazos=1))  # se retoma
+        self.assertEqual(len(api.posts()), 1)
+        agente.generar(self.ctx(t, memoria=memoria, motivo_rechazo="más alto", rechazos=2))
+        self.assertEqual(len(api.posts()), 2)
+
     def test_disponible_segun_la_clave(self):
         self.assertIn("MESHY_API_KEY", AgenteMeshy(clave="").disponible())
         self.assertIsNone(AgenteMeshy(clave="k").disponible())

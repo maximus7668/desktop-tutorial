@@ -32,6 +32,7 @@ class Entrada:
     agente: str = ""
     nota: str = ""
     motivo_rechazo: str = ""
+    rechazos: int = 0  # veces que se mandó rehacer, por ti o por el revisor
     actualizado: str = ""
     # Lo que el agente necesita recordar entre ejecuciones (por ejemplo, el id de una tarea
     # remota para retomarla en vez de pagarla otra vez). Se borra si la tarea se rehace.

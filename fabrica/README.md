@@ -6,11 +6,11 @@ Un **director** lee el documento de diseño, decide qué se puede hacer ya, se l
 agente que toca, guarda el resultado y para cuando algo necesita tu visto bueno.
 
 ```
-juego.toml ──► director ──► agente de concepto ──► agente 3D ──► limpieza ──► rig ──► animaciones
-                  │
-                  ├──► agente de voces
-                  ├──► agente de efectos de sonido
-                  └──► agente de música
+tu idea ──► Claude ──► juego.toml ──► director ──► concepto ──► 3D ──► limpieza ──► rig ──► animaciones
+                                         │            └── Claude revisa cada imagen antes que tú ──┘
+                                         ├──► voces
+                                         ├──► efectos de sonido
+                                         └──► música
                                     todo queda en recursos/ y en registro.json
 ```
 
@@ -19,6 +19,8 @@ juego.toml ──► director ──► agente de concepto ──► agente 3D �
 | Parte | Agentes disponibles |
 |---|---|
 | Director, plan, registro, aprobaciones, montaje en Godot | Hecho |
+| Diseño a partir de una idea escrita | **Claude** (`idear`) |
+| Revisión de las imágenes antes de que te lleguen | **Claude** |
 | Arte conceptual | **ComfyUI** (en tu PC), **Meshy** (texto a imagen) o simulado |
 | Modelo 3D | **Meshy** (imagen a 3D) o simulado |
 | Limpieza del modelo | **Blender** (en tu PC), `copiar` (lo pasa tal cual) o simulado |
@@ -31,11 +33,12 @@ de un personaje, pitidos WAV...). Sirve para probar el flujo entero gratis y sin
 
 ## Empezar
 
-Necesitas Python 3.11 o superior. No hay que instalar nada más.
+Necesitas Python 3.11 o superior. Para lo básico no hay que instalar nada más.
 
 ```
 cd fabrica
 python -m fabrica nuevo mi_juego        # crea mi_juego/juego.toml con dos personajes de ejemplo
+#   o bien: python -m fabrica idear mi_juego "tu idea"   (Claude lo escribe; ver más abajo)
 python -m fabrica plan -p mi_juego       # lista todas las tareas y de qué dependen
 python -m fabrica ejecutar -p mi_juego   # genera todo lo que se pueda hacer ya
 python -m fabrica estado -p mi_juego     # cómo va cada tarea
@@ -132,10 +135,59 @@ El texto que se envía junta el `estilo` del juego, la `descripcion` del persona
 «cuerpo entero, de frente, en pose A, fondo blanco» (lo que mejor pasa luego a 3D). Si
 rechazas una imagen, tu motivo se añade y cambia la semilla.
 
+## Claude: de tu idea al diseño, y revisor de imágenes
+
+Claude (de Anthropic) hace dos trabajos en la fábrica:
+
+- **Director creativo** (`idear`): le cuentas el juego con tus palabras y escribe el
+  `juego.toml` completo: estilo, personajes (descripción visual, voz, altura, animaciones y
+  frases), efectos de sonido y música.
+- **Revisor**: mira cada imagen antes que tú (el arte conceptual, la miniatura del modelo 3D y
+  la vista tras limpiarlo) y manda rehacer lo que tenga fallos claros: el pelo de otro color que
+  el descrito, los pies cortados, manos deformes, una pose que no sirve para pasar a 3D...
+
+Para activarlo:
+
+1. `pip install anthropic`
+2. Crea una clave en platform.claude.com y defínela como `ANTHROPIC_API_KEY` (igual que la de
+   ElevenLabs, más arriba).
+
+**Idear:**
+
+```
+python -m fabrica idear mi_juego lucha de samuráis con poderes de rayo, 6 personajes, estética de tinta japonesa
+python -m fabrica idear mi_juego --archivo idea.txt      # la idea, en un archivo de texto
+```
+
+Tarda unos minutos. Es un punto de partida: léelo y cambia lo que quieras antes de ejecutar.
+Los personajes siempre son originales: si mencionas una serie, la toma solo como referencia de
+estilo. Las animaciones especiales salen con nombres como `rafaga_...` y `tecnica_...`, que Meshy
+sabe traducir solo a su biblioteca de acciones.
+
+**Revisor:** en `juego.toml`,
+
+```toml
+[fabrica]
+revisar = ["concepto", "modelo3d", "limpieza"]
+```
+
+Cuando Claude ve un fallo, la fábrica lo rehace en el momento con su corrección (como mucho dos
+veces). Si sigue mal, o si Claude no ha podido revisarlo, te lo pasa a ti con lo que ha visto.
+Claude no sustituye tu visto bueno: lo que está en `aprobar` sigue esperándote; solo te ahorra
+ver lo que está claramente mal. Lo que no puede mirar (un modelo sin vista previa, el SVG del
+agente simulado) sigue como siempre.
+
+Ajustes en `[fabrica.claude]`: `modelo` (por defecto `claude-opus-5-5`), `esfuerzo` (`low`,
+`medium`, `high`, `xhigh` o `max`; por defecto `medium`) y `rehacer` (de 0 a 5, por defecto 2).
+
+Cada revisión gasta unos céntimos de tu cuenta de Anthropic; `idear`, algo más (es una sola
+petición larga). Si los filtros de seguridad de Claude rechazan una petición, la API la repite
+sola con otro modelo de Claude.
+
 ## Ajustes de cada proveedor
 
 Cada proveedor admite ajustes en su propia tabla de `juego.toml` (`[fabrica.comfyui]`,
-`[fabrica.meshy]`, `[fabrica.blender]`; la plantilla trae ejemplos). Un ajuste mal escrito se
+`[fabrica.meshy]`, `[fabrica.blender]`, `[fabrica.claude]`; la plantilla trae ejemplos). Un ajuste mal escrito se
 avisa al empezar, antes de gastar nada. Si cambias uno, se rehace solo lo que hace ese proveedor.
 
 ## Limpiar los modelos con Blender (gratis)
@@ -180,14 +232,17 @@ Cada agente es una clase con:
   En `ctx.entradas` recibe los archivos de las tareas de las que depende (por ejemplo, el modelo
   3D recibe la hoja del concepto) y en `ctx.motivo_rechazo` lo que pediste cambiar.
 
+Si encarga el trabajo a un servicio remoto, que guarde el id del encargo en `ctx.memoria` junto
+con `clave_intento(ctx)` (de `fabrica/agentes/remoto.py`), como hace Meshy: así una ejecución
+cortada se recoge sin pagar dos veces, y cada rechazo nuevo pide otra versión.
+
 Después se añade en `proveedores()` de `fabrica/agentes/__init__.py`. El agente trabaja en una
 carpeta aparte: si falla, lo que ya había no se pierde, y el resto de tareas sigue adelante.
 
-## Próximos agentes
+## Próximos pasos
 
-1. **Revisión con Claude**: mira cada recurso y rechaza lo que salga mal antes de que llegue a ti.
-2. **Director con Claude**: de una idea escrita al `juego.toml` completo.
-3. **Panel visual** para usar la fábrica sin la línea de comandos.
+1. **Panel visual** para usar la fábrica sin la línea de comandos.
+2. **Guía paso a paso** para instalarlo todo en el PC.
 
 ## Pruebas
 
@@ -196,4 +251,5 @@ cd fabrica
 python -m unittest discover -s tests -t .
 ```
 
-La prueba con Blender de verdad solo se ejecuta si Blender está instalado.
+La prueba con Blender de verdad solo se ejecuta si Blender está instalado, y las de la librería
+de Claude solo si está instalada (hablan con un servidor local que imita la API: no gastan).

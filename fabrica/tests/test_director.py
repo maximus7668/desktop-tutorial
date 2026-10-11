@@ -54,6 +54,7 @@ class TestDirector(ConProyecto):
         d.ejecutar()
         self.assertEqual(agente.ids(), ["ren/modelo3d", "ren/limpieza", "ren/rig", "ren/animacion/golpe"])
         self.assertEqual(agente.contextos[0].motivo_rechazo, "más alto")
+        self.assertEqual(agente.contextos[0].rechazos, 1)  # un pedido nuevo aunque repitas el motivo
         self.assertEqual(d.entrada("ren/modelo3d").motivo_rechazo, "")  # aprobado solo: ya se tuvo en cuenta
 
     def test_cambiar_el_diseno_rehace_solo_lo_afectado(self):

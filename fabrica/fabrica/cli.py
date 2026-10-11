@@ -8,8 +8,11 @@ from collections import Counter
 from importlib import resources
 from pathlib import Path
 
-from .diseno import ErrorDiseno
+from .agentes import ErrorAgente, Veredicto
+from .agentes.claude import ESFUERZOS, MODELO, ClienteClaude
+from .diseno import ErrorDiseno, cargar
 from .director import Director, ErrorOrden
+from .idear import idear
 from .plan import Tarea
 from .registro import (
     APROBADO,
@@ -59,6 +62,14 @@ def main(argv: list[str] | None = None) -> int:
     ordenes = parser.add_subparsers(dest="orden", required=True, metavar="orden")
     nuevo = ordenes.add_parser("nuevo", help="crea un proyecto con un juego.toml de ejemplo")
     nuevo.add_argument("carpeta", type=Path)
+    idear = ordenes.add_parser(
+        "idear", help="Claude escribe el juego.toml a partir de tu idea (necesita ANTHROPIC_API_KEY)"
+    )
+    idear.add_argument("carpeta", type=Path, help="carpeta del proyecto nuevo")
+    idear.add_argument("idea", nargs="*", help="tu idea, con tus palabras (las comillas son opcionales)")
+    idear.add_argument("--archivo", type=Path, help="lee la idea de un archivo de texto")
+    idear.add_argument("--modelo", default=MODELO, help=f"modelo de Claude (por defecto {MODELO})")
+    idear.add_argument("--esfuerzo", default="high", choices=ESFUERZOS, help="cuánto piensa Claude (por defecto high)")
     ordenes.add_parser("plan", parents=[comun], help="muestra todas las tareas y de qué dependen")
     ejecutar = ordenes.add_parser("ejecutar", parents=[comun], help="genera todo lo que se pueda hacer ya")
     ejecutar.add_argument("--max", type=int, metavar="N", help="como mucho N tareas en esta vuelta")
@@ -86,6 +97,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.orden == "nuevo":
             return _nuevo(args.carpeta)
+        if args.orden == "idear":
+            return _idear(args.carpeta, " ".join(args.idea), args.archivo, args.modelo, args.esfuerzo)
         director = Director(args.proyecto)
         if args.orden == "plan":
             return _plan(director)
@@ -118,7 +131,7 @@ def main(argv: list[str] | None = None) -> int:
                 )
             print("Abre el proyecto en Godot para que importe los archivos nuevos.")
             return 0
-    except (ErrorDiseno, ErrorRegistro, ErrorOrden) as e:
+    except (ErrorDiseno, ErrorRegistro, ErrorOrden, ErrorAgente) as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1
     return 2
@@ -134,6 +147,41 @@ def _nuevo(carpeta: Path) -> int:
     print(f"Proyecto creado en {carpeta}")
     print("Siguientes pasos:")
     print(f"  1. Edita {destino} con tus personajes, sonidos y música.")
+    print(f"  2. python -m fabrica plan -p {carpeta}")
+    print(f"  3. python -m fabrica ejecutar -p {carpeta}")
+    return 0
+
+
+def _idear(carpeta: Path, idea: str, archivo: Path | None, modelo: str, esfuerzo: str) -> int:
+    destino = carpeta / "juego.toml"
+    if destino.exists():
+        raise ErrorOrden(f"{destino} ya existe; no lo sobrescribo. Elige una carpeta nueva.")
+    if archivo is not None:
+        if idea:
+            raise ErrorOrden("Da la idea escrita o con --archivo, pero no las dos cosas.")
+        try:
+            idea = archivo.read_text(encoding="utf-8")
+        except OSError as e:
+            raise ErrorOrden(f"No puedo leer {archivo}: {e.strerror or e}") from None
+    if not idea.strip():
+        raise ErrorOrden('Cuenta tu idea, por ejemplo: idear mi_juego "lucha de samuráis con poderes de rayo"')
+    try:
+        claude = ClienteClaude(modelo=modelo, esfuerzo=esfuerzo)
+    except ValueError as e:
+        raise ErrorOrden(str(e)) from None
+    aviso = claude.disponible()
+    if aviso:
+        raise ErrorOrden(aviso)
+    print(f"Claude ({modelo}) está escribiendo el diseño. Puede tardar unos minutos...")
+    texto = idear(idea, claude)
+    carpeta.mkdir(parents=True, exist_ok=True)
+    destino.write_text(texto, encoding="utf-8")
+    diseno = cargar(destino)
+    print(f"«{diseno.nombre}» escrito en {destino}")
+    print(f"  Personajes: {', '.join(p.nombre for p in diseno.personajes)}")
+    print(f"  {len(diseno.sonidos)} efectos de sonido y {len(diseno.musica)} pistas de música")
+    print("Siguientes pasos:")
+    print(f"  1. Léelo y cambia lo que quieras: {destino}")
     print(f"  2. python -m fabrica plan -p {carpeta}")
     print(f"  3. python -m fabrica ejecutar -p {carpeta}")
     return 0
@@ -159,8 +207,16 @@ def _ejecutar(director: Director, maximo: int | None) -> int:
             espera = " -> espera tu visto bueno" if e.estado == ESPERANDO else ""
             print(f"  hecho   {t.id} ({e.agente}){espera}")
 
+    def al_revisar(t: Tarea, veredicto: Veredicto, vez: int, maximo_veces: int) -> None:
+        if veredicto.aprobado:
+            print(f"  Claude  {t.id}: {veredicto.comentario or 'bien'}")
+        elif vez:
+            print(f"  Claude  {t.id}: {'; '.join(veredicto.problemas)} -> se rehace ({vez}/{maximo_veces})")
+        else:
+            print(f"  Claude  {t.id}: {'; '.join(veredicto.problemas)} -> te lo paso a ti")
+
     print(f"Ejecutando «{director.diseno.nombre}»")
-    informe = director.ejecutar(maximo, al_terminar)
+    informe = director.ejecutar(maximo, al_terminar, al_revisar)
     if not informe.hechas and not informe.errores and not informe.sin_agente:
         print("  No hay nada que se pueda hacer ahora mismo.")
     for motivo, n in Counter(director.entrada(i).nota for i in informe.sin_agente).items():

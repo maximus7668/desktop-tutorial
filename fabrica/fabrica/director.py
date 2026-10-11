@@ -12,14 +12,15 @@ from pathlib import Path
 from typing import NoReturn
 
 from . import agentes as _agentes
-from .agentes import Agente, Contexto, Resultado
-from .diseno import Diseno, ErrorDiseno, cargar
+from .agentes import Agente, Contexto, Resultado, Revision, Revisor, Veredicto
+from .diseno import REVISABLES, Diseno, ErrorDiseno, cargar
 from .plan import Tarea, planificar
 from .registro import APROBADO, ERROR, ESPERANDO, PENDIENTE, RECHAZADO, SIN_AGENTE, Entrada, Registro
 
 
 CARPETA_MONTAJE = "recursos_fabrica"
 MARCA_MONTAJE = ".fabrica"
+REVISOR = "claude"
 
 
 class ErrorOrden(ValueError):
@@ -60,7 +61,10 @@ class Director:
         self.registro = Registro(self.carpeta / "registro.json")
         self._reconciliar()
         if self._fabricas is not None:
-            for nombre in sorted(set(self.diseno.proveedores.values()) | set(self.diseno.ajustes)):
+            nombres = set(self.diseno.proveedores.values()) | set(self.diseno.ajustes)
+            if self.diseno.revisar:
+                nombres.add(REVISOR)
+            for nombre in sorted(nombres):
                 self._agente(nombre)  # si un ajuste está mal, el error sale ya, no a mitad del trabajo
 
     # --- consultas -------------------------------------------------------------------------
@@ -77,16 +81,25 @@ class Director:
     # --- trabajo ---------------------------------------------------------------------------
 
     def ejecutar(
-        self, maximo: int | None = None, al_terminar: Callable[[Tarea, Entrada], None] | None = None
+        self,
+        maximo: int | None = None,
+        al_terminar: Callable[[Tarea, Entrada], None] | None = None,
+        al_revisar: Callable[[Tarea, Veredicto, int, int], None] | None = None,
     ) -> Informe:
-        """Genera, en orden, todo lo que tenga sus dependencias aprobadas."""
+        """Genera, en orden, todo lo que tenga sus dependencias aprobadas.
+
+        Lo de los tipos de [fabrica] revisar pasa antes por el revisor: si ve fallos, se rehace con
+        su corrección. al_revisar recibe cada veredicto: tarea, veredicto, número de la vez que se
+        rehace por él (0 si no se rehace) y máximo de veces.
+        """
         informe = Informe()
         for tarea in self.tareas:
             e = self.entrada(tarea.id)
             if not self._puede_intentarse(e) or self.deps_sin_aprobar(tarea):
                 continue
             agente = self._agente(tarea.proveedor)
-            motivo = agente.disponible()
+            revisor = self._revisor() if tarea.tipo in self.diseno.revisar else None
+            motivo = agente.disponible() or (revisor.disponible() if revisor else None)
             if motivo:
                 if (e.estado, e.nota) != (SIN_AGENTE, motivo):
                     e.estado, e.nota = SIN_AGENTE, motivo
@@ -97,7 +110,7 @@ class Director:
             if maximo is not None and len(informe.hechas) + len(informe.errores) >= maximo:
                 informe.limite_alcanzado = True
                 break
-            self._generar(tarea, e, agente)
+            self._producir(tarea, e, agente, revisor, al_revisar)
             (informe.errores if e.estado == ERROR else informe.hechas).append(tarea.id)
             self.registro.guardar()
             if al_terminar:
@@ -134,6 +147,7 @@ class Director:
         if e.estado not in (ESPERANDO, APROBADO):
             raise ErrorOrden(f"Solo se puede rechazar algo ya generado; {id_} está {e.estado}.")
         e.estado, e.motivo_rechazo, e.nota = RECHAZADO, motivo, f"Rechazado: {motivo}"
+        e.rechazos += 1
         e.tocar()
         afectadas = self._invalidar_dependientes(id_)
         self.registro.guardar()
@@ -238,6 +252,91 @@ class Director:
 
     # --- interno ---------------------------------------------------------------------------
 
+    def _producir(
+        self,
+        tarea: Tarea,
+        e: Entrada,
+        agente: Agente,
+        revisor: Revisor | None,
+        al_revisar: Callable[[Tarea, Veredicto, int, int], None] | None,
+    ) -> None:
+        """Genera y, si toca, pasa por el revisor; lo que no aprueba se rehace con su corrección."""
+        pedido = e.motivo_rechazo  # lo que pediste tú se mantiene aunque el revisor pida más
+        rehechas = 0
+        while True:
+            motivo = e.motivo_rechazo
+            self._generar(tarea, e, agente)
+            if e.estado == ERROR or revisor is None:
+                return
+            try:
+                veredicto = revisor.revisar(self._revision(tarea, e, motivo))
+            except Exception as exc:  # sin revisión no se da nada por bueno: lo decides tú
+                self._a_tus_manos(e, f"{e.nota} Claude no pudo revisarlo ({exc}); míralo tú.")
+                return
+            if veredicto is None:
+                e.nota = f"{e.nota} (Claude no lo revisó: no hay imagen PNG, JPG o WEBP.)".strip()
+                return
+            rehace = not veredicto.aprobado and rehechas < revisor.rehacer
+            if al_revisar:
+                al_revisar(tarea, veredicto, rehechas + 1 if rehace else 0, revisor.rehacer)
+            if veredicto.aprobado:
+                e.nota = f"{e.nota} Claude: {veredicto.comentario or 'bien'}".strip()
+                return
+            problemas = "; ".join(veredicto.problemas)
+            if not rehace:
+                self._a_tus_manos(
+                    e, f"Claude sigue viendo fallos: {problemas}. Decide tú: apruébalo o recházalo con tu motivo."
+                )
+                return
+            rehechas += 1
+            e.estado = RECHAZADO
+            e.motivo_rechazo = "; ".join(m for m in (pedido, veredicto.correccion or problemas) if m)
+            e.nota = f"Claude lo rechazó: {problemas}"
+            e.rechazos += 1
+            e.tocar()
+            self.registro.guardar()
+
+    @staticmethod
+    def _a_tus_manos(e: Entrada, nota: str) -> None:
+        e.estado, e.nota = ESPERANDO, nota
+        e.tocar()
+
+    def _revision(self, tarea: Tarea, e: Entrada, motivo: str) -> Revision:
+        personaje = next((p for p in self.diseno.personajes if p.id == tarea.id.split("/", 1)[0]), None)
+        ficha: dict = {}
+        if personaje:
+            ficha = {"nombre": personaje.nombre, "descripcion": personaje.descripcion}
+            if personaje.altura:
+                ficha["altura"] = personaje.altura
+        return Revision(
+            tarea=tarea,
+            juego=self.diseno.nombre,
+            estilo=self.diseno.estilo,
+            archivos=[self.carpeta / a for a in e.archivos],
+            referencias=self._referencias(tarea),
+            ficha=ficha,
+            nota=e.nota,
+            motivo_rechazo=motivo,
+        )
+
+    def _referencias(self, tarea: Tarea) -> list[Path]:
+        """El arte conceptual aprobado del que sale este recurso, para comparar."""
+        referencias: list[Path] = []
+        pila, vistas = list(tarea.deps), set()
+        while pila:
+            id_ = pila.pop()
+            if id_ in vistas:
+                continue
+            vistas.add(id_)
+            dep = self.por_id[id_]
+            if dep.tipo == "concepto" and self.entrada(id_).estado == APROBADO:
+                referencias += [self.carpeta / a for a in self.entrada(id_).archivos]
+            pila.extend(dep.deps)
+        return referencias
+
+    def _revisor(self) -> Revisor:
+        return self._agente(REVISOR)  # type: ignore[return-value]
+
     def _generar(self, tarea: Tarea, e: Entrada, agente: Agente) -> None:
         destino = self.carpeta_de(tarea)
         # El agente trabaja en una carpeta aparte: si falla, lo anterior sigue intacto.
@@ -255,6 +354,7 @@ class Director:
             memoria=e.memoria,
             memorias={d: dict(self.entrada(d).memoria) for d in tarea.deps},
             proyecto=self.carpeta,
+            rechazos=e.rechazos,
         )
         e.intentos += 1
         e.agente = agente.nombre
@@ -375,6 +475,8 @@ class Director:
 
     def _validar_proveedores(self) -> None:
         conocidos = sorted(self._fabricas if self._fabricas is not None else self._agentes)
+        if self.diseno.revisar and self._tipos_de(REVISOR) is None:
+            raise ErrorDiseno(f"[fabrica] revisar: falta el revisor '{REVISOR}'.")
         for nombre, ajustes in self.diseno.ajustes.items():
             if self._tipos_de(nombre) is None:
                 raise ErrorDiseno(f"[fabrica.{nombre}]: no existe ese proveedor. Hay: {', '.join(conocidos)}")
@@ -389,6 +491,11 @@ class Director:
             if tipos is None:
                 raise ErrorDiseno(
                     f"[fabrica.proveedores] {tipo} = '{nombre}': no existe ese proveedor. Hay: {', '.join(conocidos)}"
+                )
+            if not tipos:
+                raise ErrorDiseno(
+                    f"[fabrica.proveedores] {tipo} = '{nombre}': {nombre} no hace recursos, revisa los de los"
+                    f" demás. Para eso: [fabrica] revisar = [{', '.join(repr(t) for t in REVISABLES)}]"
                 )
             if tipo not in tipos:
                 raise ErrorDiseno(

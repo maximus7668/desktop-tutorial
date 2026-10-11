@@ -11,6 +11,8 @@ from pathlib import Path
 # Cadena de producción de un personaje, más los recursos sueltos.
 TIPOS = ("concepto", "modelo3d", "limpieza", "rig", "animacion", "voz", "sonido", "musica")
 APROBAR_POR_DEFECTO = ("concepto", "modelo3d", "animacion", "voz")
+# El revisor mira imágenes: el arte conceptual, la miniatura del modelo y la vista tras limpiarlo.
+REVISABLES = ("concepto", "modelo3d", "limpieza")
 # Son prefijos de tareas (sonido/..., musica/...): un personaje con ese id chocaría con ellas.
 IDS_RESERVADOS = frozenset({"sonido", "musica"})
 
@@ -18,7 +20,7 @@ _ID = re.compile(r"^[a-z0-9][a-z0-9_]{0,47}$")
 _CLAVES = {
     "raiz": ("juego", "fabrica", "personajes", "sonidos", "musica"),
     "juego": ("nombre", "estilo"),
-    "fabrica": ("proveedores", "aprobar", "intentos_max"),
+    "fabrica": ("proveedores", "aprobar", "intentos_max", "revisar"),
     "personaje": ("id", "nombre", "descripcion", "voz", "voz_id", "altura", "animaciones", "acciones", "frases"),
     "sonido": ("id", "descripcion", "duracion", "bucle"),
     "musica": ("id", "descripcion", "duracion", "instrumental"),
@@ -70,6 +72,7 @@ class Diseno:
     aprobar: frozenset[str]
     intentos_max: int
     ajustes: dict[str, dict] = field(default_factory=dict)  # [fabrica.<proveedor>] -> sus ajustes
+    revisar: frozenset[str] = frozenset()  # tipos que Claude revisa antes que tú
 
 
 def cargar(ruta: Path) -> Diseno:
@@ -120,6 +123,16 @@ def validar(datos: dict) -> Diseno:
                 f" Tipos: {', '.join(TIPOS)}"
             )
 
+    revisar = fabrica.get("revisar", [])
+    if not isinstance(revisar, list):
+        raise ErrorDiseno('[fabrica] revisar tiene que ser una lista, por ejemplo ["concepto", "modelo3d"]')
+    for tipo in revisar:
+        if tipo not in REVISABLES:
+            raise ErrorDiseno(
+                f"[fabrica] revisar incluye '{tipo}'. Claude revisa imágenes, así que puede revisar:"
+                f" {', '.join(REVISABLES)}"
+            )
+
     intentos = fabrica.get("intentos_max", 3)
     if isinstance(intentos, bool) or not isinstance(intentos, int) or intentos < 1:
         raise ErrorDiseno("[fabrica] intentos_max tiene que ser un número entero mayor que 0")
@@ -141,6 +154,7 @@ def validar(datos: dict) -> Diseno:
         aprobar=frozenset(aprobar),
         intentos_max=intentos,
         ajustes=ajustes,
+        revisar=frozenset(revisar),
     )
 
 

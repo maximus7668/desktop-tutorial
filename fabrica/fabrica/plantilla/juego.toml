@@ -18,6 +18,9 @@ heroicas, auras de energía brillantes. Personajes y técnicas originales, de ni
 aprobar = ["concepto", "modelo3d", "animacion", "voz"]
 # Reintentos automáticos cuando un agente falla varias veces seguidas.
 intentos_max = 3
+# Claude revisa estas imágenes antes que tú y manda rehacer lo que tenga fallos claros
+# (necesita «pip install anthropic» y la variable ANTHROPIC_API_KEY). Quita el # para usarlo:
+# revisar = ["concepto", "modelo3d", "limpieza"]
 
 # Quién hace cada tipo de recurso.
 #   "simulado"   crea archivos de relleno: sirve para probar el flujo completo gratis.
@@ -51,6 +54,10 @@ musica = "simulado"
 #
 # [fabrica.blender]
 # max_caras = 60000
+#
+# [fabrica.claude]
+# esfuerzo = "medium"                      # cuánto piensa al revisar: low, medium, high, xhigh o max
+# rehacer = 2                              # veces que puede mandar rehacer algo antes de pasártelo
 
 [[personajes]]
 id = "ren"
