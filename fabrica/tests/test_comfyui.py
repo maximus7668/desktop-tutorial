@@ -156,6 +156,21 @@ class TestAjustesDeProveedores(ConProyecto):
         with self.assertRaisesRegex(ErrorDiseno, r"\[fabrica.comfyui\]: ancho"):
             Director(self.carpeta)
 
+    def test_un_ajuste_invalido_no_toca_lo_ya_aprobado(self):
+        base = '[fabrica.proveedores]\nconcepto = "comfyui"\n\n[fabrica.comfyui]\nmodelo = "x.safetensors"'
+        self.con(base)
+        d = Director(self.carpeta)
+        d.entrada("sonido/impacto").estado = "aprobado"
+        d.registro.guardar()
+        self.con(base + "\nancho = 1001")
+        with self.assertRaises(ErrorDiseno):
+            Director(self.carpeta)
+        self.con(base)
+        self.assertEqual(Director(self.carpeta).entrada("sonido/impacto").estado, "aprobado")
+        self.con(base + '\nancho = 1024')  # cambiar el ajuste sí rehace lo de ComfyUI, pero no lo demás
+        d = Director(self.carpeta)
+        self.assertEqual(d.entrada("sonido/impacto").estado, "aprobado")
+
     def test_cambiar_ajustes_rehace_solo_lo_de_ese_proveedor(self):
         self.con('[fabrica.proveedores]\nconcepto = "comfyui"\n\n[fabrica.comfyui]\nmodelo = "a.safetensors"')
         antes = {t.id: t.huella for t in Director(self.carpeta).tareas}

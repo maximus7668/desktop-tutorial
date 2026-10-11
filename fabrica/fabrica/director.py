@@ -50,6 +50,13 @@ class Director:
         self._agentes: dict[str, Agente] = dict(agentes or {})
         self._fabricas = None if agentes is not None else _agentes.proveedores()
         self._validar_proveedores()
+        if self._fabricas is not None:
+            # Si un ajuste está mal, el error sale ya: antes de tocar el registro y de gastar nada.
+            nombres = set(self.diseno.proveedores.values()) | set(self.diseno.ajustes)
+            if self.diseno.revisar:
+                nombres.add(REVISOR)
+            for nombre in sorted(nombres):
+                self._agente(nombre)
 
         self.tareas: list[Tarea] = planificar(self.diseno)
         self.por_id = {t.id: t for t in self.tareas}
@@ -60,12 +67,6 @@ class Director:
 
         self.registro = Registro(self.carpeta / "registro.json")
         self._reconciliar()
-        if self._fabricas is not None:
-            nombres = set(self.diseno.proveedores.values()) | set(self.diseno.ajustes)
-            if self.diseno.revisar:
-                nombres.add(REVISOR)
-            for nombre in sorted(nombres):
-                self._agente(nombre)  # si un ajuste está mal, el error sale ya, no a mitad del trabajo
 
     # --- consultas -------------------------------------------------------------------------
 
