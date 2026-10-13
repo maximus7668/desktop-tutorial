@@ -39,6 +39,8 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 
 - M-015 · 13/10 · **Automatizaciones del negocio** (pedido por el dueño): presupuestos con aceptación desde el móvil, recordatorio de cita, reseñas, trabajo listo y resumen del día; web, privacidad y 2 flujos de n8n (desactivados) · panel rama `claude/automatizaciones` · 175 tests, tipos, build y recorrido completo en local (alta del presupuesto desde una llamada, envío, aceptación pública, aviso, «listo», ciclo y resumen) con capturas. **Falta**: ok del dueño al precio, migración 0021 + despliegue, activar los flujos.
 
+- M-016 · 14/10 · **Compras y costes para talleres** (lo que el dueño quería de verdad): facturas por foto con IA, pedido sugerido, margen por servicio · panel rama `claude/compras` · 161 tests, tipos, build y recorrido en local (plantilla, 2 facturas con subida de precio, recuento, escandallo, pedido, ciclo diario) con capturas. Sin probar con una factura real (no hay clave de Anthropic en la sesión). **Siguiente**: papeleo y licencias.
+
 ## Propuestas rojas (esperan al dueño)
 - R-001 · Comparativa honesta con heydiga en la web (más minutos por euro, montaje incluido, local de Vitoria). Riesgo: nombrar a un competidor exige datos exactos y fechados (publicidad comparativa, Ley 3/1991 art. 10). Alternativa segura: «qué mirar al elegir una recepcionista con IA» sin nombres.
 - R-002 · Atender en inglés y francés en las recepcionistas de los clientes (turistas, Vitoria Green Capital). Cambia agentes de clientes que pagan → solo con su permiso, uno a uno.
@@ -53,7 +55,8 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - R-003 · Escuchar el webhook de estados de WhatsApp para mandar el SMS cuando el número no tenga WhatsApp. Se hace cuando WhatsApp esté activo.
 
 ## Pendiente del dueño
-- **Automatizaciones**: dar el ok al precio (+15 €/mes, 300 mensajes, extra 0,05 €) o cambiarlo; después, desplegar (migración 0021) y activar en n8n «DEIKA · Automatizaciones (cada hora)» y «DEIKA · Resumen del día (20:00)». Aprobar las 5 plantillas de WhatsApp en borrador.
+- **Compras y costes**: ok al precio (+15 €/mes); desplegar la rama `claude/compras` (migración 0022); nueva clave de n8n para crear «DEIKA · Compras (cada mañana)»; probar con 2-3 facturas reales de Talleres Gasteiz.
+- Los flujos «DEIKA · Automatizaciones (cada hora)» y «DEIKA · Resumen del día (20:00)» de n8n quedan desactivados (lo de mensajes está archivado).
 - **Rotar la clave de la API de n8n** que se pegó en el chat el 13/10.
 - Para próximos despliegues: CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID en el entorno de la sesión (no en el chat).
 - Guardar CLAVE_CIFRADO en un gestor de contraseñas: si se pierde, hay que pedir de nuevo la clave de Cal.com a cada negocio.

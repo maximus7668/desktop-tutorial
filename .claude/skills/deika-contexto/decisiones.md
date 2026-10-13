@@ -7,6 +7,16 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-14 · Por «automatizaciones» el dueño quiere compras, costes y papeleo, NO mensajes a clientes** · Aclara que
+quería optimizar materias primas (coste, cuánto comprar) y quitar papeleo (licencias, trámites), no reseñas · Decide:
+(1) lo del 13/10 (presupuestos a clientes, recordatorios, reseñas) **fuera de la web y del panel, guardado** en la rama
+`claude/automatizaciones`, sin precio; (2) empezar por **compras y materia prima**; (3) piloto en **talleres**; (4) datos
+desde **foto o PDF de la factura del proveedor**. Hecho en `Deika-panel` rama `claude/compras` (sin desplegar): facturas
+leídas con Claude Opus 5.5 y revisadas antes de guardar, pedido sugerido (agenda + consumo + mínimo) que manda el dueño,
+coste y margen por servicio, plantilla de taller, recuento y flujo n8n «DEIKA · Compras (cada mañana)» en JSON (sin
+crear: falta una clave nueva de n8n). Precio **propuesto +15 €/mes**, pendiente de ok. **Siguiente: papeleo y licencias**
+(calendario de obligaciones por sector con avisos y documentos).
+
 **2026-10-13 · Automatizaciones para el negocio (pedido por el dueño; precio PROPUESTO por Claude, pendiente de su ok)** ·
 El dueño pidió «automatización de presupuestos etc. para que el empresario tenga los menos quebraderos de cabeza posibles»,
 con precios en la web y flujos en n8n · Construido en `Deika-panel` rama `claude/automatizaciones` (sin desplegar: no hay
