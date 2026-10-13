@@ -1,0 +1,12 @@
+# Python 3.11+ y ffmpeg (con libass) instalados en el sistema
+pydantic>=2.6
+PyYAML>=6
+requests>=2.31
+numpy>=1.26
+pillow>=10
+opencv-python-headless>=4.9
+num2words>=0.5.13
+google-api-python-client>=2.120
+google-auth-oauthlib>=1.2
+# voz gratis y local para borradores (opcional)
+piper-tts>=1.3

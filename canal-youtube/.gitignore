@@ -1,0 +1,8 @@
+.env
+secretos/
+cache/
+salida/
+__pycache__/
+*.pyc
+musica/*
+!musica/LEEME.md

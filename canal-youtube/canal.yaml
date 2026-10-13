@@ -1,0 +1,80 @@
+# Configuración del canal. Lo no indicado aquí toma el valor por defecto de canal/config.py.
+# Cambiar voz, nicho, presupuesto o autonomía es decisión del dueño (anótalo en memoria/decisiones.md).
+
+canal:
+  nombre: "Imperios S.A."          # provisional: lo decide el dueño (ver ESTRATEGIA.md)
+  idioma: es
+  # Web o email de contacto para el User-Agent de Wikimedia (sin él limitan más las descargas)
+  contacto_api: ""
+
+voz:
+  # piper = gratis y local, solo para borradores. Para publicar: elevenlabs (mejor) o azure (gratis hasta 500k caracteres/mes)
+  proveedor: piper
+  velocidad: 1.0
+  pausa_entre_escenas: 0.25
+  pausa_entre_capitulos: 0.8
+  pronunciacion:
+    Fugger: Fúguer
+  elevenlabs:
+    voice_id: ""                  # una voz de narrador grave de la biblioteca de ElevenLabs
+    modelo: eleven_multilingual_v2
+    estabilidad: 0.45
+    similitud: 0.8
+    estilo: 0.15
+  azure:
+    region: westeurope
+    voz: es-ES-AlvaroNeural
+  piper:
+    modelo: es_ES-davefx-medium
+
+visuales:
+  stock: [wikimedia, pexels, pixabay]   # historia: primero archivo real
+  ia:
+    proveedor: ninguno            # openai para ilustraciones (cuestan dinero y llevan marca C2PA)
+    modelo: gpt-image-1
+    calidad: medium
+  plano_max_seg: 6.5
+
+estilo:
+  color_acento: "#F5C518"         # oro
+  color_texto: "#FFFFFF"
+  color_fondo: "#0D0F14"
+  fuente_titulos: Anton-Regular.ttf
+  fuente_subtitulos: Montserrat-Black.ttf
+  fuente_texto: Montserrat-ExtraBold.ttf
+  vineta: true
+  grano: 0
+  musica_db: -23
+  animo_musica: misterio
+  aviso_ia: true                  # «Voz generada con IA» discreto en los primeros segundos
+
+largo:
+  resolucion: [1920, 1080]
+  fps: 30
+  subtitulos_quemados: false
+  palabras_min: 2000              # ~13 min
+  palabras_max: 4000              # ~26 min
+
+short:
+  resolucion: [1080, 1920]
+  fps: 30
+  duracion_objetivo_seg: 50
+  duracion_max_seg: 180
+  palabras_por_grupo: 3
+
+presupuesto:
+  mensual_eur: 30
+  eur_por_1000_caracteres:
+    elevenlabs: 0.20
+    azure: 0.015
+    openai: 0.012
+    piper: 0
+  eur_por_imagen_ia: 0.05
+
+autonomia:
+  subir_privado: false            # amarillo: actívalo cuando confíes en el agente
+
+youtube:
+  categoria: "27"                 # Educación
+  idioma: es
+  hecho_para_ninos: false
