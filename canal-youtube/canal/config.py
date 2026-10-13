@@ -62,6 +62,7 @@ POR_DEFECTO: dict = {
         "musica_db": -22,
         "animo_musica": "misterio",
         "aviso_ia": True,
+        "sfx_transiciones": True,
     },
     "largo": {
         "resolucion": [1920, 1080],

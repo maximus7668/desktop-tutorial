@@ -9,7 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import audio, metadatos, miniatura, movimiento, musica, registro, subtitulos
+from . import audio, metadatos, miniatura, movimiento, musica, registro, sfx, subtitulos
 from .config import FUENTES, SALIDA
 from .guion import Escena, Guion, Visual
 from .subtitulos import Palabra
@@ -58,7 +58,7 @@ def locutar(escenas: list[Escena], narrador: Narrador, cfg: dict, capitulos: boo
     partes = [audio.silencio(ENTRADA)]
     t = ENTRADA
     palabras: list[Palabra] = []
-    inicios = []
+    inicios, pausas = [], []
     textos = [e.narracion for e in escenas]
     for i, e in enumerate(escenas):
         tokens = tokenizar(e.narracion, narrador.normalizar, vcfg.get("pronunciacion"))
@@ -72,10 +72,13 @@ def locutar(escenas: list[Escena], narrador: Narrador, cfg: dict, capitulos: boo
         if i + 1 < len(escenas):
             pausa = vcfg["pausa_entre_capitulos"] if (capitulos and escenas[i + 1].capitulo) else vcfg["pausa_entre_escenas"]
             partes.append(audio.silencio(pausa))
+            pausas.append(pausa)
             t += pausa
     partes.append(audio.silencio(COLA))
     t += COLA
-    tramos = [(0.0 if i == 0 else inicios[i], inicios[i + 1] if i + 1 < len(inicios) else t) for i in range(len(escenas))]
+    # la imagen cambia un poco antes de que entre la voz de la escena siguiente (corte más natural)
+    cortes = [0.0] + [inicios[i] - min(0.3, pausas[i - 1] * 0.5) for i in range(1, len(escenas))]
+    tramos = [(cortes[i], cortes[i + 1] if i + 1 < len(cortes) else t) for i in range(len(escenas))]
     return Linea(np.concatenate(partes), palabras, tramos, t)
 
 
@@ -141,7 +144,7 @@ def _componer(clips: list[Path], mezcla: Path, ass: Path, salida: Path, cfg: dic
     lista.write_text("".join(f"file '{c}'\n" for c in clips), encoding="utf-8")
     audio.ffmpeg("-f", "concat", "-safe", "0", "-i", str(lista), "-i", str(mezcla),
                  "-filter_complex", f"[0:v]{_filtro_estilo(cfg, ass)},format=yuv420p[v]",
-                 "-map", "[v]", "-map", "1:a", "-r", str(fps), "-c:v", "libx264", "-preset", "faster", "-crf", "19",
+                 "-map", "[v]", "-map", "1:a", "-r", str(fps), "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
                  "-profile:v", "high", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart",
                  "-shortest", str(salida))
     lista.unlink(missing_ok=True)
@@ -152,6 +155,11 @@ def producir_largo(g: Guion, cfg: dict, narrador: Narrador, carpeta: Path) -> Pi
     fps = int(cfg["largo"]["fps"])
     avisos: list[str] = []
     linea = locutar(g.escenas, narrador, cfg, capitulos=True)
+    if cfg["estilo"].get("sfx_transiciones", True):
+        cambios = [linea.tramos[i][0] for i, e in enumerate(g.escenas) if e.capitulo and i > 0]
+        efectos = sfx.pista(len(linea.audio) / audio.SR, cambios)
+        n = min(len(efectos), len(linea.audio))
+        linea.audio[:n] += efectos[:n] * 0.32
     voz = audio.escribir(carpeta / "trabajo" / "voz.wav", linea.audio)
     pista = musica.elegir(linea.duracion, cfg["estilo"]["animo_musica"], g.id)
     mezcla = audio.mezclar(voz, carpeta / "trabajo" / "mezcla.wav", pista, cfg["estilo"]["musica_db"])

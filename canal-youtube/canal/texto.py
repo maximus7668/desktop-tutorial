@@ -224,6 +224,7 @@ def repartir(tokens: list[Token], inicio: float, fin: float) -> list[tuple[float
     """Reparte [inicio, fin] entre los tokens según lo que cuesta decirlos (letras y pausas)."""
     if not tokens:
         return []
+    fin = max(fin, inicio + 0.06 * len(tokens))  # frases muy cortas («Sí.»): nunca un tramo negativo
     pesos = [_letras(t.habla) + 1.0 for t in tokens]
     pausas = [t.pausa for t in tokens[:-1]] + [0.0]
     escala = (fin - inicio) / (sum(pesos) + sum(pausas))

@@ -180,6 +180,14 @@ def tendencias(a, cfg):
     return 0
 
 
+def marca(a, cfg):
+    from .marca import crear
+
+    for r in crear(cfg):
+        print(r)
+    return 0
+
+
 def gastos(a, cfg):
     print(f"{registro.gasto_mes():.2f} € este mes (tope {cfg['presupuesto']['mensual_eur']:.2f} €)")
     return 0
@@ -218,11 +226,12 @@ def main(argv=None) -> int:
     s.add_argument("--region", help="ES, MX, US, AR, CO…")
     s.add_argument("--shorts", action="store_true", help="incluir vídeos de menos de 4 min")
     sub.add_parser("gastos", help="gasto del mes")
+    sub.add_parser("marca", help="avatar y banner del canal con su nombre → salida/marca/")
     a = p.parse_args(argv)
     cfg = config.cargar(a.config)
     ordenes = {"comprobar": comprobar, "validar": validar, "visuales": visuales, "producir": producir,
                "paquete": paquete, "autorizar": autorizar, "subir": subir, "programar": programar,
-               "metricas": metricas, "tendencias": tendencias, "gastos": gastos}
+               "metricas": metricas, "tendencias": tendencias, "gastos": gastos, "marca": marca}
     return ordenes[a.orden](a, cfg)
 
 
