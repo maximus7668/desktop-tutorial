@@ -14,7 +14,7 @@ TAM = (1280, 720)
 
 
 def _fondo(g, cfg) -> Image.Image:
-    b = Buscador(cfg, (1920, 1080))
+    b = Buscador(cfg, (1920, 1080), g.id)
     r = b.conseguir(g.miniatura.visual)
     if r.tipo == "video":
         cuadro = r.ruta.with_suffix(".miniatura.jpg")

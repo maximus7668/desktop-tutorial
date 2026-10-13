@@ -270,10 +270,11 @@ def revisar(g: Guion, cfg: dict, anteriores: dict[str, str] | None = None) -> tu
     busquedas: dict[str, int] = {}
     for v in visuales:
         if v.tipo in ("stock", "foto", "wikimedia", "ia"):
-            busquedas[v.valor.lower()] = busquedas.get(v.valor.lower(), 0) + 1
+            k = v.valor.lower() + (f" (encuadre {v.encuadre})" if v.encuadre else "")  # otro encuadre = otro plano
+            busquedas[k] = busquedas.get(k, 0) + 1
     for b, n in busquedas.items():
         if n > 2:
-            h.append(Hallazgo("aviso", f"la búsqueda «{b}» se repite {n} veces; varía las imágenes"))
+            h.append(Hallazgo("aviso", f"la búsqueda «{b}» se repite {n} veces; varía las imágenes o usa otro encuadre"))
     if any(v.tipo == "ia" for v in visuales) and not g.sintetico_realista:
         h.append(Hallazgo("aviso", "hay imágenes IA: si parecen reales (personas, lugares o hechos reales), pon sintetico_realista=true para activar la etiqueta de YouTube"))
 

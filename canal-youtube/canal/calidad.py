@@ -12,7 +12,7 @@ from . import audio
 from .graficos import _fuente
 from .guion import Guion, Hallazgo, anteriores, revisar
 from .config import GUIONES
-from .visuales import Buscador
+from .visuales import Buscador, precargar_wikimedia, visuales_del_guion
 
 
 def sondear(ruta: Path) -> dict:
@@ -90,7 +90,8 @@ def hoja_visuales(g: Guion, cfg: dict, salida: Path, short: int | None = None) -
     """Antes de montar: qué imagen ha tocado a cada plano, con su id para fijarla o cambiarla."""
     vertical = short is not None
     tam = tuple(cfg["short" if vertical else "largo"]["resolucion"])
-    b = Buscador(cfg, tam)
+    precargar_wikimedia(visuales_del_guion(g), cfg)
+    b = Buscador(cfg, tam, g.id)
     escenas = g.shorts[short].escenas if vertical else g.escenas
     por_id = {e.id: e for e in g.escenas}
     filas = []

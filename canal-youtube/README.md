@@ -85,6 +85,8 @@ Python 3.11+ y ffmpeg. Después: `bash preparar.sh`, que instala las dependencia
 | `python -m canal paquete <id>` | Instrucciones para subirlo a mano en Studio |
 | `python -m canal programar <youtube_id> --cuando 2026-10-23T19:00 --confirmo` | Programa la publicación (🔴) |
 | `python -m canal metricas [--crear-informe]` | Métricas, CTR y caídas de retención → `memoria/metricas.md` |
+| `python -m canal vista <id>` | Copias ligeras de los vídeos para revisarlos en el móvil |
+| `python -m canal marca` | Avatar (800×800) y banner (2560×1440) del canal → `salida/marca/` |
 | `python -m canal gastos` | Gasto del mes |
 
 ## Qué sale de cada vídeo (`salida/<id>/`)
@@ -112,6 +114,7 @@ cada Short y la respuesta a los comentarios.
 ```
 canal/        el programa (voz, visuales, montaje, subtítulos, miniaturas, calidad, YouTube)
 guiones/      un JSON por vídeo (formato en plantillas/guion.ejemplo.json)
+investigacion/ datos y fuentes de cada vídeo, con su grado de certeza
 memoria/      decisiones, ideas, lecciones, métricas, gastos, registro
 fuentes/      tipografías libres (OFL) para rótulos y subtítulos
 musica/       tus pistas de la Biblioteca de audio (opcional)

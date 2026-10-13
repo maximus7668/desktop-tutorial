@@ -14,7 +14,7 @@ from .config import FUENTES, SALIDA
 from .guion import Escena, Guion, Visual
 from .subtitulos import Palabra
 from .texto import tokenizar
-from .visuales import Buscador
+from .visuales import Buscador, precargar_wikimedia, visuales_del_guion
 from .voz import Narrador
 
 ENTRADA = 0.35   # silencio antes de la primera palabra
@@ -164,7 +164,7 @@ def producir_largo(g: Guion, cfg: dict, narrador: Narrador, carpeta: Path) -> Pi
     pista = musica.elegir(linea.duracion, cfg["estilo"]["animo_musica"], g.id)
     mezcla = audio.mezclar(voz, carpeta / "trabajo" / "mezcla.wav", pista, cfg["estilo"]["musica_db"])
 
-    buscador = Buscador(cfg, tam)
+    buscador = Buscador(cfg, tam, g.id)
     planos = planificar(g.escenas, linea.tramos, True, avisos)
     clips = _render_planos(planos, buscador, tam, fps)
 
@@ -205,7 +205,7 @@ def producir_short(g: Guion, indice: int, cfg: dict, narrador: Narrador, carpeta
     def resolver(v: Visual) -> Visual:
         return por_id[v.de_escena].visuales[0] if v.de_escena else v
 
-    buscador = Buscador(cfg, tam)
+    buscador = Buscador(cfg, tam, g.id)
     planos = planificar(s.escenas, linea.tramos, False, avisos)
     clips = _render_planos(planos, buscador, tam, fps, resolver)
     rotulos = []
@@ -228,6 +228,7 @@ def producir_short(g: Guion, indice: int, cfg: dict, narrador: Narrador, carpeta
 def producir(g: Guion, cfg: dict, solo: str | None = None, proveedor_voz: str | None = None) -> dict:
     carpeta = SALIDA / g.id
     (carpeta / "trabajo").mkdir(parents=True, exist_ok=True)
+    precargar_wikimedia(visuales_del_guion(g), cfg)
     narrador = Narrador(cfg, proveedor_voz)
     piezas: list[Pieza] = []
     if solo in (None, "largo"):

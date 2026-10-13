@@ -70,6 +70,9 @@ expertas. Por eso:
 borrador) y vuelve a comprobar. Dile al dueño qué claves faltan, nunca se las pidas por el chat:
 van en `.env` o en los secretos del entorno.
 
+Imagen del canal (una vez, o si cambia el nombre): `python -m canal marca` deja el avatar y el banner
+en `salida/marca/`.
+
 ### 1. Ideas
 1. `python -m canal tendencias "<términos del pilar>" --dias 90` (prueba también con `--region ES`,
    `MX` y `US`). Lee `memoria/tendencias/<fecha>.md`: un ratio por encima de 3 indica demanda.
@@ -90,7 +93,10 @@ van en `.env` o en los secretos del entorno.
 
 ### 3. Visuales
 1. `python -m canal visuales guiones/<archivo>.json` genera `salida/<id>/visuales-*.jpg`, con la
-   imagen que ha tocado a cada plano.
+   imagen que ha tocado a cada plano. Para elegir entre muchas, busca primero candidatos en Commons
+   (API con `generator=search`, `prop=imageinfo`, `iiurlwidth=330`) y míralos en una hoja de
+   contactos; fija los buenos por id. Wikimedia limita las ráfagas: pocas búsquedas, sin prisas.
+   Guarda la investigación con sus fuentes en `investigacion/<fecha>-<tema>.md`.
 2. **Míralas** (Read sobre las .jpg). Si una imagen no corresponde (época equivocada, foto turística
    moderna, persona distinta…), cámbiala: afina la búsqueda, usa el título exacto de Commons
    (`"wikimedia": "File:…"`) o fija el recurso por su id (`"wikimedia": "id:wikimedia-123"`).
@@ -109,7 +115,8 @@ van en `.env` o en los secretos del entorno.
 ### 5. Revisión (tú primero, luego el dueño)
 1. Lee `calidad.md` y mira `revision-largo.jpg`, `revision-short-*.jpg` y `miniaturas-en-movil.jpg`.
    Arregla lo que falle y vuelve a producir.
-2. Envía al dueño con SendUserFile el largo, los Shorts y las 3 miniaturas, junto con una tabla:
+2. `python -m canal vista <id>` crea copias ligeras (`vista-*.mp4`) para verlas en el móvil. Envía al
+   dueño con SendUserFile esas copias, las 3 miniaturas y `revision-largo.jpg`, junto con una tabla:
    títulos A/B/C, duración, coste, avisos pendientes y la etiqueta de IA (sí/no).
 3. Espera su ok, en el que diga qué título y qué miniatura van.
 

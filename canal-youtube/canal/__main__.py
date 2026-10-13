@@ -180,6 +180,22 @@ def tendencias(a, cfg):
     return 0
 
 
+def vista(a, cfg):
+    """Copias ligeras para revisar en el móvil (720p o 540×960); no son para subir."""
+    from .audio import ffmpeg
+
+    carpeta = config.SALIDA / a.id
+    for v in sorted(carpeta.glob("*.mp4")):
+        if v.stem.startswith("vista-"):
+            continue
+        destino = carpeta / f"vista-{v.stem}.mp4"
+        escala = "scale=-2:720" if v.stem == "largo" else "scale=540:-2"
+        ffmpeg("-i", str(v), "-vf", escala, "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
+               "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(destino))
+        print(destino, f"{destino.stat().st_size / 1e6:.0f} MB")
+    return 0
+
+
 def marca(a, cfg):
     from .marca import crear
 
@@ -227,11 +243,13 @@ def main(argv=None) -> int:
     s.add_argument("--shorts", action="store_true", help="incluir vídeos de menos de 4 min")
     sub.add_parser("gastos", help="gasto del mes")
     sub.add_parser("marca", help="avatar y banner del canal con su nombre → salida/marca/")
+    s = sub.add_parser("vista", help="copias ligeras de los vídeos para revisarlos en el móvil")
+    s.add_argument("id")
     a = p.parse_args(argv)
     cfg = config.cargar(a.config)
     ordenes = {"comprobar": comprobar, "validar": validar, "visuales": visuales, "producir": producir,
                "paquete": paquete, "autorizar": autorizar, "subir": subir, "programar": programar,
-               "metricas": metricas, "tendencias": tendencias, "gastos": gastos, "marca": marca}
+               "metricas": metricas, "tendencias": tendencias, "gastos": gastos, "marca": marca, "vista": vista}
     return ordenes[a.orden](a, cfg)
 
 

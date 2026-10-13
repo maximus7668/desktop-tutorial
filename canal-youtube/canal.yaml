@@ -28,7 +28,7 @@ voz:
     modelo: es_ES-davefx-medium
 
 visuales:
-  stock: [wikimedia, pexels, pixabay]   # historia: primero archivo real
+  stock: [pexels, pixabay, wikimedia]   # para «stock»/«foto»; el archivo histórico se pide con «wikimedia»
   ia:
     proveedor: ninguno            # openai para ilustraciones (cuestan dinero y llevan marca C2PA)
     modelo: gpt-image-1

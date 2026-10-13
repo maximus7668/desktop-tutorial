@@ -105,7 +105,7 @@ def subir(ruta: Path, titulo: str, descripcion: str, etiquetas: list[str], cfg: 
     }
     media = MediaFileUpload(str(ruta), mimetype="video/mp4", chunksize=16 * 1024 * 1024, resumable=True)
     resp = _ejecutar_subida(yt.videos().insert(part="snippet,status", body=cuerpo, media_body=media,
-                                               notifySubscribers=False))
+                                               notifySubscribers=True))
     vid = resp["id"]
     if miniatura and miniatura.exists():
         try:

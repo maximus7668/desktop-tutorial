@@ -1,0 +1,2617 @@
+{
+ "id": "2026-10-13-potosi",
+ "tema": "Por qué la mayor mina de plata del mundo no hizo rica a España",
+ "titulos": [
+  "Potosí: la plata que financió un imperio… y arruinó a España",
+  "Por qué la plata de América no hizo rica a España",
+  "Potosí: la plata que acabó en Génova… y en China"
+ ],
+ "descripcion": "En 1545 empezó a explotarse en los Andes una montaña de plata que cambió la economía del mundo. Por qué esa riqueza pasó por España sin quedarse: guerras, banqueros genoveses, la mita, la ruta de la plata, China y nueve suspensiones de pagos.\n\nLo debatido se cuenta como debatido. Si ves un error, dínoslo en los comentarios.",
+ "etiquetas": [
+  "potosí",
+  "cerro rico",
+  "historia de potosí",
+  "plata de potosí",
+  "imperio español",
+  "historia económica",
+  "felipe ii",
+  "real de a ocho",
+  "galeón de manila",
+  "la mita",
+  "historia de bolivia",
+  "historia de españa"
+ ],
+ "hashtags": [
+  "#historia",
+  "#economía",
+  "#potosí"
+ ],
+ "fuentes": [
+  {
+   "titulo": "J. H. Elliott, «Potosí: The Silver Rush», The New York Review of Books (2019)",
+   "url": "https://www.nybooks.com/articles/2019/11/21/potosi-silver-rush/"
+  },
+  {
+   "titulo": "C. Marichal, «El peso de plata hispanoamericano como moneda universal», El Colegio de México",
+   "url": "https://carlosmarichal.colmex.mx/Historia%20econ%C3%B3mica/El%20peso%20de%20plata.pdf"
+  },
+  {
+   "titulo": "M. Dell, «The Persistent Effects of Peru's Mining Mita», Econometrica (2010)",
+   "url": "https://econometricsociety.org/publications/econometrica/2010/11/01/persistent-effects-perus-mining"
+  },
+  {
+   "titulo": "N. Robins y N. Hagan, «Mercury Production and Use in Colonial Andean Silver Production», Environmental Health Perspectives (2012)",
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3346781/"
+  },
+  {
+   "titulo": "R. M. Serrera, La Carrera de Indias y el tráfico de metales, Universidad de Sevilla",
+   "url": "https://editorial.us.es/en/muestra/719330?f=pdf"
+  },
+  {
+   "titulo": "M. Drelichman y H.-J. Voth, Lending to the Borrower from Hell, Princeton University Press (2014)",
+   "url": "https://press.princeton.edu/node/8726"
+  },
+  {
+   "titulo": "M. Drelichman, «The curse of Moctezuma», Explorations in Economic History (2005)",
+   "url": "https://ideas.repec.org/a/eee/exehis/v42y2005i3p349-380.html"
+  },
+  {
+   "titulo": "J. Munro, la revolución de los precios, Universidad de Toronto",
+   "url": "https://www.economics.utoronto.ca/public/workingPapers/UT-ECIPA-MUNRO-02-02.pdf"
+  },
+  {
+   "titulo": "Library of Congress, Potosí, la mayor mina de plata de Sudamérica (2022)",
+   "url": "https://blogs.loc.gov/international-collections/2022/08/a-short-story-about-potosi-the-largest-south-american-silver-mine-in-the-librarys-collections-part-2-loclr-blogint/"
+  },
+  {
+   "titulo": "Real Academia de la Historia, Diego López de Zúñiga y Velasco (conde de Nieva)",
+   "url": "https://dbe.rah.es/biografias/15398/diego-lopez-de-zuniga-y-velasco"
+  },
+  {
+   "titulo": "Centro Virtual Cervantes, Don Quijote, II, 71",
+   "url": "https://cvc.cervantes.es/literatura/clasicos/quijote/edicion/parte2/cap71/default.htm"
+  },
+  {
+   "titulo": "UNESCO, Ciudad de Potosí",
+   "url": "https://whc.unesco.org/es/list/420/"
+  },
+  {
+   "titulo": "Banco de España, deuda y suspensiones de pagos de la Corona",
+   "url": "https://repositorio.bde.es/bitstream/123456789/7406/1/roja70.pdf"
+  }
+ ],
+ "miniatura": {
+  "texto": "La montaña de plata",
+  "visual": {
+   "wikimedia": "id:wikimedia-55293332"
+  },
+  "texto_secundario": "1545"
+ },
+ "sintetico_realista": false,
+ "notas": "Tesis: la plata no hizo rica a España porque nunca se quedó: llegó gastada de antemano, pagó guerras y deudas y acabó en Génova, el norte de Europa y China; además ahorró al rey reformar su economía. Mitos que se evitan: «más grande que Londres», «ocho millones de muertos», «vale un Potosí» literal en el Quijote, el $ nacido en la ceca de Potosí. Voz de borrador: Piper; para publicar, ElevenLabs.",
+ "escenas": [
+  {
+   "id": "gancho",
+   "capitulo": "La montaña de plata",
+   "narracion": "A 4.000 metros de altura, en los Andes, hay una montaña que cambió el mundo. Se llama Cerro Rico y está en Potosí, en la actual Bolivia.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-55293332",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-1772983",
+     "mov": "der"
+    }
+   ],
+   "texto_pantalla": "Potosí, Bolivia"
+  },
+  {
+   "id": "riada",
+   "narracion": "De ella salió, durante dos siglos, una cantidad de plata difícil de imaginar. Pagó ejércitos en Europa, llenó los bancos de Génova y acabó en los mercados de China.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-164912863",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-22617836",
+     "encuadre": [
+      0.15,
+      0.05,
+      0.65,
+      0.65
+     ]
+    },
+    {
+     "wikimedia": "id:wikimedia-104047355",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "ciudad",
+   "narracion": "A sus pies creció una ciudad que llegó a rivalizar con Sevilla y a superar a Madrid.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-197606248",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-3592932",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "deudas",
+   "narracion": "Y aun así, el imperio dueño de esa montaña dejó de pagar sus deudas una y otra vez.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-7514474",
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "9",
+     "sub": "suspensiones de pagos entre 1557 y 1662"
+    }
+   ]
+  },
+  {
+   "id": "pregunta",
+   "narracion": "¿Cómo puede arruinarse un imperio que tiene la mina de plata más rica del planeta? Esa es la pregunta de hoy. Y la respuesta dice mucho de cómo funciona el dinero, entonces y ahora.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-29716320",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-29716320",
+     "encuadre": [
+      0.2,
+      0.25,
+      0.6,
+      0.45
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "tarjeta": "Potosí",
+     "sub": "La montaña que financió un imperio"
+    }
+   ]
+  },
+  {
+   "id": "1545",
+   "capitulo": "Un cerro en el fin del mundo",
+   "narracion": "Es 1545. Han pasado poco más de diez años desde que los españoles llegaron al imperio inca, y buscan metales por todo el altiplano.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-2093083"
+    },
+    {
+     "mapa": "El altiplano andino",
+     "puntos": [
+      {
+       "n": "Cuzco",
+       "lat": -13.53,
+       "lon": -71.97,
+       "pos": "izq"
+      },
+      {
+       "n": "La Paz",
+       "lat": -16.5,
+       "lon": -68.15,
+       "pos": "izq"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      }
+     ],
+     "ruta": false,
+     "resaltar": [
+      "BOL",
+      "PER"
+     ],
+     "zona": [
+      -82,
+      -26,
+      -56,
+      -8
+     ]
+    }
+   ]
+  },
+  {
+   "id": "leyenda",
+   "narracion": "Cuenta la tradición que un indígena llamado Diego Huallpa subió a un cerro, encendió una hoguera para pasar la noche y, al amanecer, vio hilos de plata derretida entre las piedras.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-64139430",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-55293332",
+     "encuadre": [
+      0.3,
+      0.2,
+      0.55,
+      0.55
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "verdad",
+   "narracion": "El nombre de Huallpa aparece en un documento de la época, su supuesta confesión. La hoguera, casi seguro, es leyenda. Lo cierto es que en abril de 1545 empezó la explotación del cerro.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-36030851",
+     "mov": "der"
+    },
+    {
+     "dato": "1545",
+     "sub": "empieza la explotación del cerro"
+    }
+   ]
+  },
+  {
+   "id": "fiebre",
+   "narracion": "Las primeras vetas eran tan ricas que la noticia corrió por todo el virreinato. Llegaron españoles con sus criados, mercaderes, aventureros y miles de trabajadores indígenas.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "encuadre": [
+      0.0,
+      0.0,
+      0.6,
+      0.6
+     ],
+     "mov": "abajo"
+    },
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "encuadre": [
+      0.35,
+      0.35,
+      0.6,
+      0.6
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "altura",
+   "narracion": "A los pies del cerro se levantó, casi de la nada, una ciudad. Allí apenas crecía nada, y el aire tenía mucho menos oxígeno que en la costa.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-197606248",
+     "encuadre": [
+      0.35,
+      0.0,
+      0.65,
+      0.75
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "dato": "4.000 m",
+     "sub": "de altitud"
+    }
+   ]
+  },
+  {
+   "id": "50000",
+   "narracion": "Todo había que subirlo desde lejos: comida, leña, telas, vino. Y aun así, a comienzos de la década de 1570 ya vivían allí más de 50.000 personas.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782517",
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "+50.000",
+     "sub": "habitantes a comienzos de la década de 1570"
+    }
+   ]
+  },
+  {
+   "id": "160000",
+   "narracion": "Hacia 1610 los informes hablaban de 160.000 habitantes. Probablemente contaban todo el distrito minero. Aun así, Potosí rivalizaba con Sevilla, la gran ciudad de España, y superaba a Madrid.",
+   "visuales": [
+    {
+     "grafico": "Población hacia 1600",
+     "forma": "barras",
+     "datos": [
+      [
+       "Londres",
+       200000
+      ],
+      [
+       "Potosí (1610)",
+       160000
+      ],
+      [
+       "Sevilla",
+       150000
+      ],
+      [
+       "Madrid",
+       90000
+      ]
+     ],
+     "sub": "habitantes · estimaciones",
+     "nota": "Potosí: informes de 1610, quizá con todo el distrito minero. Fuentes: Elliott (2019), Finlay (1981), Serrera, Carbajo Isla (1984)",
+     "destacar": [
+      "Potosí (1610)"
+     ],
+     "peso": 1.4
+    },
+    {
+     "dato": "160.000",
+     "sub": "habitantes, según los informes de 1610"
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "villa",
+   "narracion": "Los mineros tenían tanto dinero que en 1561 pagaron 79.000 pesos para gobernarse por su cuenta y recibir un título. Desde entonces, Potosí fue la Villa Imperial.",
+   "visuales": [
+    {
+     "dato": "79.000 pesos",
+     "sub": "por el título de Villa Imperial, 1561"
+    },
+    {
+     "wikimedia": "id:wikimedia-82143971",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "quijote",
+   "narracion": "Su fama llegó a toda Europa. En el Quijote, Cervantes la usa como medida de una riqueza enorme: «las minas del Potosí fueran poco para pagarte».",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-23548456"
+    },
+    {
+     "cita": "El tesoro de Venecia, las minas del Potosí fueran poco para pagarte",
+     "autor": "Cervantes, Quijote, II, 71 (1615)",
+     "peso": 1.3
+    }
+   ]
+  },
+  {
+   "id": "vale",
+   "narracion": "Y en España todavía decimos que algo «vale un Potosí».",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-1772983",
+     "encuadre": [
+      0.15,
+      0.0,
+      0.7,
+      0.8
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "agota",
+   "capitulo": "El virrey y el mercurio",
+   "narracion": "Pero la plata fácil se acaba. A partir de 1550, las vetas más ricas de la superficie empezaron a agotarse, y la producción cayó durante casi veinte años.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-36030855",
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "encuadre": [
+      0.2,
+      0.15,
+      0.5,
+      0.5
+     ],
+     "mov": "arriba"
+    }
+   ]
+  },
+  {
+   "id": "pobre",
+   "narracion": "El mineral que quedaba era más pobre. Fundirlo con fuego, como se había hecho hasta entonces, ya no compensaba.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782514",
+     "encuadre": [
+      0.1,
+      0.1,
+      0.8,
+      0.8
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-139809163",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "medina",
+   "narracion": "La solución llegó de México. Allí, Bartolomé de Medina había perfeccionado un método para sacar la plata con mercurio: la amalgamación.",
+   "visuales": [
+    {
+     "mapa": "De México a los Andes",
+     "puntos": [
+      {
+       "n": "México",
+       "lat": 19.43,
+       "lon": -99.13,
+       "pos": "der"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75,
+       "pos": "der"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "MEX",
+      "BOL"
+     ],
+     "peso": 1.3
+    },
+    {
+     "tarjeta": "Amalgamación",
+     "sub": "el método de Bartolomé de Medina"
+    }
+   ]
+  },
+  {
+   "id": "metodo",
+   "narracion": "Se molía el mineral, se mezclaba con mercurio y otros ingredientes, y el mercurio atrapaba la plata. Después se calentaba la mezcla, el mercurio se evaporaba y quedaba la plata.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782512",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-104047355",
+     "encuadre": [
+      0.15,
+      0.1,
+      0.7,
+      0.8
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "huancavelica",
+   "narracion": "Y, para suerte de la Corona, en los Andes había mercurio: desde 1564 se explotaba la mina de Huancavelica, en el actual Perú.",
+   "visuales": [
+    {
+     "mapa": "El mercurio de Huancavelica",
+     "puntos": [
+      {
+       "n": "Huancavelica",
+       "lat": -12.79,
+       "lon": -74.97,
+       "pos": "izq"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "PER",
+      "BOL"
+     ],
+     "peso": 1.3
+    },
+    {
+     "wikimedia": "id:wikimedia-4987469",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "toledo",
+   "narracion": "Faltaba alguien que lo organizara todo. Ese fue Francisco de Toledo, el virrey que llegó al Perú a finales de 1569.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-9991551",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-9991551",
+     "encuadre": [
+      0.2,
+      0.05,
+      0.6,
+      0.45
+     ],
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "1572",
+   "narracion": "En 1572 la amalgamación llegó a Potosí. Ese mismo año se fundó la Casa de la Moneda, donde la plata se convertía en monedas.",
+   "visuales": [
+    {
+     "dato": "1572",
+     "sub": "llegan el mercurio y la Casa de la Moneda"
+    },
+    {
+     "wikimedia": "id:wikimedia-175633248",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "1592",
+   "narracion": "El resultado fue espectacular. La producción se disparó y alcanzó su máximo en 1592.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-3631966",
+     "mov": "der"
+    },
+    {
+     "dato": "1592",
+     "sub": "año de máxima producción"
+    }
+   ]
+  },
+  {
+   "id": "mitad",
+   "narracion": "Según algunas estimaciones, en el siglo que siguió a 1545 el cerro dio casi la mitad de la plata del mundo.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782517",
+     "encuadre": [
+      0.2,
+      0.0,
+      0.6,
+      0.7
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "dato": "Casi la mitad",
+     "sub": "de la plata del mundo, según algunas estimaciones"
+    }
+   ]
+  },
+  {
+   "id": "canal",
+   "narracion": "Por cierto, si te interesa entender cómo se ganó y se perdió el dinero en el mundo hispano, suscríbete: de eso va este canal.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-164912754",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.25,
+      0.2,
+      0.5,
+      0.6
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "mano",
+   "narracion": "Pero a Toledo le faltaba lo más importante: miles de trabajadores. Y para conseguirlos recurrió a un antiguo sistema inca, la mita.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "mov": "zoom_out"
+    },
+    {
+     "tarjeta": "La mita",
+     "sub": "1573-1812"
+    }
+   ]
+  },
+  {
+   "id": "mita",
+   "capitulo": "El precio de la plata",
+   "narracion": "La mita obligaba a los pueblos indígenas de una amplia región de los Andes a enviar cada año a Potosí a uno de cada siete hombres adultos.",
+   "visuales": [
+    {
+     "mapa": "La mita",
+     "puntos": [
+      {
+       "n": "Cuzco",
+       "lat": -13.53,
+       "lon": -71.97,
+       "pos": "izq"
+      },
+      {
+       "n": "La Paz",
+       "lat": -16.5,
+       "lon": -68.15,
+       "pos": "izq"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      }
+     ],
+     "ruta": false,
+     "resaltar": [
+      "PER",
+      "BOL"
+     ],
+     "zona": [
+      -82,
+      -26,
+      -56,
+      -8
+     ],
+     "sub": "de Cuzco a Potosí"
+    },
+    {
+     "dato": "1 de cada 7",
+     "sub": "hombres adultos, cada año"
+    }
+   ]
+  },
+  {
+   "id": "turnos",
+   "narracion": "Eran unos 13.500 hombres al año. Trabajaban por turnos: una semana dentro de la mina y dos de descanso.",
+   "visuales": [
+    {
+     "dato": "13.500",
+     "sub": "mitayos al año"
+    },
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "encuadre": [
+      0.4,
+      0.0,
+      0.6,
+      0.6
+     ],
+     "mov": "abajo"
+    }
+   ]
+  },
+  {
+   "id": "deuda",
+   "narracion": "Viajaban con sus familias y con su propia comida, a cientos de kilómetros de casa. La paga era tan baja que muchos acababan endeudados.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-9948164",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-94782514",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "libres",
+   "narracion": "No todos eran forzados. A finales del siglo XVI, los mitayos eran cerca de un tercio de la mano de obra; el resto cobraba un jornal. Pero el trabajo era igual de peligroso para todos.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "mov": "zoom_out"
+    },
+    {
+     "dato": "≈ 30 %",
+     "sub": "de la mano de obra eran mitayos (finales del siglo XVI)"
+    },
+    {
+     "wikimedia": "id:wikimedia-94782514",
+     "encuadre": [
+      0.3,
+      0.2,
+      0.6,
+      0.7
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "mercurio",
+   "narracion": "Dentro del cerro, subían sacos de mineral por galerías estrechas, a la luz de las velas. Fuera, el mercurio envenenaba poco a poco a quienes lo manipulaban.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-64396215",
+     "encuadre": [
+      0.1,
+      0.4,
+      0.55,
+      0.55
+     ],
+     "mov": "arriba"
+    },
+    {
+     "wikimedia": "id:wikimedia-166418706",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "39000",
+   "narracion": "Se calcula que entre 1564 y 1810 se liberaron en Potosí unas 39.000 toneladas de mercurio, convertidas en vapor.",
+   "visuales": [
+    {
+     "dato": "39.000 t",
+     "sub": "de mercurio liberadas en Potosí (1564-1810)"
+    },
+    {
+     "wikimedia": "id:wikimedia-36030855",
+     "encuadre": [
+      0.1,
+      0.2,
+      0.7,
+      0.7
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "mito",
+   "narracion": "¿Cuántos murieron? A menudo se repite que fueron ocho millones. La cifra se popularizó con un libro muy famoso de 1971, Las venas abiertas de América Latina, y no tiene base documental.",
+   "visuales": [
+    {
+     "tarjeta": "«Ocho millones»",
+     "sub": "una cifra sin base documental"
+    },
+    {
+     "wikimedia": "id:wikimedia-36030851",
+     "encuadre": [
+      0.2,
+      0.1,
+      0.6,
+      0.7
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "cuadra",
+   "narracion": "Para llegar a ocho millones tendrían que haber muerto unas 30.000 personas al año: más del doble de todos los hombres que enviaba la mita.",
+   "visuales": [
+    {
+     "grafico": "La cifra no cuadra",
+     "forma": "barras",
+     "datos": [
+      [
+       "Muertes al año para llegar a 8 millones",
+       30000
+      ],
+      [
+       "Hombres enviados por la mita al año",
+       13500
+      ]
+     ],
+     "sub": "1545-1810",
+     "nota": "Cálculo propio. Mita: unos 13.500 al año (UPenn)",
+     "destacar": [
+      "Muertes al año para llegar a 8 millones"
+     ],
+     "peso": 1.3
+    },
+    {
+     "wikimedia": "id:wikimedia-64139430",
+     "encuadre": [
+      0.2,
+      0.0,
+      0.6,
+      0.8
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "huellas",
+   "narracion": "La verdad es que no sabemos cuántos murieron. Lo que sí sabemos es que sus huellas todavía se pueden medir.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-55293332",
+     "encuadre": [
+      0.0,
+      0.25,
+      0.75,
+      0.75
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-181470261",
+     "mov": "arriba"
+    }
+   ]
+  },
+  {
+   "id": "dell",
+   "narracion": "En 2010, la economista Melissa Dell comparó los pueblos del Perú que estuvieron sujetos a la mita con sus vecinos que no lo estuvieron.",
+   "visuales": [
+    {
+     "tarjeta": "Melissa Dell",
+     "sub": "Econometrica, 2010"
+    },
+    {
+     "mapa": "Los antiguos pueblos de la mita",
+     "puntos": [
+      {
+       "n": "Cuzco",
+       "lat": -13.53,
+       "lon": -71.97,
+       "pos": "izq"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      }
+     ],
+     "ruta": false,
+     "resaltar": [
+      "PER"
+     ],
+     "zona": [
+      -80,
+      -22,
+      -60,
+      -8
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hoy",
+   "narracion": "Casi dos siglos después del fin de la mita, en los antiguos pueblos mitayos se consume un 25 % menos, y hay más niños con retraso en el crecimiento.",
+   "visuales": [
+    {
+     "dato": "−25 %",
+     "sub": "de consumo en los antiguos pueblos de la mita"
+    },
+    {
+     "dato": "+6 puntos",
+     "sub": "de retraso en el crecimiento infantil"
+    }
+   ]
+  },
+  {
+   "id": "detras",
+   "narracion": "Detrás de cada moneda de plata de Potosí hubo este trabajo. Conviene recordarlo en todo lo que viene.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-164912863",
+     "encuadre": [
+      0.15,
+      0.15,
+      0.7,
+      0.7
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-139809163",
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "quinto",
+   "capitulo": "La ruta de la plata",
+   "narracion": "Una vez fundida, la plata se marcaba y se pagaba el impuesto del rey: el quinto real, la quinta parte de lo que salía del cerro.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782512",
+     "encuadre": [
+      0.15,
+      0.15,
+      0.7,
+      0.7
+     ],
+     "mov": "izq"
+    },
+    {
+     "dato": "20 %",
+     "sub": "para el rey: el quinto real"
+    }
+   ]
+  },
+  {
+   "id": "arica",
+   "narracion": "Después empezaba un viaje de miles de kilómetros. Primero, a lomos de llamas y mulas, hasta Arica, en la costa del Pacífico.",
+   "visuales": [
+    {
+     "mapa": "De Potosí a Arica",
+     "puntos": [
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75,
+       "pos": "der"
+      },
+      {
+       "n": "Arica",
+       "lat": -18.48,
+       "lon": -70.32,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "BOL"
+     ],
+     "zona": [
+      -76,
+      -24,
+      -60,
+      -14
+     ],
+     "peso": 1.3
+    },
+    {
+     "wikimedia": "id:wikimedia-9948164",
+     "encuadre": [
+      0.0,
+      0.3,
+      1.0,
+      0.6
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "callao",
+   "narracion": "De Arica, en barco, hasta El Callao, el puerto de Lima. Y de allí, hacia el norte, hasta Panamá.",
+   "visuales": [
+    {
+     "mapa": "Por el Pacífico",
+     "puntos": [
+      {
+       "n": "Arica",
+       "lat": -18.48,
+       "lon": -70.32,
+       "pos": "der"
+      },
+      {
+       "n": "El Callao",
+       "lat": -12.05,
+       "lon": -77.15,
+       "pos": "izq"
+      },
+      {
+       "n": "Panamá",
+       "lat": 8.98,
+       "lon": -79.52,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "PER",
+      "PAN"
+     ],
+     "peso": 1.4
+    },
+    {
+     "wikimedia": "id:wikimedia-154701210",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "istmo",
+   "narracion": "En Panamá, la plata cruzaba el istmo en mulas hasta el Caribe: primero a Nombre de Dios y, más tarde, a Portobelo. Allí la esperaban las flotas.",
+   "visuales": [
+    {
+     "mapa": "El istmo de Panamá",
+     "puntos": [
+      {
+       "n": "Panamá",
+       "lat": 8.98,
+       "lon": -79.52,
+       "pos": "abajo"
+      },
+      {
+       "n": "Portobelo",
+       "lat": 9.55,
+       "lon": -79.65,
+       "pos": "arriba"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "PAN"
+     ],
+     "zona": [
+      -80.6,
+      8.4,
+      -78.8,
+      10.1
+     ],
+     "peso": 1.2
+    },
+    {
+     "wikimedia": "id:wikimedia-7491459",
+     "mov": "izq"
+    },
+    {
+     "wikimedia": "id:wikimedia-21957483",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "habana",
+   "narracion": "Los barcos se reunían en La Habana y cruzaban juntos el Atlántico, escoltados para protegerse de piratas y corsarios. Destino: Sevilla.",
+   "visuales": [
+    {
+     "mapa": "La ruta de la plata",
+     "puntos": [
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      },
+      {
+       "n": "Arica",
+       "lat": -18.48,
+       "lon": -70.32,
+       "pos": "izq"
+      },
+      {
+       "n": "El Callao",
+       "lat": -12.05,
+       "lon": -77.15,
+       "pos": "izq"
+      },
+      {
+       "n": "Panamá",
+       "lat": 8.98,
+       "lon": -79.52,
+       "pos": "izq"
+      },
+      {
+       "n": "La Habana",
+       "lat": 23.13,
+       "lon": -82.38,
+       "pos": "izq"
+      },
+      {
+       "n": "Sevilla",
+       "lat": 37.39,
+       "lon": -5.99,
+       "pos": "arriba"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "BOL",
+      "ESP"
+     ],
+     "zona": [
+      -92,
+      -28,
+      8,
+      45
+     ],
+     "peso": 1.5
+    },
+    {
+     "wikimedia": "id:wikimedia-15465744",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "hamilton",
+   "narracion": "Entre 1503 y 1660 llegaron a Sevilla, registradas, casi 17.000 toneladas de plata. Son las cuentas del historiador Earl Hamilton, de 1934.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-3592932",
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "≈ 17.000 t",
+     "sub": "de plata registradas en Sevilla (1503-1660)"
+    }
+   ]
+  },
+  {
+   "id": "particulares",
+   "narracion": "Y solo una cuarta parte era del rey. El resto pertenecía a particulares: mercaderes, mineros, inversores.",
+   "visuales": [
+    {
+     "grafico": "¿De quién era la plata?",
+     "forma": "barras",
+     "datos": [
+      [
+       "Particulares",
+       74
+      ],
+      [
+       "Corona",
+       26
+      ]
+     ],
+     "sub": "metales registrados en Sevilla, 1503-1660",
+     "nota": "Fuente: E. J. Hamilton (1934)",
+     "unidad": "%",
+     "peso": 1.2
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.0,
+      0.3,
+      0.55,
+      0.6
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "contrabando",
+   "narracion": "Y eso es solo lo declarado. El contrabando fue enorme: según algunos cálculos, en la segunda mitad del siglo XVII llegó más plata sin registrar que registrada.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.45,
+      0.35,
+      0.55,
+      0.6
+     ],
+     "mov": "izq"
+    },
+    {
+     "tarjeta": "Contrabando",
+     "sub": "más plata sin registrar que registrada (1651-1700)"
+    }
+   ]
+  },
+  {
+   "id": "dostercios",
+   "narracion": "De todo lo que llegó entre 1580 y 1660, unas dos terceras partes venían por la ruta de Panamá, en buena medida desde Potosí.",
+   "visuales": [
+    {
+     "dato": "2/3",
+     "sub": "de los metales llegados a Sevilla venían por Panamá (1580-1660)"
+    },
+    {
+     "wikimedia": "id:wikimedia-109208424",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "peso",
+   "narracion": "Mucha de esa plata viajaba ya convertida en monedas: el real de a ocho, también llamado peso.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-164912754",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-164912863",
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "global",
+   "narracion": "Fue la primera moneda global. Corría por Europa, por Asia y por América.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-10909672",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "dolar",
+   "narracion": "En Estados Unidos, una ley de 1792 definió el dólar con el mismo valor que el peso de a ocho. Y las monedas españolas fueron de curso legal allí hasta 1857.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-20597934",
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "1857",
+     "sub": "fin del curso legal de las monedas españolas en EE. UU."
+    }
+   ]
+  },
+  {
+   "id": "manila",
+   "narracion": "Otra parte de la plata nunca pasó por España. Desde 1571, el galeón de Manila unía Acapulco, en México, con las Filipinas.",
+   "visuales": [
+    {
+     "mapa": "El galeón de Manila",
+     "puntos": [
+      {
+       "n": "Acapulco",
+       "lat": 16.85,
+       "lon": -99.9
+      },
+      {
+       "n": "Manila",
+       "lat": 14.6,
+       "lon": 120.98,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "MEX",
+      "PHL"
+     ],
+     "sub": "desde 1571",
+     "peso": 1.4
+    },
+    {
+     "wikimedia": "id:wikimedia-82198314",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "china",
+   "narracion": "¿Por qué tanta plata iba hacia Asia? Porque en China valía el doble. Allí el oro se cambiaba por seis veces su peso en plata; en Europa, por once o doce.",
+   "visuales": [
+    {
+     "grafico": "Onzas de plata por una de oro",
+     "forma": "barras",
+     "datos": [
+      [
+       "China",
+       6
+      ],
+      [
+       "Europa",
+       11.5
+      ]
+     ],
+     "sub": "mediados del siglo XVI",
+     "nota": "Europa: entre 11 y 12. Fuente: R. von Glahn, en C. Marichal",
+     "destacar": [
+      "China"
+     ],
+     "peso": 1.3
+    },
+    {
+     "dato": "× 2",
+     "sub": "valía la plata en China"
+    },
+    {
+     "wikimedia": "id:wikimedia-12636365",
+     "encuadre": [
+      0.35,
+      0.2,
+      0.6,
+      0.7
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "seda",
+   "narracion": "Con la misma plata se compraba en Asia mucho más que en Europa: seda, porcelana, especias. Fue uno de los grandes negocios de la época.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-12636365",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-101248412",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "sevilla",
+   "capitulo": "Nace en las Indias, muere en Génova",
+   "narracion": "Volvamos a Sevilla. La plata llega al puerto. ¿Se queda en España? Casi nunca.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.3,
+      0.25,
+      0.4,
+      0.5
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "guerras",
+   "narracion": "Carlos V primero, y luego su hijo Felipe II, estuvieron en guerra casi constante: contra Francia, contra los otomanos, contra los protestantes de Alemania y de Flandes.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-22617836",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-134141510",
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-7514474",
+     "encuadre": [
+      0.1,
+      0.0,
+      0.8,
+      0.6
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "banqueros",
+   "narracion": "Las guerras se pagaban por adelantado. Para eso, la Corona pedía dinero a los grandes banqueros de Europa: primero a los Fugger de Augsburgo, después sobre todo a los genoveses.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-150476",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-117054002"
+    },
+    {
+     "wikimedia": "id:wikimedia-155048"
+    }
+   ]
+  },
+  {
+   "id": "adelantado",
+   "narracion": "Y esos préstamos se devolvían con la plata de las próximas flotas. Muchas veces, la plata estaba gastada antes de salir de América.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-155048",
+     "encuadre": [
+      0.2,
+      0.25,
+      0.6,
+      0.6
+     ],
+     "mov": "izq"
+    },
+    {
+     "wikimedia": "id:wikimedia-179984890",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "quevedo",
+   "narracion": "Francisco de Quevedo lo resumió en cuatro versos sobre el dinero: «Nace en las Indias honrado, donde el mundo le acompaña; viene a morir en España, y es en Génova enterrado».",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-27702609"
+    },
+    {
+     "cita": "Nace en las Indias honrado, donde el mundo le acompaña; viene a morir en España, y es en Génova enterrado",
+     "autor": "Francisco de Quevedo",
+     "peso": 1.6
+    },
+    {
+     "wikimedia": "id:wikimedia-117054002",
+     "encuadre": [
+      0.3,
+      0.2,
+      0.5,
+      0.65
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "felipe",
+   "narracion": "Cuando las cuentas no salían, el rey suspendía pagos. Felipe II lo hizo cuatro veces: en 1557, 1560, 1575 y 1596.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-5249539",
+     "mov": "zoom_in"
+    },
+    {
+     "grafico": "Suspensiones de pagos de la Corona",
+     "forma": "cronologia",
+     "datos": [
+      [
+       "1557",
+       "Felipe II"
+      ],
+      [
+       "1560",
+       "Felipe II"
+      ],
+      [
+       "1575",
+       "Felipe II"
+      ],
+      [
+       "1596",
+       "Felipe II"
+      ],
+      [
+       "1607",
+       "Felipe III"
+      ],
+      [
+       "1627",
+       "Felipe IV"
+      ],
+      [
+       "1647",
+       "Felipe IV"
+      ],
+      [
+       "1652",
+       "Felipe IV"
+      ],
+      [
+       "1662",
+       "Felipe IV"
+      ]
+     ],
+     "nota": "Fuentes: Banco de España; Drelichman y Voth (2014)",
+     "peso": 1.5
+    }
+   ]
+  },
+  {
+   "id": "sucesores",
+   "narracion": "Su hijo, Felipe III, lo hizo en 1607. Y Felipe IV, en 1627, 1647, 1652 y 1662.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-164912754",
+     "encuadre": [
+      0.1,
+      0.1,
+      0.8,
+      0.8
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "9",
+     "sub": "suspensiones de pagos en poco más de un siglo"
+    }
+   ]
+  },
+  {
+   "id": "posible",
+   "narracion": "Nueve suspensiones de pagos en poco más de un siglo, con la mayor mina de plata del mundo en sus manos. ¿Cómo es posible?",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-55293332",
+     "encuadre": [
+      0.1,
+      0.1,
+      0.8,
+      0.8
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "tarjeta": "¿Cómo es posible?"
+    }
+   ]
+  },
+  {
+   "id": "azpilcueta",
+   "capitulo": "La maldición de la abundancia",
+   "narracion": "Los propios españoles lo notaron pronto. En 1556, el navarro Martín de Azpilcueta, de la Escuela de Salamanca, relacionó la subida de los precios con los metales que llegaban de América.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-177633080"
+    },
+    {
+     "dato": "1556",
+     "sub": "Azpilcueta relaciona precios y metales de América"
+    },
+    {
+     "wikimedia": "id:wikimedia-3592932",
+     "encuadre": [
+      0.0,
+      0.0,
+      0.6,
+      0.6
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "bodin",
+   "narracion": "Lo hizo doce años antes que el francés Jean Bodin, a quien durante mucho tiempo se atribuyó la idea.",
+   "visuales": [
+    {
+     "dato": "12 años",
+     "sub": "antes que Jean Bodin (1568)"
+    },
+    {
+     "wikimedia": "id:wikimedia-177633080",
+     "encuadre": [
+      0.2,
+      0.1,
+      0.6,
+      0.6
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "revolucion",
+   "narracion": "En 1934, el historiador Earl Hamilton convirtió la idea en una teoría famosa: la revolución de los precios. Según él, la plata americana había disparado la inflación en España.",
+   "visuales": [
+    {
+     "tarjeta": "La revolución de los precios",
+     "sub": "Earl J. Hamilton, 1934"
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.5,
+      0.0,
+      0.5,
+      0.6
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "complicado",
+   "narracion": "Hoy sabemos que el asunto es más complicado. Los precios empezaron a subir antes de que llegara mucha plata, y también pesó el crecimiento de la población.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-3592932",
+     "encuadre": [
+      0.4,
+      0.3,
+      0.6,
+      0.7
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-155048",
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "sorpresa",
+   "narracion": "Y hay un dato que sorprende: a mediados del siglo XVII, los precios habían subido más en Inglaterra o en los Países Bajos que en la propia España.",
+   "visuales": [
+    {
+     "grafico": "Precios hacia 1650",
+     "forma": "barras",
+     "datos": [
+      [
+       "España",
+       457
+      ],
+      [
+       "Sur de Inglaterra",
+       698
+      ],
+      [
+       "Brabante",
+       846
+      ]
+     ],
+     "sub": "índice de precios · 1501-1510 = 100",
+     "nota": "Fuente: J. Munro (Universidad de Toronto)",
+     "destacar": [
+      "España"
+     ],
+     "peso": 1.4
+    },
+    {
+     "dato": "457 frente a 846",
+     "sub": "España frente a Brabante (1501-1510 = 100)"
+    }
+   ]
+  },
+  {
+   "id": "reparte",
+   "narracion": "¿Por qué? Porque la plata no se quedaba en España. Pasaba por ella y se repartía por toda Europa.",
+   "visuales": [
+    {
+     "mapa": "La plata se reparte por Europa",
+     "puntos": [
+      {
+       "n": "Sevilla",
+       "lat": 37.39,
+       "lon": -5.99,
+       "pos": "abajo"
+      },
+      {
+       "n": "Génova",
+       "lat": 44.41,
+       "lon": 8.93,
+       "pos": "abajo"
+      },
+      {
+       "n": "Augsburgo",
+       "lat": 48.37,
+       "lon": 10.9,
+       "pos": "der"
+      },
+      {
+       "n": "Amberes",
+       "lat": 51.22,
+       "lon": 4.4,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "ESP",
+      "ITA",
+      "DEU",
+      "BEL"
+     ],
+     "peso": 1.4
+    },
+    {
+     "wikimedia": "id:wikimedia-117054002",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "holandesa",
+   "narracion": "Pero, aunque la inflación fuera menor que fuera, sí hizo daño. El economista Mauricio Drelichman lo explica con un concepto moderno: la enfermedad holandesa.",
+   "visuales": [
+    {
+     "tarjeta": "La enfermedad holandesa",
+     "sub": "Mauricio Drelichman, 2005"
+    },
+    {
+     "wikimedia": "id:wikimedia-36030851",
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "concepto",
+   "narracion": "Cuando un país recibe de golpe una gran riqueza, suben los precios de lo que no se puede importar, como las casas o los servicios. Y sus productos se encarecen frente a los extranjeros.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.1,
+      0.1,
+      0.5,
+      0.55
+     ],
+     "mov": "der"
+    },
+    {
+     "wikimedia": "id:wikimedia-3592932",
+     "encuadre": [
+      0.2,
+      0.4,
+      0.5,
+      0.5
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-15497760",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "lana",
+   "narracion": "Según Drelichman, eso pasó en Castilla entre 1550 y 1580. Sectores que exportaban, como la lana, perdieron competitividad.",
+   "visuales": [
+    {
+     "dato": "1550-1580",
+     "sub": "Castilla pierde competitividad"
+    },
+    {
+     "wikimedia": "id:wikimedia-1713560",
+     "encuadre": [
+      0.6,
+      0.4,
+      0.4,
+      0.5
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "politica",
+   "narracion": "Y hubo un efecto más sutil, al que llama una maldición política. Con la plata asegurada, el rey se endeudaba más y necesitaba menos el permiso de nadie.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-7514474",
+     "encuadre": [
+      0.2,
+      0.0,
+      0.6,
+      0.45
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "tarjeta": "Una maldición política",
+     "sub": "más deuda, menos controles al rey"
+    }
+   ]
+  },
+  {
+   "id": "voth",
+   "narracion": "Ahora bien, no todos lo ven igual. Drelichman y Hans-Joachim Voth revisaron cientos de contratos de préstamo de Felipe II.",
+   "visuales": [
+    {
+     "tarjeta": "Lending to the Borrower from Hell",
+     "sub": "Drelichman y Voth, 2014"
+    },
+    {
+     "wikimedia": "id:wikimedia-150476",
+     "encuadre": [
+      0.15,
+      0.1,
+      0.7,
+      0.6
+     ],
+     "mov": "zoom_out"
+    }
+   ]
+  },
+  {
+   "id": "credito",
+   "narracion": "Su conclusión: el rey nunca perdió el acceso al crédito. Tras cada suspensión volvía a pedir prestado en uno o dos años, y los banqueros, en conjunto, ganaron dinero.",
+   "visuales": [
+    {
+     "grafico": "Suspensiones de pagos de la Corona",
+     "forma": "cronologia",
+     "datos": [
+      [
+       "1557",
+       "Felipe II"
+      ],
+      [
+       "1560",
+       "Felipe II"
+      ],
+      [
+       "1575",
+       "Felipe II"
+      ],
+      [
+       "1596",
+       "Felipe II"
+      ],
+      [
+       "1607",
+       "Felipe III"
+      ],
+      [
+       "1627",
+       "Felipe IV"
+      ],
+      [
+       "1647",
+       "Felipe IV"
+      ],
+      [
+       "1652",
+       "Felipe IV"
+      ],
+      [
+       "1662",
+       "Felipe IV"
+      ]
+     ],
+     "nota": "Fuentes: Banco de España; Drelichman y Voth (2014)",
+     "peso": 1.5
+    },
+    {
+     "wikimedia": "id:wikimedia-5249539",
+     "encuadre": [
+      0.2,
+      0.0,
+      0.6,
+      0.5
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-15497760",
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "tesis",
+   "narracion": "Visto así, la plata no arruinó a España por sí sola. Lo que hizo fue financiar una política: la de un imperio en guerra casi permanente, que gastaba más de lo que su economía producía.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-22617836",
+     "encuadre": [
+      0.3,
+      0.1,
+      0.5,
+      0.5
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-29716320",
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-164912863",
+     "encuadre": [
+      0.05,
+      0.05,
+      0.9,
+      0.9
+     ],
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "decadencia",
+   "capitulo": "Potosí hoy",
+   "narracion": "Mientras tanto, en los Andes, el cerro seguía dando plata, pero cada vez menos. Hacia 1620, México ya producía más que el Perú.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-36030855",
+     "mov": "zoom_in"
+    },
+    {
+     "mapa": "Hacia 1620",
+     "puntos": [
+      {
+       "n": "México",
+       "lat": 19.43,
+       "lon": -99.13,
+       "pos": "der"
+      },
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75,
+       "pos": "der"
+      }
+     ],
+     "ruta": false,
+     "resaltar": [
+      "MEX"
+     ],
+     "sub": "México supera al Perú"
+    }
+   ]
+  },
+  {
+   "id": "riada1626",
+   "narracion": "En 1626 se rompió una de las presas que movían los molinos, y la riada arrasó buena parte de los ingenios.",
+   "visuales": [
+    {
+     "tarjeta": "1626",
+     "sub": "la rotura de la presa de San Ildefonso"
+    },
+    {
+     "wikimedia": "id:wikimedia-64139430",
+     "encuadre": [
+      0.0,
+      0.4,
+      0.7,
+      0.6
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "independencia",
+   "narracion": "Hubo una recuperación en el siglo XVIII. Pero en 1812 se abolió la mita y, en 1825, con la independencia de Bolivia, Potosí ya no era ni sombra de lo que fue.",
+   "visuales": [
+    {
+     "grafico": "Potosí en seis fechas",
+     "forma": "cronologia",
+     "datos": [
+      [
+       "1545",
+       "Empieza la explotación"
+      ],
+      [
+       "1572",
+       "Mercurio y Casa de Moneda"
+      ],
+      [
+       "1592",
+       "Máximo de producción"
+      ],
+      [
+       "1626",
+       "Riada de San Ildefonso"
+      ],
+      [
+       "1812",
+       "Fin de la mita"
+      ],
+      [
+       "1825",
+       "Independencia"
+      ]
+     ],
+     "peso": 1.6
+    },
+    {
+     "wikimedia": "id:wikimedia-1819532",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-197606248",
+     "mov": "izq"
+    }
+   ]
+  },
+  {
+   "id": "unesco",
+   "narracion": "Hoy, Potosí es patrimonio de la humanidad desde 1987. Y desde 2014 está en la lista del patrimonio en peligro.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782517",
+     "mov": "zoom_out"
+    },
+    {
+     "dato": "2014",
+     "sub": "patrimonio de la humanidad en peligro"
+    }
+   ]
+  },
+  {
+   "id": "hunde",
+   "narracion": "El problema es el propio cerro. Después de casi cinco siglos de minería, está lleno de galerías y su cumbre se hunde: se han contado una docena de hundimientos, tres en la cima.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-36030855",
+     "encuadre": [
+      0.3,
+      0.0,
+      0.6,
+      0.6
+     ],
+     "mov": "zoom_in"
+    },
+    {
+     "dato": "12",
+     "sub": "hundimientos, 3 en la cima"
+    },
+    {
+     "wikimedia": "id:wikimedia-64139430",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "4400",
+   "narracion": "Está prohibido excavar por encima de los 4.400 metros, pero la prohibición se incumple.",
+   "visuales": [
+    {
+     "dato": "4.400 m",
+     "sub": "por encima, prohibido excavar"
+    }
+   ]
+  },
+  {
+   "id": "mineros",
+   "narracion": "En sus túneles siguen trabajando miles de mineros, organizados en cooperativas y a menudo en condiciones muy duras. Solo en 2025, según la policía boliviana, murieron allí más de cien.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-94782514",
+     "mov": "zoom_in"
+    },
+    {
+     "wikimedia": "id:wikimedia-94782514",
+     "encuadre": [
+      0.35,
+      0.2,
+      0.5,
+      0.6
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-36030851",
+     "encuadre": [
+      0.0,
+      0.0,
+      0.7,
+      0.8
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "leccion",
+   "capitulo": "La lección de Potosí",
+   "narracion": "Potosí produjo una riqueza inmensa. Pero esa riqueza casi nunca se quedó donde se producía.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-55293332",
+     "mov": "zoom_out"
+    },
+    {
+     "wikimedia": "id:wikimedia-29716320",
+     "encuadre": [
+      0.25,
+      0.1,
+      0.5,
+      0.5
+     ],
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "salio",
+   "narracion": "Salió de los Andes, cruzó España sin detenerse y acabó en los bancos de Génova, en los talleres del norte de Europa y en los mercados de China.",
+   "visuales": [
+    {
+     "mapa": "La ruta de la plata",
+     "puntos": [
+      {
+       "n": "Potosí",
+       "lat": -19.58,
+       "lon": -65.75
+      },
+      {
+       "n": "Arica",
+       "lat": -18.48,
+       "lon": -70.32,
+       "pos": "izq"
+      },
+      {
+       "n": "El Callao",
+       "lat": -12.05,
+       "lon": -77.15,
+       "pos": "izq"
+      },
+      {
+       "n": "Panamá",
+       "lat": 8.98,
+       "lon": -79.52,
+       "pos": "izq"
+      },
+      {
+       "n": "La Habana",
+       "lat": 23.13,
+       "lon": -82.38,
+       "pos": "izq"
+      },
+      {
+       "n": "Sevilla",
+       "lat": 37.39,
+       "lon": -5.99,
+       "pos": "arriba"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "BOL",
+      "ESP"
+     ],
+     "zona": [
+      -92,
+      -28,
+      8,
+      45
+     ],
+     "peso": 1.5
+    },
+    {
+     "mapa": "La plata se reparte por Europa",
+     "puntos": [
+      {
+       "n": "Sevilla",
+       "lat": 37.39,
+       "lon": -5.99,
+       "pos": "abajo"
+      },
+      {
+       "n": "Génova",
+       "lat": 44.41,
+       "lon": 8.93,
+       "pos": "abajo"
+      },
+      {
+       "n": "Augsburgo",
+       "lat": 48.37,
+       "lon": 10.9,
+       "pos": "der"
+      },
+      {
+       "n": "Amberes",
+       "lat": 51.22,
+       "lon": 4.4,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "ESP",
+      "ITA",
+      "DEU",
+      "BEL"
+     ],
+     "peso": 1.4
+    },
+    {
+     "wikimedia": "id:wikimedia-104047355",
+     "mov": "zoom_in"
+    }
+   ]
+  },
+  {
+   "id": "riqueza",
+   "narracion": "La lección es incómoda, y sigue vigente: tener dinero no es lo mismo que crear riqueza. La riqueza de un país está en lo que sabe hacer, no en lo que encuentra bajo tierra.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-1772983",
+     "mov": "zoom_in"
+    },
+    {
+     "tarjeta": "Tener dinero no es crear riqueza"
+    },
+    {
+     "wikimedia": "id:wikimedia-94782517",
+     "encuadre": [
+      0.0,
+      0.2,
+      0.6,
+      0.6
+     ],
+     "mov": "der"
+    }
+   ]
+  },
+  {
+   "id": "cierre",
+   "narracion": "Por eso, cuando alguien dice que algo vale un Potosí, quizá esté diciendo más de lo que cree.",
+   "visuales": [
+    {
+     "wikimedia": "id:wikimedia-197606248",
+     "encuadre": [
+      0.0,
+      0.0,
+      0.7,
+      0.85
+     ],
+     "mov": "zoom_out"
+    },
+    {
+     "tarjeta": "«Vale un Potosí»"
+    }
+   ]
+  },
+  {
+   "id": "proximo",
+   "narracion": "En el próximo vídeo seguiremos a la plata hasta el otro lado del mundo: el galeón de Manila, una de las primeras rutas comerciales de verdad globales.",
+   "visuales": [
+    {
+     "mapa": "El galeón de Manila",
+     "puntos": [
+      {
+       "n": "Acapulco",
+       "lat": 16.85,
+       "lon": -99.9
+      },
+      {
+       "n": "Manila",
+       "lat": 14.6,
+       "lon": 120.98,
+       "pos": "izq"
+      }
+     ],
+     "ruta": true,
+     "resaltar": [
+      "MEX",
+      "PHL"
+     ],
+     "sub": "desde 1571",
+     "peso": 1.4
+    },
+    {
+     "wikimedia": "id:wikimedia-14678364",
+     "mov": "izq"
+    }
+   ]
+  }
+ ],
+ "shorts": [
+  {
+   "id": "short-1",
+   "titulo": "El dólar nació de una moneda española",
+   "descripcion": "El real de a ocho, acuñado con plata de Potosí, fue la primera moneda global.",
+   "escenas": [
+    {
+     "id": "s1a",
+     "narracion": "El dólar de Estados Unidos nació de una moneda española.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-10909672",
+       "mov": "zoom_in"
+      }
+     ],
+     "texto_pantalla": "El origen del dólar"
+    },
+    {
+     "id": "s1b",
+     "narracion": "Se llamaba real de a ocho, o peso, y buena parte se acuñó con plata de Potosí, en la actual Bolivia.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-164912863",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-164912754",
+       "mov": "zoom_out"
+      },
+      {
+       "wikimedia": "id:wikimedia-181470261",
+       "mov": "arriba"
+      }
+     ]
+    },
+    {
+     "id": "s1c",
+     "narracion": "Fue la primera moneda global: corría por Europa, por Asia y por América.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-20597934",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-82198314",
+       "mov": "der"
+      }
+     ]
+    },
+    {
+     "id": "s1d",
+     "narracion": "En 1792, Estados Unidos definió su dólar con el mismo valor que el peso de a ocho. Y las monedas españolas fueron de curso legal allí hasta 1857.",
+     "visuales": [
+      {
+       "dato": "1792",
+       "sub": "el dólar vale lo mismo que el peso de a ocho"
+      },
+      {
+       "wikimedia": "id:wikimedia-10909672",
+       "encuadre": [
+        0.2,
+        0.2,
+        0.6,
+        0.6
+       ],
+       "mov": "zoom_in"
+      },
+      {
+       "dato": "1857",
+       "sub": "fin del curso legal de las monedas españolas"
+      }
+     ]
+    },
+    {
+     "id": "s1e",
+     "narracion": "¿Y el símbolo del dólar? Se dice que viene de las columnas de la moneda, pero no hay pruebas. Lo más aceptado es que nace de «ps», la abreviatura de pesos.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-10909672",
+       "encuadre": [
+        0.0,
+        0.1,
+        0.5,
+        0.8
+       ],
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-10909672",
+       "encuadre": [
+        0.5,
+        0.1,
+        0.5,
+        0.8
+       ],
+       "mov": "zoom_in"
+      },
+      {
+       "tarjeta": "¿$?",
+       "sub": "lo más aceptado: «ps» de pesos"
+      }
+     ]
+    },
+    {
+     "id": "s1f",
+     "narracion": "La historia completa de la montaña que fabricó esa plata está en el canal.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-55293332",
+       "mov": "zoom_out"
+      },
+      {
+       "wikimedia": "id:wikimedia-181470261",
+       "mov": "arriba"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "short-2",
+   "titulo": "Por qué la plata de América acabó en China",
+   "descripcion": "En el siglo XVI, la plata valía en China el doble que en Europa.",
+   "escenas": [
+    {
+     "id": "s2a",
+     "narracion": "Mucha plata de América no se quedó en España. Acabó en China.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-104047355",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-101248412",
+       "mov": "izq"
+      }
+     ],
+     "texto_pantalla": "¿Por qué China?"
+    },
+    {
+     "id": "s2b",
+     "narracion": "Desde 1571, el galeón de Manila cruzaba el Pacífico desde Acapulco cargado de plata.",
+     "visuales": [
+      {
+       "mapa": "El galeón de Manila",
+       "puntos": [
+        {
+         "n": "Acapulco",
+         "lat": 16.85,
+         "lon": -99.9
+        },
+        {
+         "n": "Manila",
+         "lat": 14.6,
+         "lon": 120.98,
+         "pos": "izq"
+        }
+       ],
+       "ruta": true,
+       "resaltar": [
+        "MEX",
+        "PHL"
+       ],
+       "sub": "desde 1571",
+       "peso": 1.4
+      },
+      {
+       "wikimedia": "id:wikimedia-82198314",
+       "mov": "der"
+      }
+     ]
+    },
+    {
+     "id": "s2c",
+     "narracion": "La razón era sencilla: en China, la plata valía el doble. Allí el oro se cambiaba por seis veces su peso en plata; en Europa, por once o doce.",
+     "visuales": [
+      {
+       "grafico": "Onzas de plata por una de oro",
+       "forma": "barras",
+       "datos": [
+        [
+         "China",
+         6
+        ],
+        [
+         "Europa",
+         11.5
+        ]
+       ],
+       "sub": "mediados del siglo XVI",
+       "nota": "Europa: entre 11 y 12. Fuente: R. von Glahn, en C. Marichal",
+       "destacar": [
+        "China"
+       ],
+       "peso": 1.3
+      },
+      {
+       "dato": "× 2",
+       "sub": "valía la plata en China"
+      },
+      {
+       "wikimedia": "id:wikimedia-104047355",
+       "encuadre": [
+        0.2,
+        0.1,
+        0.6,
+        0.8
+       ],
+       "mov": "zoom_in"
+      }
+     ]
+    },
+    {
+     "id": "s2d",
+     "narracion": "Con la misma plata se compraba en Asia mucho más que en Europa: seda, porcelana, especias.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-12636365",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-101248412",
+       "mov": "izq"
+      }
+     ]
+    },
+    {
+     "id": "s2e",
+     "narracion": "Fue uno de los grandes negocios de la época. Y empezó en una montaña de los Andes: Potosí.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-181470261",
+       "mov": "arriba"
+      },
+      {
+       "wikimedia": "id:wikimedia-55293332",
+       "mov": "zoom_out"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "short-3",
+   "titulo": "Cuatro versos que explican un imperio",
+   "descripcion": "Quevedo resumió en cuatro versos adónde iba la plata de América.",
+   "escenas": [
+    {
+     "id": "s3a",
+     "narracion": "Cuatro versos de Quevedo explican por qué España no se hizo rica.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-27702609",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-27702609",
+       "encuadre": [
+        0.2,
+        0.05,
+        0.6,
+        0.45
+       ],
+       "mov": "zoom_in"
+      }
+     ],
+     "texto_pantalla": "Quevedo lo sabía"
+    },
+    {
+     "id": "s3b",
+     "narracion": "«Nace en las Indias honrado, donde el mundo le acompaña.» Es el dinero: la plata de América, sobre todo la de Potosí.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-29716320",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-181470261",
+       "mov": "arriba"
+      },
+      {
+       "wikimedia": "id:wikimedia-164912863",
+       "mov": "zoom_out"
+      }
+     ]
+    },
+    {
+     "id": "s3c",
+     "narracion": "«Viene a morir en España.» Llegaba a Sevilla y se gastaba enseguida en guerras y deudas.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-1713560",
+       "mov": "izq"
+      },
+      {
+       "wikimedia": "id:wikimedia-22617836",
+       "mov": "zoom_in"
+      }
+     ]
+    },
+    {
+     "id": "s3d",
+     "narracion": "«Y es en Génova enterrado.» Acababa en manos de los banqueros que prestaban al rey.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-117054002",
+       "mov": "zoom_in"
+      },
+      {
+       "wikimedia": "id:wikimedia-155048",
+       "mov": "zoom_out"
+      }
+     ]
+    },
+    {
+     "id": "s3e",
+     "narracion": "Felipe II suspendió pagos cuatro veces. Con la mayor mina de plata del mundo en sus manos.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-5249539",
+       "mov": "zoom_in"
+      },
+      {
+       "dato": "4",
+       "sub": "suspensiones de pagos de Felipe II"
+      }
+     ]
+    },
+    {
+     "id": "s3f",
+     "narracion": "Quevedo lo escribió hace más de cuatro siglos. La historia completa, en el canal.",
+     "visuales": [
+      {
+       "wikimedia": "id:wikimedia-181470261",
+       "mov": "arriba"
+      },
+      {
+       "wikimedia": "id:wikimedia-55293332",
+       "mov": "zoom_out"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

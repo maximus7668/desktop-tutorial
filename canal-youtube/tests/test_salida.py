@@ -115,3 +115,41 @@ def test_subir_exige_permiso(monkeypatch, capsys):
     assert main(["subir", "no-existe"]) == 2
     assert "AMARILLO" in capsys.readouterr().out
     assert main(["programar", "abc", "--cuando", "2026-10-20T18:00"]) == 2
+
+
+def test_buscador_no_evita_las_imagenes_del_propio_video(tmp_path, monkeypatch):
+    monkeypatch.setattr(visuales, "MEMORIA", tmp_path)
+    (tmp_path / "medios_usados.json").write_text(json.dumps({"otro": ["w-1"], "este": ["w-2"]}))
+    b = visuales.Buscador(config.cargar(), (1920, 1080), "este")
+    assert b._previos == {"w-1"}
+
+
+def test_video_de_stock_antes_que_fotos(monkeypatch):
+    llamadas = []
+    monkeypatch.setitem(visuales.PROVEEDORES, "pexels", (lambda *a: llamadas.append("pv") or [], lambda *a: llamadas.append("pf") or []))
+    monkeypatch.setitem(visuales.PROVEEDORES, "wikimedia", (None, lambda *a: llamadas.append("wf") or []))
+    b = visuales.Buscador(config.cargar(), (1920, 1080), "x")
+    assert b._buscar("q", ["pexels", "wikimedia"], video=True, duracion=3) is None
+    assert llamadas == ["pv", "pf", "wf"]
+
+
+def test_precarga_wikimedia_en_lotes(tmp_path, monkeypatch):
+    from canal.guion import Visual
+
+    monkeypatch.setattr(visuales, "CACHE", tmp_path)
+    pedidas = []
+
+    def falso_get(url, cfg, params, headers=None, dias=7):
+        pedidas.append(params)
+        if "pageids" in params:
+            return {"query": {"pages": {i: {"pageid": int(i), "title": f"File:{i}.jpg"} for i in params["pageids"].split("|")}}}
+        return {"query": {"normalized": [{"from": "File:a_b.jpg", "to": "File:A b.jpg"}],
+                          "pages": {"7": {"pageid": 7, "title": "File:A b.jpg"}, "-1": {"title": "File:No.jpg", "missing": ""}}}}
+
+    monkeypatch.setattr(visuales, "_get_json", falso_get)
+    vs = [Visual(wikimedia=f"id:wikimedia-{i}") for i in range(60)] + [Visual(wikimedia="File:a_b.jpg"), Visual(wikimedia="File:No.jpg")]
+    assert visuales.precargar_wikimedia(vs, config.cargar()) == 61
+    assert len(pedidas) == 3  # 50 + 10 ids, 2 títulos en una sola llamada
+    base = visuales._params_ficha()
+    assert visuales._ruta_cache(visuales.API_COMMONS, {**base, "titles": "File:a_b.jpg"}).exists()
+    assert not visuales._ruta_cache(visuales.API_COMMONS, {**base, "titles": "File:No.jpg"}).exists()

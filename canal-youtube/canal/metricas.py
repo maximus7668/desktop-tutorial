@@ -95,7 +95,7 @@ def ctr_por_video() -> dict[str, dict]:
     total: dict[str, dict] = {}
     for inf in informes[:60]:
         buf = io.BytesIO()
-        peticion = rep.media().download(resourceName="")
+        peticion = rep.media().download(resourceName=" ")
         peticion.uri = inf["downloadUrl"]  # así lo hace el ejemplo oficial de la Reporting API
         bajada = MediaIoBaseDownload(buf, peticion, chunksize=-1)
         hecho = False

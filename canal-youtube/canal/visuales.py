@@ -61,17 +61,24 @@ def _ua(cfg: dict) -> str:
     return f"CanalYouTube/1.0 ({contacto}) python-requests"
 
 
-def _get_json(url: str, cfg: dict, params: dict, headers: dict | None = None, dias: int = 7) -> dict:
-    """GET con caché en disco (las APIs de stock piden no repetir búsquedas)."""
+API_COMMONS = "https://commons.wikimedia.org/w/api.php"
+
+
+def _ruta_cache(url: str, params: dict) -> Path:
     publico = {k: v for k, v in params.items() if k != "key"}
     h = hashlib.sha256(f"{url}|{json.dumps(publico, sort_keys=True)}".encode()).hexdigest()[:24]
-    ruta = CACHE / "busquedas" / f"{h}.json"
+    return CACHE / "busquedas" / f"{h}.json"
+
+
+def _get_json(url: str, cfg: dict, params: dict, headers: dict | None = None, dias: int = 7) -> dict:
+    """GET con caché en disco (las APIs de stock piden no repetir búsquedas)."""
+    ruta = _ruta_cache(url, params)
     if ruta.exists() and time.time() - ruta.stat().st_mtime < dias * 86400:
         return json.loads(ruta.read_text(encoding="utf-8"))
     cab = {"User-Agent": _ua(cfg), **(headers or {})}
-    for intento in range(6):
+    for intento in range(12):  # con la IP limitada, mejor esperar que fallar
         r = requests.get(url, params=params, headers=cab, timeout=60)
-        if r.status_code == 429 and intento < 5:
+        if r.status_code == 429 and intento < 11:
             time.sleep(_espera(r, intento))
             continue
         r.raise_for_status()
@@ -83,11 +90,11 @@ def _get_json(url: str, cfg: dict, params: dict, headers: dict | None = None, di
 
 
 def _espera(r: requests.Response, intento: int) -> float:
-    """Respeta Retry-After (Wikimedia limita a los programas por IP y agente)."""
+    """Respeta Retry-After; si no lo hay, espera cada vez más (Wikimedia limita las ráfagas por IP)."""
     try:
         return min(90.0, float(r.headers.get("Retry-After", "")) + 1)
     except ValueError:
-        return 4.0 * (intento + 1)
+        return min(60.0, 5.0 * 2 ** intento)
 
 
 def _descargar(url: str, destino: Path, cfg: dict) -> Path:
@@ -95,10 +102,10 @@ def _descargar(url: str, destino: Path, cfg: dict) -> Path:
         return destino
     destino.parent.mkdir(parents=True, exist_ok=True)
     tmp = destino.with_suffix(destino.suffix + ".parte")
-    for intento in range(6):
+    for intento in range(9):
         try:
             with requests.get(url, stream=True, timeout=120, headers={"User-Agent": _ua(cfg)}) as r:
-                if r.status_code == 429 and intento < 5:
+                if r.status_code == 429 and intento < 8:
                     time.sleep(_espera(r, intento))
                     continue
                 r.raise_for_status()
@@ -108,7 +115,7 @@ def _descargar(url: str, destino: Path, cfg: dict) -> Path:
             tmp.rename(destino)
             return destino
         except requests.RequestException:
-            if intento == 5:
+            if intento == 8:
                 raise
             time.sleep(2 ** intento)
     raise RuntimeError(f"No pude descargar {url}")
@@ -204,16 +211,73 @@ def _miniatura_wikimedia(ii: dict) -> str | None:
     return f"{m[1]}/thumb/{m[2]}/{nombre}/{w}px-{final}"
 
 
+def _params_ficha() -> dict:
+    return {"action": "query", "format": "json", "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
+            "iiurlwidth": 1920, "iiextmetadatafilter": "LicenseShortName|Artist|AttributionRequired|Credit"}
+
+
+def _es_titulo(q: str) -> bool:
+    return bool(re.match(r"^(File|Archivo|Fichero):", q.strip(), re.I))
+
+
+def _titulo(q: str) -> str:
+    return "File:" + q.split(":", 1)[1].strip()
+
+
+def precargar_wikimedia(visuales: list, cfg: dict) -> int:
+    """Pide de una vez (50 por llamada) la ficha de las imágenes fijadas por id o por título exacto.
+
+    Cada ficha se guarda en la caché como si se hubiera pedido sola, así el montaje ya no llama a la
+    API por cada imagen (Wikimedia pide no hacer ráfagas y limita mucho las IP compartidas)."""
+    pedidos: dict[str, list[str]] = {"pageids": [], "titles": []}
+    for v in visuales:
+        val = (getattr(v, "wikimedia", None) or "").strip()
+        if val.startswith("id:wikimedia-"):
+            pedidos["pageids"].append(val[len("id:wikimedia-"):])
+        elif _es_titulo(val):
+            pedidos["titles"].append(_titulo(val))
+    base = _params_ficha()
+    hechas = 0
+    for campo, valores in pedidos.items():
+        faltan = [x for x in dict.fromkeys(valores) if not _ruta_cache(API_COMMONS, {**base, campo: x}).exists()]
+        for i in range(0, len(faltan), 50):
+            lote = faltan[i:i + 50]
+            d = _get_json(API_COMMONS, cfg, {**base, campo: "|".join(lote)}, dias=30)
+            consulta = d.get("query", {})
+            paginas = list(consulta.get("pages", {}).values())
+            if campo == "pageids":
+                por_clave = {str(p.get("pageid")): p for p in paginas if "pageid" in p}
+            else:
+                normal = {n["from"]: n["to"] for n in consulta.get("normalized", [])}
+                por_titulo = {p.get("title"): p for p in paginas}
+                por_clave = {t: por_titulo.get(normal.get(t, t)) for t in lote}
+            for x in lote:
+                pag = por_clave.get(x)
+                if not pag or "missing" in pag or "pageid" not in pag:
+                    continue
+                ruta = _ruta_cache(API_COMMONS, {**base, campo: x})
+                ruta.parent.mkdir(parents=True, exist_ok=True)
+                ruta.write_text(json.dumps({"query": {"pages": {str(pag["pageid"]): pag}}}), encoding="utf-8")
+                hechas += 1
+    return hechas
+
+
+def visuales_del_guion(g) -> list:
+    """Todos los visuales de un guion: escenas, Shorts y miniatura."""
+    res = [v for e in g.escenas for v in e.visuales]
+    res += [v for s in g.shorts for e in s.escenas for v in e.visuales]
+    return res + [g.miniatura.visual]
+
+
 def _wikimedia(q: str, orient: str, cfg: dict, tam, exacto: dict | None = None) -> list[_Candidato]:
-    params = {"action": "query", "format": "json", "prop": "imageinfo", "iiprop": "url|size|mime|extmetadata",
-              "iiurlwidth": 1920, "iiextmetadatafilter": "LicenseShortName|Artist|AttributionRequired|Credit"}
+    params = _params_ficha()
     if exacto:
         params.update(exacto)
-    elif re.match(r"^(File|Archivo|Fichero):", q, re.I):
-        params["titles"] = "File:" + q.split(":", 1)[1].strip()
+    elif _es_titulo(q):
+        params["titles"] = _titulo(q)
     else:
         params.update({"generator": "search", "gsrsearch": f"filetype:bitmap {q}", "gsrnamespace": 6, "gsrlimit": 25})
-    d = _get_json("https://commons.wikimedia.org/w/api.php", cfg, params, dias=30)
+    d = _get_json(API_COMMONS, cfg, params, dias=30)
     paginas = sorted(d.get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 99))
     res = []
     for p in paginas:
@@ -283,23 +347,26 @@ PROVEEDORES = {
 class Buscador:
     """Resuelve visuales para un vídeo concreto, sin repetir el mismo recurso dentro del vídeo."""
 
-    def __init__(self, cfg: dict, tam: tuple[int, int]):
+    def __init__(self, cfg: dict, tam: tuple[int, int], video_id: str | None = None):
         self.cfg = cfg
+        self.video_id = video_id
         self.tam = tam
         self.orient = "portrait" if tam[1] > tam[0] else "landscape"
         self.usados: set[str] = set()
         self._fallidos: set[str] = set()
         self.recursos: list[Recurso] = []
         self.avisos: list[str] = []
-        self._previos = self._usados_antes()
+        self._previos = self._usados_antes(video_id)
 
     @staticmethod
-    def _usados_antes() -> set[str]:
+    def _usados_antes(video_id: str | None) -> set[str]:
+        """Recursos de los últimos 6 vídeos (salvo este mismo), para no repetir imágenes entre vídeos."""
         p = MEMORIA / "medios_usados.json"
         if not p.exists():
             return set()
         datos = json.loads(p.read_text(encoding="utf-8"))
-        return {i for ids in list(datos.values())[-6:] for i in ids}  # últimos 6 vídeos
+        otros = [ids for vid, ids in datos.items() if vid != video_id]
+        return {i for ids in otros[-6:] for i in ids}
 
     def guardar_usados(self, video_id: str) -> None:
         p = MEMORIA / "medios_usados.json"
@@ -323,32 +390,32 @@ class Buscador:
         return frescos[0]
 
     def _buscar(self, q: str, fuentes: list[str], video: bool, duracion: float) -> Recurso | None:
-        for nombre in fuentes:
-            pv, pf = PROVEEDORES.get(nombre, (None, None))
-            for fn in ([pv] if video else []) + [pf]:
-                if fn is None:
-                    continue
+        intentos = []
+        if video:  # primero clips de vídeo en todas las fuentes, después fotos
+            intentos += [(n, PROVEEDORES[n][0]) for n in fuentes if n in PROVEEDORES and PROVEEDORES[n][0]]
+        intentos += [(n, PROVEEDORES[n][1]) for n in fuentes if n in PROVEEDORES and PROVEEDORES[n][1]]
+        for nombre, fn in intentos:
+            try:
+                cands = fn(q, self.orient, self.cfg, self.tam)
+            except requests.RequestException as e:
+                self.avisos.append(f"{nombre}: error buscando «{q}»: {e}")
+                continue
+            for _ in range(3):
+                c = self._elegir(cands, duracion)
+                if not c:
+                    break
                 try:
-                    cands = fn(q, self.orient, self.cfg, self.tam)
-                except requests.RequestException as e:
-                    self.avisos.append(f"{nombre}: error buscando «{q}»: {e}")
-                    continue
-                for _ in range(3):
-                    c = self._elegir(cands, duracion)
-                    if not c:
-                        break
-                    try:
-                        return self._bajar(c, nombre)
-                    except (requests.RequestException, RuntimeError) as e:
-                        self.usados.add(c.id)
-                        self._fallidos.add(c.id)
-                        self.avisos.append(f"{nombre}: no pude descargar {c.id}: {str(e)[:120]}")
+                    return self._bajar(c, nombre)
+                except (requests.RequestException, RuntimeError) as e:
+                    self.usados.add(c.id)
+                    self._fallidos.add(c.id)
+                    self.avisos.append(f"{nombre}: no pude descargar {c.id}: {str(e)[:120]}")
         return None
 
     def _bajar(self, c: _Candidato, fuente: str) -> Recurso:
         destino = CACHE / "medios" / fuente / f"{c.id}{c.ext}"
         if fuente == "wikimedia" and not destino.exists():
-            time.sleep(0.4)  # norma de uso de Wikimedia: sin ráfagas
+            time.sleep(1.0)  # norma de uso de Wikimedia: sin ráfagas
         _descargar(c.url_descarga, destino, self.cfg)
         self.usados.add(c.id)
         r = Recurso(destino, c.tipo, fuente, c.id, c.url, c.autor, c.licencia, c.atribucion, c.duracion)
@@ -385,7 +452,9 @@ class Buscador:
         return rec
 
     def conseguir(self, v: Visual, duracion: float = 0.0) -> Recurso:
-        stock = list(self.cfg["visuales"]["stock"])
+        stock = [s for s in self.cfg["visuales"]["stock"] if s != "wikimedia"]
+        if "wikimedia" in self.cfg["visuales"]["stock"]:
+            stock.append("wikimedia")  # para «stock» y «foto», el archivo es el último recurso
         tipo, valor = v.tipo, v.valor
         r = None
         if tipo in ("tarjeta", "dato", "cita"):
@@ -417,6 +486,10 @@ class Buscador:
             r = self._buscar(valor, stock, video=True, duracion=duracion)
         elif tipo == "foto":
             r = self._buscar(valor, stock, video=False, duracion=0)
+        elif tipo == "wikimedia" and _es_titulo(valor):
+            r = self._buscar(valor, ["wikimedia"], video=False, duracion=0)
+            if r is None:
+                self.avisos.append(f"«{valor}» no existe en Commons o no tiene licencia libre")
         elif tipo == "wikimedia":
             r = self._buscar(valor, ["wikimedia"] + [s for s in stock if s != "wikimedia"], video=False, duracion=0)
         elif tipo == "ia":
