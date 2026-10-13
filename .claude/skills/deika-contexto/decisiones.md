@@ -7,6 +7,12 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-14 · Compras y mensajes a clientes: NO por ahora (decisión del dueño)** · Primero conseguir clientes de pago
+con la recepcionista; un segundo producto quita foco, compite con programas de taller que ya existen y nadie lo ha
+pedido · Todo queda como estaba: nada en `main`, web y panel sin cambios. Código guardado en las ramas
+`claude/automatizaciones` y `claude/compras` de Deika-panel. En n8n siguen dos flujos desactivados («Automatizaciones
+(cada hora)» y «Resumen del día (20:00)») para borrar. Si se retoma: validar antes en visitas (¿pagarías 15 € más?).
+
 **2026-10-14 · Por «automatizaciones» el dueño quiere compras, costes y papeleo, NO mensajes a clientes** · Aclara que
 quería optimizar materias primas (coste, cuánto comprar) y quitar papeleo (licencias, trámites), no reseñas · Decide:
 (1) lo del 13/10 (presupuestos a clientes, recordatorios, reseñas) **fuera de la web y del panel, guardado** en la rama
