@@ -204,8 +204,10 @@ def _miniatura_wikimedia(ii: dict) -> str | None:
     ancho = int(ii.get("width") or 0)
     m = re.match(r"(https://upload\.wikimedia\.org/wikipedia/commons)/(\w/\w\w)/([^/?]+)", ii.get("url", ""))
     w = next((a for a in ANCHOS_WIKIMEDIA if a < ancho), None)
-    if not m or not w:
+    if not m:
         return None
+    if not w:
+        return ii.get("url")  # original pequeño (menos de 960 px de ancho): se baja entero
     nombre = m[3]
     final = nombre if len(nombre) <= 160 else "thumbnail" + Path(nombre).suffix
     return f"{m[1]}/thumb/{m[2]}/{nombre}/{w}px-{final}"
@@ -260,6 +262,47 @@ def precargar_wikimedia(visuales: list, cfg: dict) -> int:
                 ruta.write_text(json.dumps({"query": {"pages": {str(pag["pageid"]): pag}}}), encoding="utf-8")
                 hechas += 1
     return hechas
+
+
+def descargar_despacio(g, cfg: dict, minutos: float = 60, avisar=print) -> list[str]:
+    """Baja sin ráfagas las imágenes de Wikimedia fijadas en un guion, para IPs muy limitadas
+    (p. ej. en la nube). Una petición cada 8-20 s; las rechazadas se reintentan en otra ronda.
+    Devuelve los ids que no se pudieron bajar."""
+    precargar_wikimedia(visuales_del_guion(g), cfg)
+    pendientes, vistos = [], set()
+    for v in visuales_del_guion(g):
+        val = (getattr(v, "wikimedia", None) or "").strip()
+        if not val.startswith("id:wikimedia-") or val in vistos:
+            continue
+        vistos.add(val)
+        cands = _wikimedia("", "landscape", cfg, (1920, 1080), exacto={"pageids": val[len("id:wikimedia-"):]})
+        if not cands:
+            avisar(f"⚠️  {val}: sin ficha en Commons o sin licencia libre")
+            continue
+        destino = CACHE / "medios" / "wikimedia" / f"{cands[0].id}{cands[0].ext}"
+        if not destino.exists():
+            pendientes.append((cands[0], destino))
+    avisar(f"{len(vistos)} imágenes fijadas; faltan {len(pendientes)}")
+    inicio, ronda = time.time(), 0
+    while pendientes and time.time() - inicio < minutos * 60:
+        ronda += 1
+        siguen = []
+        for c, destino in pendientes:
+            try:
+                r = requests.get(c.url_descarga, headers={"User-Agent": _ua(cfg)}, timeout=120)
+                ok = r.status_code == 200 and bool(r.content)
+            except requests.RequestException:
+                ok = False
+            if ok:
+                destino.parent.mkdir(parents=True, exist_ok=True)
+                destino.write_bytes(r.content)
+                time.sleep(8)
+            else:
+                siguen.append((c, destino))
+                time.sleep(20)
+        pendientes = siguen
+        avisar(f"ronda {ronda}: faltan {len(pendientes)}")
+    return [c.id for c, _ in pendientes]
 
 
 def visuales_del_guion(g) -> list:

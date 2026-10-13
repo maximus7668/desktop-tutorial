@@ -23,6 +23,12 @@ def capitulos(g: Guion, tramos: list[tuple[float, float]]) -> list[tuple[float, 
     return [(0.0 if i == 0 else t, c) for i, (t, c) in enumerate(caps)]
 
 
+def _url_corta(r) -> str:
+    if r.fuente == "wikimedia" and r.id.startswith("wikimedia-"):
+        return f"https://commons.wikimedia.org/?curid={r.id[len('wikimedia-'):]}"
+    return r.url
+
+
 def _creditos(recursos) -> tuple[list[str], set[str]]:
     lineas, fuentes, vistos = [], set(), set()
     for r in recursos:
@@ -34,27 +40,42 @@ def _creditos(recursos) -> tuple[list[str], set[str]]:
                      "ia": "imágenes generadas con IA", "propio": "material propio",
                      "Natural Earth": "mapas de Natural Earth"}.get(r.fuente, r.fuente))
         if r.atribucion:
-            autor = r.autor or "autor desconocido"
-            lineas.append(f"• {autor} — {r.licencia} — {r.url}")
+            autor = (r.autor or "autor desconocido").strip()
+            autor = autor if len(autor) <= 48 else autor[:46].rstrip() + "…"
+            lineas.append(f"• {autor} · {r.licencia} · {_url_corta(r)}")
     return lineas, fuentes
 
 
 def descripcion_largo(g: Guion, caps: list[tuple[float, str]], recursos) -> str:
-    partes = [g.descripcion.strip(), ""]
+    """Texto, capítulos, fuentes, aviso de IA y créditos. Los créditos con atribución son
+    obligatorios (CC BY / BY-SA): si no cabe todo, se acortan las fuentes, nunca los créditos."""
+    creditos, origenes = _creditos(recursos)
+    cabeza = [g.descripcion.strip(), ""]
     if len(caps) >= 3:
-        partes += ["📌 Capítulos"] + [f"{marca_tiempo(t)} {c}" for t, c in caps] + [""]
-    if g.fuentes:
-        partes += ["📚 Fuentes"] + [f"• {f.titulo} — {f.url}" for f in g.fuentes] + [""]
-    creditos, fuentes = _creditos(recursos)
-    partes.append("🎙️ Narración con voz sintética (IA). Guion documentado: fuentes arriba.")
-    if fuentes:
-        partes.append("🖼️ Imágenes: " + ", ".join(sorted(fuentes)) + ".")
+        cabeza += ["📌 Capítulos"] + [f"{marca_tiempo(t)} {c}" for t, c in caps] + [""]
+    pie = ["🎙️ Narración con voz sintética (IA). Guion documentado: fuentes arriba."]
+    if origenes:
+        pie.append("🖼️ Imágenes: " + ", ".join(sorted(origenes)) + ".")
     if creditos:
-        partes += ["Créditos con atribución:"] + creditos
+        pie += ["Créditos con atribución:"] + creditos
     if g.hashtags:
-        partes += ["", " ".join(h if h.startswith("#") else f"#{h}" for h in g.hashtags)]
-    texto = "\n".join(partes).strip()
-    if len(texto) > LIMITE_DESCRIPCION:
+        pie += ["", " ".join(h if h.startswith("#") else f"#{h}" for h in g.hashtags)]
+
+    def montar(fuentes: list[str]) -> str:
+        bloque = (["📚 Fuentes"] + fuentes + [""]) if fuentes else []
+        return "\n".join(cabeza + bloque + pie).strip()
+
+    completas = [f"• {f.titulo} — {f.url}" for f in g.fuentes]
+    texto = montar(completas)
+    if len(texto) > LIMITE_DESCRIPCION:  # 1) títulos de fuente más cortos
+        cortas = [f"• {f.titulo if len(f.titulo) <= 60 else f.titulo[:58].rstrip() + '…'} — {f.url}" for f in g.fuentes]
+        texto = montar(cortas)
+        n = len(cortas)
+        while len(texto) > LIMITE_DESCRIPCION and n > 0:  # 2) menos fuentes (las demás, en el guion)
+            n -= 1
+            resto = len(cortas) - n
+            texto = montar(cortas[:n] + [f"• … y {resto} fuente{'s' if resto > 1 else ''} más"])
+    if len(texto) > LIMITE_DESCRIPCION:  # 3) último recurso
         texto = texto[:LIMITE_DESCRIPCION].rsplit("\n", 1)[0] + "\n…"
     return texto
 

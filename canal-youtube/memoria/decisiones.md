@@ -16,6 +16,17 @@ Registro fechado. Se añade al decidir; nunca se borra. Si algo contradice `cana
   `true`); rojo = publicar o programar, siempre con ok expreso del dueño para ese vídeo y fecha.
 - **Tope de gasto**: 30 €/mes (`presupuesto.mensual_eur`).
 
+## 2026-10-13 · Episodio 1: Potosí (muestra)
+
+- **Hecho por el agente**: guion `guiones/2026-10-13-potosi.json` (86 escenas, ~2.100 palabras, 9
+  capítulos, 3 Shorts) con su investigación en `investigacion/2026-10-13-potosi.md`.
+- **Voz de borrador** (Piper, gratis). Para publicarlo hay que rehacer la voz con ElevenLabs o Azure
+  (`voz.proveedor` en `canal.yaml`) y volver a producir: las imágenes y los planos ya están en caché.
+- **Mitos que no se repiten**: «más grande que Londres», «ocho millones de muertos», «vale un
+  Potosí» literal en el Quijote, el $ nacido en la ceca de Potosí.
+- **Aprendido del entorno**: desde la nube, Wikimedia limita mucho las descargas (429, «robot
+  policy»). Se baja todo antes con `python -m canal descargar` y se pone contacto en `canal.contacto_api`.
+
 ## Pendiente de decidir (dueño)
 
 - [ ] Nombre del canal: Imperios S.A. · Crónica Mercantil · Dinero e Imperio (comprobar marca en OEPM/EUIPO).

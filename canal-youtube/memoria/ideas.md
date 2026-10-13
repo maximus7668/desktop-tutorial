@@ -5,7 +5,7 @@ Evidencia = vídeo de la competencia o búsqueda que demuestra demanda.
 
 | Estado | Pilar | Título provisional | Tesis / ángulo | Evidencia de demanda |
 |---|---|---|---|---|
-| producida | El Imperio y su dinero | Potosí: la montaña de plata que financió un imperio… y arruinó a España | La plata no enriqueció a España: pagó deudas y guerras y fue a parar a Génova, Amberes y China | Insider Español, 414K |
+| producida (voz de borrador) | El Imperio y su dinero | Potosí: la plata que financió un imperio… y arruinó a España | La plata no enriqueció a España: pagó deudas y guerras y fue a parar a Génova, Amberes y China | Insider Español, 414K |
 | propuesta | Imperios hispanos | Mercadona: cómo un supermercado llegó a controlar España | El modelo «jefe» y la marca blanca como estrategia, no como ahorro | qash, 505K |
 | propuesta | Por qué un país… | Argentina, el país que quebró nueve veces | Cada quiebra repite el mismo error de tipo de cambio | Memorias de Tiburón, 1,86M |
 | propuesta | Imperios hispanos | ¿Quién es el dueño de OXXO? El imperio que está en cada esquina | FEMSA: de cervecera a dueña de la tienda de la esquina | Farwell Investor, 887K |

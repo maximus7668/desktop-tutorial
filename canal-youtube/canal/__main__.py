@@ -68,6 +68,14 @@ def validar(a, cfg):
     return 1 if errores else 0
 
 
+def descargar(a, cfg):
+    from .visuales import descargar_despacio
+
+    faltan = descargar_despacio(_guion(a.guion), cfg, a.minutos)
+    print("✅ todas descargadas" if not faltan else f"⚠️  faltan {len(faltan)}: {', '.join(faltan)}")
+    return 0 if not faltan else 1
+
+
 def visuales(a, cfg):
     from .calidad import hoja_visuales
 
@@ -218,6 +226,9 @@ def main(argv=None) -> int:
     s.add_argument("guion")
     s = sub.add_parser("visuales", help="hoja con la imagen elegida para cada plano, para revisarla")
     s.add_argument("guion")
+    s = sub.add_parser("descargar", help="bajar despacio las imágenes de Wikimedia de un guion (si Wikimedia limita)")
+    s.add_argument("guion")
+    s.add_argument("--minutos", type=float, default=60)
     s = sub.add_parser("producir", help="voz, montaje, Shorts, miniaturas, metadatos y control de calidad")
     s.add_argument("guion")
     s.add_argument("--solo", choices=["largo", "shorts"])
@@ -247,7 +258,7 @@ def main(argv=None) -> int:
     s.add_argument("id")
     a = p.parse_args(argv)
     cfg = config.cargar(a.config)
-    ordenes = {"comprobar": comprobar, "validar": validar, "visuales": visuales, "producir": producir,
+    ordenes = {"comprobar": comprobar, "validar": validar, "descargar": descargar, "visuales": visuales, "producir": producir,
                "paquete": paquete, "autorizar": autorizar, "subir": subir, "programar": programar,
                "metricas": metricas, "tendencias": tendencias, "gastos": gastos, "marca": marca, "vista": vista}
     return ordenes[a.orden](a, cfg)

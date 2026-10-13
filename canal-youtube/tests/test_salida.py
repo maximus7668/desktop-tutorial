@@ -49,7 +49,7 @@ def test_capitulos_empiezan_en_cero_y_descripcion():
     rec = [visuales.Recurso(config.CACHE / "x.jpg", "imagen", "wikimedia", "w-1", "https://c/x", "Ana", "CC BY 4.0", True)]
     d = metadatos.descripcion_largo(g, caps, rec)
     assert "0:00 Uno" in d and "0:45 Tres" in d
-    assert "Ana — CC BY 4.0" in d
+    assert "Ana · CC BY 4.0 · https://c/x" in d
     assert "voz sintética" in d
     assert metadatos.marca_tiempo(3725) == "1:02:05"
 
@@ -70,8 +70,9 @@ def test_miniatura_wikimedia_de_tamano_estandar():
     assert visuales._miniatura_wikimedia(ii) == "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/F.jpg/1280px-F.jpg"
     ii = {"thumburl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/F.jpg/1920px-F.jpg?utm=1", "width": 4000}
     assert visuales._miniatura_wikimedia(ii).endswith("/1920px-F.jpg")
-    assert visuales._miniatura_wikimedia({"url": "https://upload.wikimedia.org/wikipedia/commons/a/ab/F.jpg",
-                                          "width": 700}) is None
+    pequeno = {"url": "https://upload.wikimedia.org/wikipedia/commons/a/ab/F.jpg", "width": 700}
+    assert visuales._miniatura_wikimedia(pequeno) == pequeno["url"]
+    assert visuales._miniatura_wikimedia({"url": "https://ejemplo.org/F.jpg", "width": 700}) is None
 
 
 class _Peticion:
@@ -153,3 +154,17 @@ def test_precarga_wikimedia_en_lotes(tmp_path, monkeypatch):
     base = visuales._params_ficha()
     assert visuales._ruta_cache(visuales.API_COMMONS, {**base, "titles": "File:a_b.jpg"}).exists()
     assert not visuales._ruta_cache(visuales.API_COMMONS, {**base, "titles": "File:No.jpg"}).exists()
+
+
+def test_descripcion_larga_conserva_todos_los_creditos():
+    import copy
+
+    d = copy.deepcopy(BASE)
+    d["fuentes"] = [{"titulo": "Un título de fuente muy largo " * 4, "url": f"https://ejemplo.org/{'x' * 80}/{i}"} for i in range(40)]
+    g = Guion.model_validate(d)
+    rec = [visuales.Recurso(config.CACHE / f"{i}.jpg", "imagen", "wikimedia", f"wikimedia-{i}", "https://c/x",
+                            "Autora " + str(i), "CC BY-SA 4.0", True) for i in range(30)]
+    texto = metadatos.descripcion_largo(g, [(0.0, "Uno"), (20.0, "Dos"), (45.0, "Tres")], rec)
+    assert len(texto) <= metadatos.LIMITE_DESCRIPCION
+    assert all(f"curid={i}" in texto for i in range(30))
+    assert "fuentes más" in texto

@@ -21,6 +21,7 @@ from .graficos import _fuente, bloque, envolver, fondo, rgb
 
 NE = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/{}.geojson"
 ANIM = 1.4  # segundos que tarda en dibujarse un gráfico
+VERSION = 2  # súbela al cambiar el dibujo: invalida los planos animados en caché
 
 
 # ------------------------------------------------------------------ utilidades
@@ -359,7 +360,7 @@ def _arco(a: np.ndarray, b: np.ndarray, n: int = 48) -> np.ndarray:
     return (1 - t) ** 2 * a + 2 * (1 - t) * t * ctrl + t ** 2 * b
 
 
-def _mapa(base: np.ndarray, proy: _Proyeccion, spec: dict, estilo: dict, t: float) -> np.ndarray:
+def _mapa(base: np.ndarray, proy: _Proyeccion, spec: dict, estilo: dict, t: float, y0: int = 0) -> np.ndarray:
     img = base.copy()
     H, W = img.shape[:2]
     acento = rgb(estilo["color_acento"])
@@ -404,6 +405,10 @@ def _mapa(base: np.ndarray, proy: _Proyeccion, spec: dict, estilo: dict, t: floa
             x, y = int(c[0] - eti.shape[1] / 2), int(c[1] + 16)
         else:
             x, y = int(c[0] + 18), int(c[1] - eti.shape[0] / 2)
+        # que la etiqueta no se salga del cuadro ni pise el título
+        margen = int(min(W, H) * 0.03)
+        x = max(margen, min(x, W - eti.shape[1] - margen))
+        y = max(y0, min(y, H - eti.shape[0] - margen))
         pegar(img, eti, x, y, q)
     return img
 
@@ -423,7 +428,7 @@ def spec_de(v) -> dict:
 
 def guardar_spec(v, tam, estilo) -> Path:
     spec = spec_de(v)
-    h = hashlib.sha256(json.dumps([spec, tam, sorted(estilo.items())], sort_keys=True, default=str).encode()).hexdigest()[:20]
+    h = hashlib.sha256(json.dumps([spec, tam, sorted(estilo.items()), VERSION], sort_keys=True, default=str).encode()).hexdigest()[:20]
     ruta = CACHE / "animados" / f"{spec['tipo']}-{h}.json"
     if not ruta.exists():
         ruta.parent.mkdir(parents=True, exist_ok=True)
@@ -448,7 +453,7 @@ class Dibujante:
 
     def cuadro(self, t: float) -> np.ndarray:
         if self.spec["tipo"] == "mapa":
-            return _mapa(self.base, self.proy, self.spec, self.estilo, t)
+            return _mapa(self.base, self.proy, self.spec, self.estilo, t, self.y0)
         forma = self.spec.get("forma", "barras")
         hacer = {"barras": _barras, "linea": _linea, "cronologia": _cronologia}[forma]
         return hacer(self.base, self.spec, self.estilo, t, self.y0)

@@ -97,6 +97,8 @@ en `salida/marca/`.
    (API con `generator=search`, `prop=imageinfo`, `iiurlwidth=330`) y míralos en una hoja de
    contactos; fija los buenos por id. Wikimedia limita las ráfagas: pocas búsquedas, sin prisas.
    Guarda la investigación con sus fuentes en `investigacion/<fecha>-<tema>.md`.
+   Si Wikimedia responde 429 («robot policy»), lanza antes `python -m canal descargar guiones/<archivo>.json`
+   en segundo plano: baja las imágenes despacio y reintenta las rechazadas.
 2. **Míralas** (Read sobre las .jpg). Si una imagen no corresponde (época equivocada, foto turística
    moderna, persona distinta…), cámbiala: afina la búsqueda, usa el título exacto de Commons
    (`"wikimedia": "File:…"`) o fija el recurso por su id (`"wikimedia": "id:wikimedia-123"`).

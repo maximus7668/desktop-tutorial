@@ -47,8 +47,10 @@ nube, como **secretos del entorno**. Nunca en el chat.
 | `PIXABAY_API_KEY` | Más stock | pixabay.com/api/docs |
 | `YOUTUBE_API_KEY` | Buscar temas con demanda (`tendencias`) | Google Cloud → APIs → YouTube Data API v3 → Credenciales → Clave de API |
 
-Wikimedia Commons y los mapas de Natural Earth no necesitan clave. Pon una web o un email de
-contacto en `canal.contacto_api` para que Wikimedia no te limite las descargas.
+Wikimedia Commons y los mapas de Natural Earth no necesitan clave. Su norma pide que los programas
+se identifiquen con un contacto: pon una web o un email en `canal.contacto_api`. Desde IPs
+compartidas (como las sesiones en la nube) Wikimedia limita mucho las descargas; entonces
+`python -m canal descargar guiones/X.json` las baja una a una, sin ráfagas, antes de montar.
 
 ### 3. Conectar con tu canal (subir y leer métricas)
 1. En console.cloud.google.com, crea un proyecto y activa **YouTube Data API v3**, **YouTube
@@ -79,6 +81,7 @@ Python 3.11+ y ffmpeg. Después: `bash preparar.sh`, que instala las dependencia
 | `python -m canal comprobar` | Herramientas, claves y gasto del mes |
 | `python -m canal tendencias "historia de empresas" --dias 90 --region MX` | Vídeos atípicos del tema → `memoria/tendencias/` |
 | `python -m canal validar guiones/X.json` | Revisión editorial del guion (errores bloquean) |
+| `python -m canal descargar guiones/X.json` | Baja despacio las imágenes de Wikimedia (si Wikimedia limita, típico en la nube) |
 | `python -m canal visuales guiones/X.json` | Hoja con la imagen de cada plano, para revisarla antes de montar |
 | `python -m canal producir guiones/X.json [--voz piper] [--solo largo\|shorts]` | Voz, montaje, Shorts, miniaturas, metadatos y control de calidad → `salida/<id>/` |
 | `python -m canal subir <id> --confirmo` | Sube en privado (🟡) |
