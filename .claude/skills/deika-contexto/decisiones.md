@@ -7,6 +7,23 @@ Formato: **fecha · decisión** · motivo · qué cambia.
 
 ---
 
+**2026-10-13 · Automatizaciones para el negocio (pedido por el dueño; precio PROPUESTO por Claude, pendiente de su ok)** ·
+El dueño pidió «automatización de presupuestos etc. para que el empresario tenga los menos quebraderos de cabeza posibles»,
+con precios en la web y flujos en n8n · Construido en `Deika-panel` rama `claude/automatizaciones` (sin desplegar: no hay
+clave de Cloudflare en la sesión): pestaña **Presupuestos** (a mano o desde una llamada; borrador con IA que solo usa los
+precios de la lista del negocio; el cliente acepta desde el móvil en `/p/<token>` con rastro de fecha, IP y navegador;
+recordatorio a los 3 días y caducidad), **recordatorio de cita** el día antes, **reseña en Google** (a todos, máx. 1 cada
+6 meses, sin incentivos: normas de Google), **«ya está listo»** y **resumen del día** a las 20:00. Sin WhatsApp Business
+ni remitente SMS, los mensajes quedan en «Para enviar por WhatsApp» y el negocio los manda con un toque desde su móvil.
+**Precio propuesto: +15 €/mes en cualquier plan, 300 mensajes incluidos, extra 0,05 €** (heydiga cobra WhatsApp a +39 €;
+coste ~0,017 €/WhatsApp y ~0,08 €/SMS → 6-8 €/mes si casi todo va por WhatsApp). Web actualizada en la rama (sección,
+añadido en precios, FAQ, datos estructurados, casilla al contratar) y privacidad. n8n: creados «DEIKA · Automatizaciones
+(cada hora)» y «DEIKA · Resumen del día (20:00)», **desactivados** hasta desplegar. Descartado: facturas (Verifactu, 2027:
+mejor integrar con un programa homologado que hacerlas). Los mensajes al cliente del negocio los decide el negocio
+(responsable); DEIKA es encargado. Plantillas de WhatsApp en borrador (`automatizacion/plantillas/whatsapp-automatizaciones.md`).
+Nota: en n8n ya había 25 «PLANTILLA DEIKA - …» (20/09-02/10, inactivas, con relé por cliente); las nuevas las sustituyen
+para presupuestos, recordatorio, reseña y trabajo listo, sin borrarlas.
+
 **2026-10-10 · Precios súper competitivos sin quitar ElevenLabs v4 (aprobado por el dueño)** · El dueño pidió un
 precio muy competitivo manteniendo la voz ElevenLabs v4. Coste real medido en las llamadas de Retell: ~0,14 €/min
 (Retell 0,055 $ + ElevenLabs v4 Turbo 0,08 $ + gpt-5.6-luna ~0,012 $ + Twilio 0,004 $) y ~3,3 $/mes por número ·

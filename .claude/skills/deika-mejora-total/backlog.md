@@ -37,6 +37,8 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - M-013 · 10/10 · **Precios súper competitivos con ElevenLabs v4** (pedido y aprobado por el dueño): coste real medido en Retell y Twilio (~0,14 €/min); tabla nueva Esencial 29/100, Básico 39/200, Negocio 79/450, Pro 139/800, extra 0,20 €; panel, web, agentes de demo, hoja y guion de visita, memoria. Plantillas de sector: eleven_v4_turbo intacto, cuelgan a los 24 s de silencio y máx. 10 min · panel 0becf38 y 12017f2 · tests (124) con comprobación de que ningún plan baja del coste; capturas de precios en móvil, tableta y ordenador.
 - 10/10 · **Desplegado todo lo anterior**: migración 0019 en remoto, panel (versión 67695593) y web. Verificado en producción: 404 real, robots, sitemap, cabeceras, datos estructurados, privacidad nueva, API protegida (401 sin sesión) y columnas nuevas en D1.
 
+- M-015 · 13/10 · **Automatizaciones del negocio** (pedido por el dueño): presupuestos con aceptación desde el móvil, recordatorio de cita, reseñas, trabajo listo y resumen del día; web, privacidad y 2 flujos de n8n (desactivados) · panel rama `claude/automatizaciones` · 175 tests, tipos, build y recorrido completo en local (alta del presupuesto desde una llamada, envío, aceptación pública, aviso, «listo», ciclo y resumen) con capturas. **Falta**: ok del dueño al precio, migración 0021 + despliegue, activar los flujos.
+
 ## Propuestas rojas (esperan al dueño)
 - R-001 · Comparativa honesta con heydiga en la web (más minutos por euro, montaje incluido, local de Vitoria). Riesgo: nombrar a un competidor exige datos exactos y fechados (publicidad comparativa, Ley 3/1991 art. 10). Alternativa segura: «qué mirar al elegir una recepcionista con IA» sin nombres.
 - R-002 · Atender en inglés y francés en las recepcionistas de los clientes (turistas, Vitoria Green Capital). Cambia agentes de clientes que pagan → solo con su permiso, uno a uno.
@@ -51,6 +53,8 @@ Informe publicado: https://claude.ai/artifact/CmCGwMMHFxfMSiuwGF8Nrq
 - R-003 · Escuchar el webhook de estados de WhatsApp para mandar el SMS cuando el número no tenga WhatsApp. Se hace cuando WhatsApp esté activo.
 
 ## Pendiente del dueño
+- **Automatizaciones**: dar el ok al precio (+15 €/mes, 300 mensajes, extra 0,05 €) o cambiarlo; después, desplegar (migración 0021) y activar en n8n «DEIKA · Automatizaciones (cada hora)» y «DEIKA · Resumen del día (20:00)». Aprobar las 5 plantillas de WhatsApp en borrador.
+- **Rotar la clave de la API de n8n** que se pegó en el chat el 13/10.
 - Para próximos despliegues: CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID en el entorno de la sesión (no en el chat).
 - Guardar CLAVE_CIFRADO en un gestor de contraseñas: si se pierde, hay que pedir de nuevo la clave de Cal.com a cada negocio.
 - Comprobar en Retell que las grabaciones de las demos se borran a los 30 días (lo dice la privacidad).

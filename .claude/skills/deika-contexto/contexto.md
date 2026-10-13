@@ -14,6 +14,8 @@
   - Negocio 79 €/mes, 450 min
   - Pro 139 €/mes, 800 min
   - Minuto extra: 0,20 €
+  - Automatizaciones (presupuestos, recordatorios, reseñas, «ya está listo», resumen del día): +15 €/mes con
+    cualquier plan, 300 mensajes incluidos, extra 0,05 €. Propuesto el 13/10/2026, pendiente del ok del dueño.
   - Desde el 10/10/2026. Coste real por minuto con la voz ElevenLabs v4 Turbo: ~0,14 € (Retell 0,055 $ +
     voz 0,08 $ + IA gpt-5.6-luna ~0,012 $ con el recargo de prompt largo + Twilio 0,004 $), más ~3,3 $/mes
     por número. Margen con los minutos gastados al 100 %: 38 / 18 / 15 / 17 %. No bajar de ~0,17 €/min.
@@ -109,6 +111,7 @@ sensible**. No se busca una IA que lo haga todo sin control.
 - Editar guion, horarios y reglas de transferencia sin código (hoy se carga por SQL).
 - Cola de aprobaciones de acciones sensibles.
 - Informe semanal automático.
+- Presupuestos y automatizaciones del negocio: hechos el 13/10/2026 (rama `claude/automatizaciones`, sin desplegar).
 
 ## 9. Pendiente de decidir
 
