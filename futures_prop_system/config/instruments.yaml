@@ -1,0 +1,317 @@
+# Librería de especificaciones de contratos de futuros.
+#
+# ⚠️  Márgenes y comisiones son VALORES ORIENTATIVOS. Los márgenes de exchange
+#     cambian con frecuencia (especialmente en metales y energía) y los márgenes
+#     intradía dependen del broker/prop firm. Verifícalos antes de operar.
+# ⚠️  Horarios en America/Chicago (CT). RTH = sesión "regular" de referencia.
+#
+# tick_value DEBE ser multiplier * tick_size (se valida al cargar).
+# mini_equivalent: cuánto cuenta el contrato para el límite de contratos de la
+# firma (las firmas suelen contar 10 micros = 1 mini).
+
+contracts:
+  # ---------------------------------------------------------------- Índices
+  ES:
+    name: E-mini S&P 500
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 50
+    tick_size: 0.25
+    tick_value: 12.5
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: volume, days_before: 6, max_days_before: 10, confirm_days: 1, position_policy: flatten}
+    initial_margin: 24000
+    day_trade_margin: 500
+    commission_per_side: 2.25
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: us_equity
+  MES:
+    name: Micro E-mini S&P 500
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 5
+    tick_size: 0.25
+    tick_value: 1.25
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6, position_policy: flatten}
+    initial_margin: 2400
+    day_trade_margin: 50
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: us_equity
+  NQ:
+    name: E-mini Nasdaq-100
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 20
+    tick_size: 0.25
+    tick_value: 5.0
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: volume, days_before: 6, max_days_before: 10, confirm_days: 1, position_policy: flatten}
+    initial_margin: 33000
+    day_trade_margin: 1000
+    commission_per_side: 2.25
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: us_equity
+  MNQ:
+    name: Micro E-mini Nasdaq-100
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 2
+    tick_size: 0.25
+    tick_value: 0.5
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6, position_policy: flatten}
+    initial_margin: 3300
+    day_trade_margin: 100
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: us_equity
+  YM:
+    name: E-mini Dow ($5)
+    exchange: CBOT
+    asset_class: equity_index
+    multiplier: 5
+    tick_size: 1.0
+    tick_value: 5.0
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6}
+    initial_margin: 15000
+    day_trade_margin: 500
+    commission_per_side: 2.25
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: us_equity
+  MYM:
+    name: Micro E-mini Dow
+    exchange: CBOT
+    asset_class: equity_index
+    multiplier: 0.5
+    tick_size: 1.0
+    tick_value: 0.5
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6}
+    initial_margin: 1500
+    day_trade_margin: 50
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: us_equity
+  RTY:
+    name: E-mini Russell 2000
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 50
+    tick_size: 0.1
+    tick_value: 5.0
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6}
+    initial_margin: 9000
+    day_trade_margin: 500
+    commission_per_side: 2.25
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: us_equity
+  M2K:
+    name: Micro E-mini Russell 2000
+    exchange: CME
+    asset_class: equity_index
+    multiplier: 5
+    tick_size: 0.1
+    tick_value: 0.5
+    months: HMUZ
+    expiry_rule: equity_index
+    session: {timezone: America/Chicago, rth_open: "08:30", rth_close: "15:00"}
+    roll: {method: calendar, days_before: 6}
+    initial_margin: 900
+    day_trade_margin: 50
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: us_equity
+
+  # ---------------------------------------------------------------- Energía
+  CL:
+    name: Crude Oil WTI
+    exchange: NYMEX
+    asset_class: energy
+    multiplier: 1000
+    tick_size: 0.01
+    tick_value: 10.0
+    months: FGHJKMNQUVXZ
+    expiry_rule: crude_oil
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "08:00", rth_close: "13:30"}
+    roll: {method: volume, days_before: 3, max_days_before: 8, confirm_days: 1, position_policy: flatten}
+    initial_margin: 6000
+    day_trade_margin: 500
+    commission_per_side: 2.30
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: energy
+  MCL:
+    name: Micro WTI Crude Oil
+    exchange: NYMEX
+    asset_class: energy
+    multiplier: 100
+    tick_size: 0.01
+    tick_value: 1.0
+    months: FGHJKMNQUVXZ
+    expiry_rule: crude_oil
+    physical_delivery: false  # liquidación por diferencias
+    session: {timezone: America/Chicago, rth_open: "08:00", rth_close: "13:30"}
+    roll: {method: calendar, days_before: 3, position_policy: flatten}
+    initial_margin: 600
+    day_trade_margin: 50
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: energy
+  NG:
+    name: Henry Hub Natural Gas
+    exchange: NYMEX
+    asset_class: energy
+    multiplier: 10000
+    tick_size: 0.001
+    tick_value: 10.0
+    months: FGHJKMNQUVXZ
+    expiry_rule: natural_gas
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "08:00", rth_close: "13:30"}
+    roll: {method: calendar, days_before: 3, position_policy: flatten}
+    initial_margin: 4000
+    day_trade_margin: 1000
+    commission_per_side: 2.30
+    slippage_ticks: 2
+    mini_equivalent: 1.0
+    correlation_group: natgas
+
+  # ---------------------------------------------------------------- Metales
+  GC:
+    name: Gold
+    exchange: COMEX
+    asset_class: metals
+    multiplier: 100
+    tick_size: 0.1
+    tick_value: 10.0
+    months: GJMQVZ
+    expiry_rule: metals
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "07:20", rth_close: "12:30"}
+    roll: {method: volume, days_before: 3, max_days_before: 10, confirm_days: 1, use_first_notice: true}
+    initial_margin: 16500
+    day_trade_margin: 1000
+    commission_per_side: 2.30
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: precious
+  MGC:
+    name: Micro Gold
+    exchange: COMEX
+    asset_class: metals
+    multiplier: 10
+    tick_size: 0.1
+    tick_value: 1.0
+    months: GJMQVZ
+    expiry_rule: metals
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "07:20", rth_close: "12:30"}
+    roll: {method: calendar, days_before: 3, use_first_notice: true, position_policy: flatten}
+    initial_margin: 1650
+    day_trade_margin: 100
+    commission_per_side: 0.62
+    slippage_ticks: 1
+    mini_equivalent: 0.1
+    correlation_group: precious
+  SI:
+    name: Silver
+    exchange: COMEX
+    asset_class: metals
+    multiplier: 5000
+    tick_size: 0.005
+    tick_value: 25.0
+    months: HKNUZ
+    expiry_rule: metals
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "07:25", rth_close: "12:25"}
+    roll: {method: calendar, days_before: 3, use_first_notice: true}
+    initial_margin: 20000
+    day_trade_margin: 2000
+    commission_per_side: 2.30
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: precious
+
+  # ---------------------------------------------------------------- Divisas
+  6E:
+    name: Euro FX
+    exchange: CME
+    asset_class: fx
+    multiplier: 125000
+    tick_size: 0.00005
+    tick_value: 6.25
+    months: HMUZ
+    expiry_rule: fx_imm
+    session: {timezone: America/Chicago, rth_open: "07:20", rth_close: "14:00"}
+    roll: {method: calendar, days_before: 5}
+    initial_margin: 2700
+    day_trade_margin: 500
+    commission_per_side: 2.30
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: fx_usd
+  6J:
+    name: Japanese Yen
+    exchange: CME
+    asset_class: fx
+    multiplier: 12500000
+    tick_size: 0.0000005
+    tick_value: 6.25
+    months: HMUZ
+    expiry_rule: fx_imm
+    session: {timezone: America/Chicago, rth_open: "07:20", rth_close: "14:00"}
+    roll: {method: calendar, days_before: 5}
+    initial_margin: 3200
+    day_trade_margin: 500
+    commission_per_side: 2.30
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: fx_usd
+
+  # ---------------------------------------------------------------- Tipos
+  ZN:
+    name: 10-Year T-Note
+    exchange: CBOT
+    asset_class: rates
+    multiplier: 1000
+    tick_size: 0.015625
+    tick_value: 15.625
+    months: HMUZ
+    expiry_rule: treasury
+    physical_delivery: true
+    session: {timezone: America/Chicago, rth_open: "07:20", rth_close: "14:00"}
+    roll: {method: volume, days_before: 2, max_days_before: 10, use_first_notice: true}
+    initial_margin: 2200
+    day_trade_margin: 500
+    commission_per_side: 1.80
+    slippage_ticks: 1
+    mini_equivalent: 1.0
+    correlation_group: rates

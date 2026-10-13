@@ -1,0 +1,137 @@
+# Cuenta de fondeo de futuros 50.000 USD — reglas TÍPICAS (estilo evaluación
+# "50K" con trailing de fin de día). Copia este archivo y ajústalo a las reglas
+# EXACTAS y vigentes de tu prop firm: cambian a menudo y difieren entre firmas
+# (p.ej. trailing intradía vs. fin de día, DLL que rompe la cuenta vs. que solo
+# pausa, reglas de consistencia, restricciones de noticias).
+
+contract_library_file: instruments.yaml
+
+# ----------------------------------------------------------------------------
+# Reglas de la prop firm (lo que te liquida la cuenta si lo incumples)
+# ----------------------------------------------------------------------------
+account:
+  name: "Prop firm 50K (reglas típicas)"
+  account_size: 50000
+  profit_target: 3000
+  max_loss: 2000                 # drawdown máximo
+  trailing_mode: end_of_day      # static | intraday | end_of_day
+  trailing_lock_level: 50000     # el umbral deja de subir al llegar al balance inicial
+  daily_loss_limit: 1000
+  daily_loss_mode: pause         # pause: bloquea el día | breach: rompe la cuenta
+  max_contracts_mini_equiv: 5    # 5 minis = 50 micros
+  consistency_max_day_share: 0.5 # el mejor día no puede superar el 50 % del beneficio
+  min_trading_days: 2
+  timezone: America/Chicago
+  day_reset_time: "17:00"
+  flatten_time: "15:10"          # cierre obligatorio de posiciones
+  no_overnight: true
+  news_restricted: false         # si la firma prohíbe operar noticias, pon true
+  news_blackout_minutes_before: 2
+  news_blackout_minutes_after: 2
+  allowed_roots: []              # vacío = todos
+
+# ----------------------------------------------------------------------------
+# Límites INTERNOS (siempre más estrictos que los de la firma)
+# Filosofía: con 2.000 USD de colchón, perder 4 trades seguidos a 200 USD no
+# debe acercarnos a la liquidación. Se opera con MICROS para tener granularidad.
+# ----------------------------------------------------------------------------
+risk:
+  max_risk_per_trade_usd: 200            # 10 % del drawdown permitido
+  max_risk_fraction_of_dd_room: 0.12     # y nunca más del 12 % del colchón restante
+  max_risk_fraction_of_daily_room: 0.40
+  daily_loss_soft_stop_usd: 400          # no más entradas en el día
+  daily_loss_flatten_usd: 600            # cerrar todo y parar (DLL firma = 1000)
+  daily_profit_lock_usd: 900             # proteger la consistencia y el día bueno
+  max_trades_per_day: 5
+  max_consecutive_losses: 3
+  cooldown_minutes_after_loss: 15
+  max_open_positions: 2
+  max_mini_equiv_contracts: 3            # internamente, 3 minis (30 micros) máximo
+  max_contracts_per_root: {MES: 20, MNQ: 20, MCL: 15, MGC: 15, ES: 2, NQ: 1, CL: 1, GC: 1}
+  max_portfolio_risk_usd: 300            # riesgo a stop agregado con correlaciones
+  max_margin_utilization: 0.5
+  min_trailing_room_usd: 250
+  stop_slippage_buffer_ticks: 2
+  min_stop_ticks: 4
+  min_reward_risk: 1.3
+  no_entry_minutes_before_flatten: 25
+  no_entry_minutes_after_open: 10
+  flatten_buffer_minutes: 3
+  rth_only_entries: true
+  flatten_before_high_impact_news: true
+  news_blackout_minutes_before: 10
+  news_blackout_minutes_after: 5
+  drawdown_tiers:
+    - {utilization: 0.25, risk_multiplier: 0.75}
+    - {utilization: 0.50, risk_multiplier: 0.50}
+    - {utilization: 0.70, risk_multiplier: 0.25}
+  correlations:
+    MES-MNQ: 0.90
+    ES-NQ: 0.90
+    MES-MCL: 0.30
+    MNQ-MCL: 0.25
+    MES-MGC: 0.05
+    MCL-MGC: 0.15
+  same_group_default_correlation: 0.8
+  max_slippage_ticks_alert: 4
+
+instruments: [MES, MNQ]
+
+intermarket:
+  MES: [MNQ]
+  MNQ: [MES]
+  MCL: [MES]
+  MGC: [MES]
+
+regime:
+  trend_er_threshold: 0.35
+  range_er_threshold: 0.25
+  high_vol_percentile: 0.85
+  squeeze_percentile: 0.15
+  hysteresis_bars: 3
+  use_hmm: true
+  risk_multipliers: {TREND_UP: 1.0, TREND_DOWN: 1.0, RANGE: 0.8, SQUEEZE: 0.7, HIGH_VOL: 0.4, NEWS_DRIVEN: 0.0, UNKNOWN: 0.0}
+
+agents:
+  trend:          {base_weight: 1.0, params: {min_er: 0.30}}
+  mean_reversion: {base_weight: 1.0, params: {z_threshold: 2.0, max_er: 0.30}}
+  volatility:     {base_weight: 0.9}
+  order_flow:     {base_weight: 0.8}
+  auction:        {base_weight: 1.0}
+  macro_news:     {base_weight: 0.6, params: {pre_event_minutes: 15}}
+  intermarket:    {base_weight: 0.7, params: {window: 120, z_threshold: 2.0}}
+
+ensemble:
+  min_confidence: 0.25
+  min_agreement: 0.65
+  exit_threshold: 0.40
+  performance_halflife: 40
+  performance_min_samples: 20
+  default_stop_atr: 1.5
+  default_target_rr: 2.0
+
+policy:
+  kind: heuristic       # heuristic | rl (rl sólo puede REDUCIR el tamaño heurístico)
+  model_path: null
+  min_size_fraction: 0.25
+  breakeven_at_r: 1.0
+  trail_after_r: 1.5
+  trail_atr: 1.2
+  max_holding_bars: 48
+
+execution:
+  mode: backtest        # backtest | paper | analysis | live_proposal | live_auto
+  default_entry: market
+  limit_offset_ticks: 1
+  entry_timeout_bars: 3
+  proposal_ttl_seconds: 120
+  max_orders_per_minute: 10
+  limit_requires_trade_through: true
+  max_participation_rate: 0.05
+
+monitoring:
+  log_dir: logs
+  decision_log: true
+  state_file: logs/state.json
+  dd_alert_levels: [0.5, 0.75, 0.9]
+  webhook_url: null

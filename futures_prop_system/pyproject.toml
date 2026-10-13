@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "propfut"
+version = "0.1.0"
+description = "Sistema multi-agente de trading de futuros orientado a cuentas de fondeo (prop firms), con prioridad absoluta en control de riesgo."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pyyaml>=6.0",
+    "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+ml = ["scikit-learn>=1.4", "lightgbm>=4.3"]
+rl = ["gymnasium>=0.29", "stable-baselines3>=2.3", "torch>=2.2"]
+dashboard = ["streamlit>=1.35", "plotly>=5.20"]
+fast = ["polars>=0.20", "pyarrow>=15"]
+dev = ["pytest>=8", "mypy>=1.8", "ruff>=0.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+warn_return_any = false      # ruido de los stubs de numpy/pandas
+warn_unused_ignores = false  # los ignores de dependencias opcionales dependen del entorno
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
