@@ -36,3 +36,5 @@ Texto propuesto:
 y saludos de la recepcionista con Belén. Música nueva instrumental (ElevenLabs Music v2.5, 27,5 s) a volumen constante, sin bajadas.
 Publicado el 8/10/2026 (Posty cmuz9euxk000vr27tj1n2dy6r): https://www.instagram.com/reel/DeOeoEGDj70/
 Borrar a mano en Instagram las versiones anteriores: DeOSjGnlY4n, DeOR7BfDICV y DeOPvo0FDQE.
+
+14/10/2026: precio corregido en el reel «siempre atendido»: en pantalla «29 € /mes + IVA» (antes contaba hasta 49 €) y la locución dice «Desde veintinueve euros al mes, más IVA» (Cristina, eleven_v4, 196 créditos por 2 tomas). Hay que volver a subirlo y borrar el publicado (DeOeoEGDj70), que dice 49 €.
