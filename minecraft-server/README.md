@@ -25,6 +25,13 @@ Servidor **Java con Fabric** al que pueden entrar:
 > con el filtro "Server side" y pon su nombre en `MODRINTH_PROJECTS` del
 > `docker-compose.yml`.
 
+## Lo más fácil (Windows)
+
+1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Descarga [este ZIP](https://github.com/maximus7668/desktop-tutorial/archive/refs/heads/claude/minecraft-cross-platform-mods-gw5ath.zip), descomprímelo y entra en `minecraft-server`.
+3. Doble clic en **`INICIAR.bat`**. La primera vez te abre el Bloc de notas para poner los nombres; guarda y cierra.
+4. Para apagar: doble clic en **`APAGAR.bat`**.
+
 ## Cuánto cuesta: 0 €
 
 Todo lo que usa este servidor es gratis: Minecraft server, Fabric, los mods,
