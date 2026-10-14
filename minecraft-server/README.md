@@ -25,31 +25,66 @@ Servidor **Java con Fabric** al que pueden entrar:
 > con el filtro "Server side" y pon su nombre en `MODRINTH_PROJECTS` del
 > `docker-compose.yml`.
 
-## Ponerlo en marcha
+## Cuánto cuesta: 0 €
 
-Necesitas un ordenador o VPS encendido 24/7 con [Docker](https://docs.docker.com/get-docker/)
-(4 GB de RAM libres como mínimo).
+Todo lo que usa este servidor es gratis: Minecraft server, Fabric, los mods,
+Geyser, Floodgate, Docker, playit.gg, MCXboxBroadcast y BedrockConnect.
+Elige **una** de estas tres formas de tenerlo encendido:
 
-```bash
-cd minecraft-server
-cp .env.example .env      # y edita los nombres
-docker compose up -d
-docker compose logs -f    # espera a ver "Done" y "Started Geyser"
-```
+| Opción | Cuesta | Ventajas | Pegas |
+|---|---|---|---|
+| **A. Tu propio PC + playit.gg** (recomendada) | 0 € | Fácil, sin tocar el router, sin tarjeta | Solo funciona mientras tu PC está encendido |
+| **B. Oracle Cloud "Always Free"** | 0 € | Encendido 24/7, 4 núcleos y 24 GB de RAM gratis | Piden tarjeta para verificar (no cobran) y el alta es más técnica |
+| **C. Aternos** | 0 € | Sin instalar nada, desde la web | Cola de espera, se apaga solo si no hay nadie, menos mods |
 
-### Abrir puertos en el router
+### Opción A – Tu PC + playit.gg (gratis, sin abrir puertos)
 
-Redirige hacia la IP del ordenador del servidor:
+1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (gratis para uso personal).
+   Necesitas unos 4 GB de RAM libres.
+2. Crea una cuenta gratis en [playit.gg](https://playit.gg), pulsa **Add agent → Docker**
+   y copia la **secret key** que te da.
+3. En esta carpeta:
+   ```bash
+   cp .env.example .env      # edita nombres y pega la clave en PLAYIT_SECRET
+   docker compose --profile playit up -d
+   docker compose logs -f mc # espera a ver "Done" y "Started Geyser"
+   ```
+4. En la web de playit.gg crea dos túneles (los dos entran en el plan gratis):
+   - **Minecraft Java** → dirección local `mc`, puerto `25565` → te da una dirección tipo `algo.gl.joinmc.link` (para PC).
+   - **Minecraft Bedrock** → dirección local `mc`, puerto `19132` → te da una dirección y un puerto (para consola).
 
-- `25565` **TCP** → jugadores de PC
-- `19132` **UDP** → jugadores de consola
+   Esas direcciones son las que pasas a tus amigos en lugar de tu IP. Así no
+   hace falta abrir puertos en el router y tu IP de casa no se comparte.
 
-Si usas un VPS (Oracle Cloud gratis, Hetzner, etc.), abre los mismos puertos en su firewall.
+### Opción B – Oracle Cloud Always Free (24/7 gratis)
+
+1. Date de alta en [Oracle Cloud Free Tier](https://www.oracle.com/cloud/free/).
+2. Crea una instancia **Ampere A1** (ARM) con Ubuntu: hasta 4 OCPU y 24 GB de RAM entran en lo gratuito.
+3. En la *Security List* de la red abre `25565/TCP` y `19132/UDP`, y en la máquina:
+   `sudo iptables -I INPUT -p tcp --dport 25565 -j ACCEPT && sudo iptables -I INPUT -p udp --dport 19132 -j ACCEPT`
+4. Instala Docker (`curl -fsSL https://get.docker.com | sh`), copia esta carpeta y lanza
+   `docker compose up -d` (sin el perfil de playit). Tus amigos usan la IP pública de la instancia.
+
+> Si aparece "Out of capacity" al crear la instancia, prueba otra zona o
+> vuelve a intentarlo más tarde: pasa a menudo con las máquinas gratis.
+
+### Opción C – Aternos (sin instalar nada)
+
+En [aternos.org](https://aternos.org): crea un servidor **Fabric**, en
+*Mods* instala **Geyser** y **Floodgate** más los mods de la tabla de
+arriba, y activa *Bedrock/Geyser* en Opciones. Aternos te da la dirección
+para PC y para consola. Alguien tiene que pulsar **Iniciar** en la web
+cada vez que queráis jugar.
+
+### Lo que sí hay que tener
+
+- **PC:** el Minecraft **Java** original (el servidor no puede saltarse eso).
+- **PlayStation:** su Minecraft normal. Para jugar en servidores **no hace falta PlayStation Plus**, solo una cuenta de Microsoft gratuita.
 
 ## Cómo entra cada uno
 
 ### PC (Java)
-Multijugador → Añadir servidor → `TU_IP` (o tu dominio).
+Multijugador → Añadir servidor → la dirección de Java de playit.gg (o la IP del servidor).
 
 ### PlayStation (y Xbox / Switch)
 La consola **no deja escribir la IP de un servidor**, solo muestra los
@@ -64,12 +99,12 @@ servidores oficiales. Hay dos formas de saltarlo:
    añaden esa cuenta como amigo y el servidor aparece en la pestaña
    **Amigos** → Unirse.
 2. **Cambiar el DNS de la PS** – en Ajustes → Red → configuración manual,
-   pon DNS primario `104.238.130.180` (BedrockConnect). Al pulsar en
-   cualquier servidor destacado se abre un menú donde escribes `TU_IP` y
-   puerto `19132`.
+   pon DNS primario `104.238.130.180` (BedrockConnect, gratis). Al pulsar en
+   cualquier servidor destacado se abre un menú donde escribes la dirección
+   y el puerto de Bedrock (los de playit.gg, o la IP y `19132`).
 
 ### Móvil / Windows Bedrock
-Servidores → Añadir servidor → `TU_IP`, puerto `19132`.
+Servidores → Añadir servidor → dirección y puerto de Bedrock (playit.gg) o la IP y `19132`.
 
 ## Lista blanca y administradores
 

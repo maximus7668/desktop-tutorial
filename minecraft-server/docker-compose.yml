@@ -45,3 +45,12 @@ services:
       ONLINE_MODE: "true"
     volumes:
       - ./data:/data
+
+  # Túnel gratis de playit.gg (opción A del README): evita abrir puertos.
+  # Solo arranca con:  docker compose --profile playit up -d
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:latest
+    profiles: ["playit"]
+    restart: unless-stopped
+    environment:
+      SECRET_KEY: ${PLAYIT_SECRET}
