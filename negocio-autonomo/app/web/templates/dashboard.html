@@ -16,10 +16,10 @@
 
 <h2>Dinero</h2>
 <div class="grid">
-  <div class="card"><div class="k">Capital inicial</div><div class="v">{{ fin.budget.capital_cents|eur }}</div></div>
+  <div class="card"><div class="k">Capital aportado</div><div class="v">{{ fin.budget.capital_cents|eur }}</div></div>
   <div class="card"><div class="k">Gasto acumulado</div><div class="v">{{ fin.budget.spent_cents|eur }}</div></div>
   <div class="card"><div class="k">Reservado (pendiente)</div><div class="v">{{ fin.budget.reserved_cents|eur }}</div></div>
-  <div class="card"><div class="k">Disponible para gastar</div><div class="v">{{ fin.budget.available_cents|eur }}</div><div class="small muted">respeta un suelo de {{ fin.budget.reserve_floor_cents|eur }}</div></div>
+  <div class="card"><div class="k">Disponible para gastar</div><div class="v">{{ fin.budget.available_cents|eur }}</div><div class="small muted">{% if fin.budget.capital_cents == 0 %}sin capital: solo herramientas gratuitas · <a href="/finanzas">aportar</a>{% else %}respeta un suelo de {{ fin.budget.reserve_floor_cents|eur }}{% endif %}</div></div>
   <div class="card"><div class="k">Ingresos cobrados <span class="badge real">real</span></div><div class="v real">{{ fin.real.revenue_cents|eur }}</div><div class="small muted">{{ fin.orders_real }} ventas confirmadas</div></div>
   <div class="card"><div class="k">Reembolsos <span class="badge real">real</span></div><div class="v">{{ fin.real.refunds_cents|eur }}</div><div class="small muted">{{ fin.refunds_count }} pedidos</div></div>
   <div class="card"><div class="k">Costes API <span class="badge estimate">estim.</span></div><div class="v estimate">{{ fin.api_spend_cents|eur }}</div></div>

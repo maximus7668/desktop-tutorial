@@ -113,8 +113,8 @@ def import_research(conn: sqlite3.Connection, actor: Actor, data: dict, verified
     return {"created": created, "skipped": skipped}
 
 
-SYSTEM_PROMPT = """Eres el investigador de un pequeño negocio de productos digitales con 500 € de capital.
-Busca en la web oportunidades de productos digitales que una sola persona pueda crear con poco dinero,
+SYSTEM_PROMPT = """Eres el investigador de un pequeño negocio de productos digitales con capital muy limitado (puede ser 0 €).
+Busca en la web oportunidades de productos digitales que una sola persona pueda crear y probar sin gastar dinero,
 con señales reales de demanda y de disposición a pagar. Sé escéptico: separa hechos de suposiciones.
 Usa solo información de las páginas que encuentres; cada evidencia debe citar la URL exacta de un resultado
 de búsqueda. Responde SOLO con un objeto JSON con este formato:

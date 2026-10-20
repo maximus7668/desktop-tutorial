@@ -31,7 +31,7 @@ class Settings:
     public_base_url: str = "http://localhost:8000"
     backup_dir: Path = field(default_factory=lambda: BASE_DIR / "backups")
     reports_dir: Path = field(default_factory=lambda: BASE_DIR / "reports")
-    initial_capital_eur: float = 500.0
+    initial_capital_eur: float = 0.0
 
     llm_provider: str = "none"  # none | anthropic | fake (solo pruebas)
     llm_model: str = "claude-opus-5-5"
@@ -83,7 +83,7 @@ def load_settings() -> Settings:
         public_base_url=_env("PUBLIC_BASE_URL", "http://localhost:8000"),
         backup_dir=Path(_env("BACKUP_DIR") or BASE_DIR / "backups"),
         reports_dir=Path(_env("REPORTS_DIR") or BASE_DIR / "reports"),
-        initial_capital_eur=float(_env("INITIAL_CAPITAL_EUR", "500")),
+        initial_capital_eur=float(_env("INITIAL_CAPITAL_EUR", "0")),
         llm_provider=_env("LLM_PROVIDER", "none"),
         llm_model=_env("LLM_MODEL", "claude-opus-5-5"),
         llm_price_in_usd_mtok=float(_env("LLM_PRICE_IN_USD_MTOK", "4")),

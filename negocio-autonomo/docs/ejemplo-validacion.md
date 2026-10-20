@@ -1,6 +1,6 @@
 # Ejemplo de creación y validación de un producto (ejecución real del sistema, tráfico simulado)
 
-Generado: 2026-10-20T06:13:46+00:00 · entorno: test · BD: data/demo.db
+Generado: 2026-10-20T06:16:25+00:00 · entorno: test · BD: data/demo.db
 
 ## 1. Investigación importada
 
@@ -19,13 +19,13 @@ Acciones del director: ['evaluadas 4 oportunidades', 'propuesto experimento #1 p
 
 ## 3. Experimento propuesto (pendiente de aprobación)
 
-> Experimento #1 sobre «Pack de instrucciones de IA en español para pequeños negocios»: signup_rate ≥ 8.0, mín. 100 visitas, 14 días, presupuesto máx. 30.00 €
+> Experimento #1 sobre «Pack de instrucciones de IA en español para pequeños negocios»: signup_rate ≥ 8.0, mín. 100 visitas, 14 días, presupuesto máx. 0.00 €
 
 - Hipótesis: Al menos un 8% de los visitantes de 'Pequeños negocios locales en España' dejará su email para 'Guía de 40 instrucciones de IA por sector con ejemplos de uso, en español' sabiendo que costará 15.00 €.
 - Diseño: Smoke test: página de presentación con precio previsto 15.00 € y lista de espera (sin cobro). Tráfico orgánico. Resultado máximo posible: 'interés sin validar'; para validar hará falta una segunda prueba con pago real.
 - Éxito si: signup_rate ≥ 8.0 con ≥ 100 visitantes en 14 días
-- Presupuesto máximo: 30.00 € (sin gasto previsto: tráfico orgánico)
-- Criterios bloqueados: 2026-10-20T06:13:46+00:00
+- Presupuesto máximo: 0.00 € (sin gasto previsto: tráfico orgánico)
+- Criterios bloqueados: 2026-10-20T06:16:25+00:00
 
 ## 4. Página generada y validada técnicamente
 
@@ -64,7 +64,7 @@ Tras confirmar el checklist de publicación (solo en demo), la página se public
 
 - Ingresos reales: 0.00 €
 - Ingresos simulados (no son ingresos): 15.00 €
-- Disponible: 400.00 € de 500.00 €
+- Disponible: 0.00 € de 0.00 €
 
 ## 8. Qué haría falta para validar de verdad
 

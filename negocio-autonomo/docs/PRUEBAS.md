@@ -2,7 +2,7 @@
 
 Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `python -m pytest -v`.
 
-**Resultado: 40 pruebas, 40 superadas, 0 fallidas (≈ 3 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
+**Resultado: 45 pruebas, 45 superadas, 0 fallidas (≈ 3 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
 
 ## Qué se comprueba
 
@@ -19,6 +19,7 @@ Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `py
 | Recuperación tras reinicio | `test_recovers_running_task_after_crash`, `test_budget_survives_restart`, `test_limited_retries_then_failed`, `test_pause_and_resume_queue_keeps_state` | ✔ |
 | Aprobaciones humanas funcionan | `test_full_cycle` (por HTTP, con login y CSRF) | ✔ |
 | Se pueden detener todas las acciones externas | `test_kill_switch_stops_all_external_actions` + paso 8 de `test_full_cycle` | ✔ |
+| Arranque con 0 € | `tests/test_zero_capital.py`: todo gasto rechazado (también API con sobre), el modelo no se llama, la vigilancia no activa la parada, el flujo gratuito funciona, aportar capital desbloquea y queda en el libro, reiniciar no duplica el capital; la E2E arranca con 0 € y aporta 300 € desde el panel | ✔ |
 | Auditoría inalterable / detectable | `test_audit_log_is_append_only_and_tamper_evident` | ✔ |
 | Inyección de instrucciones | `test_prompt_injection_in_research_is_data_not_instruction`, `test_sales_agent_escalates_suspicious_or_unknown`, `test_discover_drops_urls_not_returned_by_real_search` | ✔ |
 | Validación honesta | `test_score_penalizes_thin_evidence`, `test_criteria_locked_after_approval`, `test_simulated_traffic_never_validates`, `test_signups_give_interest_but_not_validation`, `test_low_interest_is_abandoned_and_remembered`, `test_only_real_purchases_validate` | ✔ |
@@ -37,7 +38,7 @@ simulación no cuenta) → todas las páginas del panel, exportación CSV y audi
 | Quitar el suelo de reserva del cálculo de presupuesto | 2 pruebas fallan (`never_exceeds`, `concurrent`) |
 | Quitar la transacción `BEGIN IMMEDIATE` de `request_spend` | `test_concurrent_agents_cannot_overspend` falla en 3 de 3 ejecuciones |
 
-Tras restaurar el código, 40/40 vuelven a pasar.
+Tras restaurar el código, todas vuelven a pasar.
 
 ## Errores encontrados y corregidos durante el desarrollo
 

@@ -10,7 +10,7 @@ secretos de tu servidor). El sistema funciona sin ninguna; cada una desbloquea a
 | 3 | `OWNER_LEGAL_NAME`, `OWNER_TAX_ID`, `OWNER_ADDRESS`, `OWNER_CONTACT_EMAIL` | Aviso legal (LSSI) y consentimiento | Tus datos reales de titular | Sí para publicar |
 | 4 | Dominio + HTTPS y `PUBLIC_BASE_URL` | Que las páginas sean accesibles y los datos cuenten como reales | Registrador de dominios + Caddy/Cloudflare | Para validar con tráfico real |
 | 5 | `ANTHROPIC_API_KEY` + `LLM_PROVIDER=anthropic` | Investigación automática con búsqueda web | console.anthropic.com → API keys. **Pon un límite de gasto mensual en la consola** además del sobre interno | No |
-| 6 | `API_MONTHLY_ENVELOPE_EUR` | Gasto de API que autorizas por adelantado | Recomendado 5-10 € al empezar | Si usas el modelo |
+| 6 | `API_MONTHLY_ENVELOPE_EUR` | Gasto de API que autorizas por adelantado | Recomendado 5-10 € cuando aportes capital (con 0 € no se usa) | Si usas el modelo |
 | 7 | Cuenta Stripe verificada + Payment Link por producto | Cobrar | dashboard.stripe.com → Payment Links; pega el enlace en Ajustes → Enlaces de pago | Para vender |
 | 8 | `STRIPE_WEBHOOK_SECRET` | Registrar pedidos y reembolsos | Stripe → Developers → Webhooks → endpoint `https://tu-dominio/webhooks/stripe`, eventos `checkout.session.completed` y `charge.refunded` | Para vender |
 | 9 | `SMTP_*` | Enviar emails (respuestas, avisos a la lista de espera) | Tu proveedor de email transaccional | No |

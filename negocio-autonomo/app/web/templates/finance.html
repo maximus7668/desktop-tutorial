@@ -9,6 +9,10 @@
 {% for dk in ['real','estimate','simulation'] %}<tr><td><span class="badge {{ dk }}">{{ dk }}</span></td>
 <td class="num">{{ fin[dk].revenue_cents|eur }}</td><td class="num">{{ fin[dk].refunds_cents|eur }}</td><td class="num">{{ fin[dk].expenses_cents|eur }}</td><td class="num">{{ fin[dk].net_cents|eur }}</td></tr>{% endfor %}
 </table></div>
+<div class="card" style="margin-top:12px"><strong>Aportar capital</strong>
+  <form method="post" action="/finanzas/capital" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+  <input name="euros" type="number" min="1" step="0.01" placeholder="€" required style="width:110px"><input name="note" placeholder="nota (p. ej. aportación noviembre)" size="30"><button>Aportar</button></form>
+  <p class="small muted">Queda registrado en el libro como capital real. El {{ floor_pct }} % de lo aportado es suelo intocable.</p></div>
 <p class="small muted">Saldo: capital {{ fin.budget.capital_cents|eur }} · gastado {{ fin.budget.spent_cents|eur }} · reservado {{ fin.budget.reserved_cents|eur }} · disponible {{ fin.budget.available_cents|eur }}. Los ingresos no amplían el presupuesto automáticamente.</p>
 <h2>Solicitudes de gasto</h2>
 <div class="tablewrap"><table><tr><th>#</th><th>Agente</th><th>Categoría</th><th>Importe</th><th>Real</th><th>Estado</th><th>Autorizado por</th><th>Motivo</th><th>Descripción</th></tr>

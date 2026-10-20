@@ -331,7 +331,19 @@ def create_app(settings: Settings) -> FastAPI:
         f, t = _range(request)
         return page(request, "finance.html", sess, fin=finance.summary(conn, f, t), ledger=finance.ledger(conn, f, t),
                     spends=budget.list_requests(conn), orders=rows(conn, "SELECT * FROM orders ORDER BY id DESC"),
-                    llm=rows(conn, "SELECT * FROM llm_usage ORDER BY id DESC LIMIT 100"), desde=f or "", hasta=t or "")
+                    llm=rows(conn, "SELECT * FROM llm_usage ORDER BY id DESC LIMIT 100"), desde=f or "", hasta=t or "",
+                    floor_pct=settings_store.get(conn, "reserve_floor_pct"))
+
+    @app.post("/finanzas/capital")
+    def add_capital(request: Request, euros: str = Form(...), note: str = Form(""), csrf: str = Form(""),
+                    sess=Depends(session), conn=Depends(get_conn)):
+        check_csrf(sess, csrf)
+        try:
+            cents = round(float(euros.replace(",", ".")) * 100)
+            budget.add_capital(conn, human(sess["u"]), cents, clean(note, 300))
+        except ValueError as e:
+            return PlainTextResponse(f"No se pudo aportar: {e}", status_code=400)
+        return RedirectResponse("/finanzas", status_code=303)
 
     @app.get("/auditoria", response_class=HTMLResponse)
     def audit_page(request: Request, sess=Depends(session), conn=Depends(get_conn)):

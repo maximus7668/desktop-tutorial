@@ -25,10 +25,10 @@ def _alert(conn: sqlite3.Connection, level: str, msg: str) -> None:
 def watch(conn: sqlite3.Connection, actor: Actor) -> dict:
     bal = budget.balance(conn)
     out = {"balance": bal, "actions": []}
-    if bal["available_cents"] < 0 or bal["cash_balance_cents"] < bal["reserve_floor_cents"]:
+    if bal["available_cents"] < 0:
         settings_store.activate_kill_switch(conn, actor, "el gasto comprometido supera el presupuesto")
         out["actions"].append("parada de emergencia")
-    elif bal["cash_balance_cents"] < settings_store.get_int(conn, "low_balance_alert_cents"):
+    elif bal["capital_cents"] > 0 and bal["cash_balance_cents"] < settings_store.get_int(conn, "low_balance_alert_cents"):
         _alert(conn, "warning", f"Saldo bajo: {bal['cash_balance_cents'] / 100:.2f} €")
     ok, broken = audit.verify_chain(conn)
     if not ok:

@@ -26,6 +26,7 @@ def settings(tmp_path) -> Settings:
         owner_contact_email="titular@example.com",
         owner_tax_id="00000000T",
         owner_address="Calle Ficticia 1",
+        initial_capital_eur=500,
     )
 
 

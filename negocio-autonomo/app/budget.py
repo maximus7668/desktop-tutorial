@@ -4,7 +4,8 @@ Reglas:
 - Todo gasto se pide primero (reserva). La reserva cuenta contra el saldo desde ese momento.
 - La comprobación y la reserva ocurren dentro de BEGIN IMMEDIATE: dos agentes no pueden gastar a la vez
   por encima del límite.
-- Nunca se compromete por debajo del suelo de reserva (por defecto 100 € de los 500 €).
+- Nunca se compromete por debajo del suelo de reserva (por defecto el 20 % del capital aportado).
+- Con capital 0 € no se puede gastar nada: el sistema trabaja solo con herramientas gratuitas.
 - Un gasto solo se ejecuta si está 'approved'. Lo aprueba una persona o, para API, un sobre mensual
   que el propietario fijó de antemano. Un agente no puede aprobar su propio gasto.
 - Los ingresos NO amplían automáticamente el presupuesto: subir el capital es una decisión humana."""
@@ -38,9 +39,19 @@ def committed_cents(conn: sqlite3.Connection) -> int:
     return _sum(conn, f"status IN {_COMMITTED} OR status IN ('executed','failed')")
 
 
+def floor_cents(conn: sqlite3.Connection) -> int:
+    capital = settings_store.get_int(conn, "capital_cents")
+    return capital * settings_store.get_int(conn, "reserve_floor_pct") // 100
+
+
+def spendable_cents(conn: sqlite3.Connection) -> int:
+    """Lo máximo que se puede llegar a comprometer en total (nunca negativo)."""
+    return max(0, settings_store.get_int(conn, "capital_cents") - floor_cents(conn))
+
+
 def balance(conn: sqlite3.Connection) -> dict:
     capital = settings_store.get_int(conn, "capital_cents")
-    floor = settings_store.get_int(conn, "reserve_floor_cents")
+    floor = floor_cents(conn)
     spent = _sum(conn, "status IN ('executed','failed')")
     reserved = _sum(conn, f"status IN {_COMMITTED}")
     return {
@@ -48,7 +59,7 @@ def balance(conn: sqlite3.Connection) -> dict:
         "reserve_floor_cents": floor,
         "spent_cents": spent,
         "reserved_cents": reserved,
-        "available_cents": capital - floor - spent - reserved,
+        "available_cents": spendable_cents(conn) - spent - reserved,
         "cash_balance_cents": capital - spent,
     }
 
@@ -77,11 +88,11 @@ def request_spend(conn: sqlite3.Connection, actor: Actor, category: str, amount_
             raise BudgetError("parada de emergencia activa: no se aceptan gastos")
 
         reason = None
-        capital = settings_store.get_int(conn, "capital_cents")
-        floor = settings_store.get_int(conn, "reserve_floor_cents")
-        if amount_cents > settings_store.get_int(conn, "max_single_spend_cents"):
+        if spendable_cents(conn) == 0:
+            reason = "sin capital disponible: el sistema solo puede usar herramientas gratuitas"
+        elif amount_cents > settings_store.get_int(conn, "max_single_spend_cents"):
             reason = "supera el máximo por gasto"
-        elif committed_cents(conn) + amount_cents > capital - floor:
+        elif committed_cents(conn) + amount_cents > spendable_cents(conn):
             reason = "supera el presupuesto disponible (respetando el suelo de reserva)"
         elif _sum(conn, f"(status IN {_COMMITTED} OR status IN ('executed','failed')) AND created_at >= ?",
                   (_today(),)) + amount_cents > settings_store.get_int(conn, "max_daily_spend_cents"):
@@ -182,6 +193,21 @@ def execute(conn: sqlite3.Connection, actor: Actor, spend_id: int,
                          (now_iso(), "critical", f"Gasto {spend_id} superó lo autorizado: {actual} > {sr['amount_cents']} céntimos"))
         audit.log(conn, actor, "spend.executed", f"spend:{spend_id}", {"actual_cents": actual, "data_kind": data_kind})
     return one(conn, "SELECT * FROM spend_requests WHERE id=?", (spend_id,))
+
+
+def add_capital(conn: sqlite3.Connection, actor: Actor, amount_cents: int, note: str = "") -> dict:
+    """Aportación de dinero del propietario. Solo una persona; queda en el libro como 'capital' real."""
+    require_human(actor, "aportar capital")
+    if not isinstance(amount_cents, int) or amount_cents <= 0:
+        raise ValueError("importe no válido")
+    with transaction(conn):
+        new = settings_store.get_int(conn, "capital_cents") + amount_cents
+        settings_store._write(conn, "capital_cents", str(new), actor)
+        conn.execute("INSERT INTO ledger (ts, kind, amount_cents, data_kind, category, source, notes)"
+                     " VALUES (?,?,?,?,?,?,?)",
+                     (now_iso(), "capital", amount_cents, "real", "aportacion", actor.label, note[:300]))
+        audit.log(conn, actor, "capital.add", "", {"amount_cents": amount_cents, "new_capital_cents": new, "note": note})
+    return balance(conn)
 
 
 def cancel(conn: sqlite3.Connection, actor: Actor, spend_id: int) -> None:

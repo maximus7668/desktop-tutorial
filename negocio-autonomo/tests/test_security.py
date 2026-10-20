@@ -21,6 +21,8 @@ def test_agents_cannot_change_permissions_or_settings(conn):
         settings_store.set_value(conn, a, "capital_cents", "999999")
     with pytest.raises(PermissionDenied):
         settings_store.release_kill_switch(conn, a)
+    with pytest.raises(PermissionDenied):
+        budget.add_capital(conn, a, 100000)
     with pytest.raises(PermissionError):  # ni siquiera una persona puede tocarse a sí misma
         permissions.set_permission(conn, human("director"), "director", "ads", "spend", "allow")
 

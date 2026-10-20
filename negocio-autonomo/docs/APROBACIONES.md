@@ -9,7 +9,7 @@ Ningún modo de operación elimina estas aprobaciones. Las del bloque «dinero»
 - Activar cobros reales (`commerce_authorized=on`), solo con el checklist legal/fiscal completo.
 - Asignar el enlace de pago de un producto.
 - Reembolsos (`payments.refund`): se hacen en Stripe; el sistema solo registra el webhook.
-- Subir el capital o cambiar el suelo de reserva, el límite diario o el máximo por gasto.
+- Aportar capital (panel → Finanzas, o `add-capital`), cambiar el % de suelo, el límite diario o el máximo por gasto.
 
 ## Publicación y comunicación
 - Empezar un experimento (fija criterios de éxito y presupuesto, que después no se pueden cambiar).

@@ -13,8 +13,8 @@ DEFAULTS: dict[str, str] = {
     "kill_switch": "off",
     "queue_paused": "off",
     "commerce_authorized": "off",         # cobros reales: solo tras checklist legal/fiscal y decisión humana
-    "capital_cents": "50000",             # 500 € iniciales
-    "reserve_floor_cents": "10000",       # 100 € intocables: el sistema nunca gasta por debajo
+    "capital_cents": "0",                 # capital aportado; se aumenta con budget.add_capital (acción humana)
+    "reserve_floor_pct": "20",            # % del capital que nunca se gasta (con 500 € → 100 € intocables)
     "max_daily_spend_cents": "2000",
     "max_single_spend_cents": "5000",
     "api_envelope_month_cents": "0",      # gasto de API preautorizado al mes (lo fija el propietario)
@@ -61,6 +61,10 @@ def set_value(conn: sqlite3.Connection, actor: Actor, key: str, value: str) -> N
     require_human(actor, f"cambiar ajuste {key}")
     if key not in DEFAULTS:
         raise KeyError(key)
+    if key == "capital_cents":
+        raise ValueError("el capital se cambia con «Aportar capital» (queda en el libro contable)")
+    if key == "reserve_floor_pct" and not 0 <= int(value) <= 100:
+        raise ValueError("el suelo debe estar entre 0 y 100 %")
     if key == "mode" and value not in VALID_MODES:
         raise ValueError("modo no válido")
     if key == "commerce_authorized" and value == "on":
@@ -68,7 +72,7 @@ def set_value(conn: sqlite3.Connection, actor: Actor, key: str, value: str) -> N
         missing = missing_for(conn, "commerce")
         if missing:
             raise PermissionError("Faltan requisitos legales/fiscales: " + ", ".join(missing))
-    if key.endswith("_cents") or key.endswith("_limit") or key.endswith("_day"):
+    if key.endswith(("_cents", "_limit", "_day", "_pct")):
         if int(value) < 0:
             raise ValueError("valor negativo")
     old = get(conn, key)

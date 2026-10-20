@@ -13,7 +13,7 @@ contrata automáticamente.
 | Copia externa | 0 € | 0-2 €/mes | Almacenamiento con capa gratuita |
 | Email transaccional | 0 € | 0-10 €/mes | Muchos proveedores tienen capa gratuita |
 | Stripe | 0 € | 0 € | Sin cuota; solo comisión por venta |
-| **Total fijo** | **~1 €/mes** | **~6-15 €/mes** | |
+| **Total fijo** | **0 €/mes** (equipo propio + Cloudflare Tunnel, sin dominio propio) | **~6-15 €/mes** | |
 
 Además: posible cuota de autónomo y asesoría si el negocio factura (depende de tu situación: consúltalo).
 
@@ -28,9 +28,10 @@ Además: posible cuota de autónomo y asesoría si el negocio factura (depende d
 | Etsy (si se usa) | 0,20 $/anuncio + 6,5 % transacción + procesamiento + tarifa regulatoria (subió en junio 2026, según guías de terceros) | Pedido de 30 € ≈ 3,7 € en tarifas |
 | Anuncios | Lo que apruebes | Por defecto 0 €: los experimentos empiezan con tráfico orgánico |
 
-## Protección de los 500 €
+## Protección del capital
 
-- 100 € de suelo intocable: el sistema solo puede comprometer 400 €.
+- Se arranca con **0 €**: todo gasto se rechaza automáticamente hasta que aportes capital.
+- Suelo intocable del 20 % de lo aportado (con 300 € → 60 € intocables, 240 € comprometibles). Se cambia en Ajustes (`reserve_floor_pct`).
 - Máximo 20 € al día y 50 € por gasto (este segundo límite solo actúa si subes el diario); cambiables solo por ti.
 - Cada experimento tiene un tope (≤ 30 € o el 10 % de lo disponible) fijado antes de empezar.
 - Coste de la ejecución de prueba de este MVP: **0 €** (sin llamadas a APIs de pago).

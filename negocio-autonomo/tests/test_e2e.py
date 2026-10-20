@@ -15,6 +15,7 @@ from .fixtures import research_fixture
 
 
 def test_full_cycle(settings):
+    settings.initial_capital_eur = 0  # escenario real: se empieza sin dinero
     app = create_app(settings)
     conn = bootstrap(settings)
     auth.create_user(conn, "propietario", "una-contraseña-larga-de-prueba")
@@ -89,7 +90,12 @@ def test_full_cycle(settings):
 
     # 7. Panel, exportación y auditoría
     dash = c.get("/")
-    assert dash.status_code == 200 and "Capital inicial" in dash.text and "500,00 €" in dash.text
+    assert dash.status_code == 200 and "Capital aportado" in dash.text and "sin capital" in dash.text
+    # Mes siguiente: el propietario aporta 300 € desde el panel
+    assert c.post("/finanzas/capital", data={"euros": "300", "note": "aportación", "csrf": "malo"}).status_code == 403
+    c.post("/finanzas/capital", data={"euros": "300", "note": "aportación noviembre", "csrf": csrf})
+    dash = c.get("/")
+    assert "300,00 €" in dash.text and "240,00 €" in dash.text  # disponible = 300 € - 20 % de suelo
     for path in ("/oportunidades", "/experimentos", "/productos", "/finanzas", "/tareas", "/auditoria", "/memoria",
                  "/ajustes", "/consultas", "/legal/privacidad", "/legal/aviso-legal", "/healthz"):
         assert c.get(path).status_code == 200, path

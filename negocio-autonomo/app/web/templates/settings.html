@@ -10,10 +10,10 @@
     {% if vals.kill_switch == 'on' %}<input type="hidden" name="state" value="off"><button>Reanudar</button>{% else %}<input type="hidden" name="state" value="on"><button class="danger">Detener todo</button>{% endif %}</form></p>
   <p class="small muted">Modo 1: solo investigación. Modo 2: validación controlada (publicar, gastar y cobrar requieren aprobación). Modo 3: operación supervisada (manda la tabla de permisos; el dinero siempre requiere aprobación).</p>
   <div class="tablewrap"><table><tr><th>Ajuste</th><th>Valor</th><th>Cambiar</th></tr>
-  {% for k, v in vals.items() if k != 'kill_switch' %}<tr><td>{{ k }}</td><td>{% if k.endswith('_cents') %}{{ v|int|eur }}{% else %}{{ v }}{% endif %}</td>
+  {% for k, v in vals.items() if k not in ('kill_switch', 'capital_cents') %}<tr><td>{{ k }}</td><td>{% if k.endswith('_cents') %}{{ v|int|eur }}{% else %}{{ v }}{% endif %}</td>
   <td><form method="post" action="/ajustes/valor" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="key" value="{{ k }}"><input name="value" value="{{ v }}" size="10"><button class="ghost">Guardar</button></form></td></tr>{% endfor %}
   </table></div>
-  <p class="small muted">Los importes van en céntimos (50000 = 500 €). commerce_authorized=on solo se acepta con el checklist de cobros completo.</p>
+  <p class="small muted">Los importes van en céntimos (2000 = 20 €). El capital se aporta en Finanzas. commerce_authorized=on solo se acepta con el checklist de cobros completo.</p>
 </div>
 
 <h2>Cumplimiento legal y fiscal</h2>

@@ -7,6 +7,7 @@
   python -m app.cli worker                   arranca el trabajador (cola + programación)
   python -m app.cli run-once                 procesa una sola tarea
   python -m app.cli status                   resumen en texto
+  python -m app.cli add-capital EUROS [nota] aportar dinero (queda en el libro contable)
   python -m app.cli stop "motivo"            parada de emergencia
   python -m app.cli backup                   copia de seguridad ahora
   python -m app.cli restore FICHERO          restaura una copia (con el sistema parado)
@@ -83,6 +84,10 @@ def main(argv: list[str]) -> int:
         ttype, ag = args[0], args[1]
         payload = json.loads(args[2]) if len(args) > 2 else {}
         print(tasks.enqueue(conn, ttype, ag, payload, args[3] if len(args) > 3 else f"cli:{ttype}:{os.getpid()}"))
+    elif cmd == "add-capital":
+        euros = float(args[0].replace(",", "."))
+        bal = budget.add_capital(conn, human(getpass.getuser()), round(euros * 100), " ".join(args[1:]))
+        print(f"Capital: {bal['capital_cents'] / 100:.2f} € · disponible para gastar: {bal['available_cents'] / 100:.2f} €")
     elif cmd == "status":
         print(json.dumps({"mode": settings_store.get(conn, "mode"), "kill_switch": settings_store.get(conn, "kill_switch"),
                           "budget": budget.balance(conn), "tasks": tasks.stats(conn),
