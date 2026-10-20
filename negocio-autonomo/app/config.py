@@ -61,7 +61,7 @@ def load_dotenv_file(path: Path | None = None) -> None:
     path = path or BASE_DIR / ".env"
     if not path.is_file():
         return
-    for line in path.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8-sig").splitlines():  # -sig: tolera el BOM del Bloc de notas
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue

@@ -109,6 +109,7 @@ Se cambia en **Ajustes** (`mode`). Ningún modo desactiva los controles financie
 
 ## Documentación
 
+- [`docs/WINDOWS.md`](docs/WINDOWS.md): puesta en marcha en Windows paso a paso (0 €).
 - [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md): plan, decisiones técnicas, criterios de aceptación, esquema de datos.
 - [`docs/OPERACION.md`](docs/OPERACION.md): despliegue, copias de seguridad, monitorización, parada de emergencia, limitaciones conocidas.
 - [`docs/CREDENCIALES.md`](docs/CREDENCIALES.md): qué tienes que configurar tú y cómo.

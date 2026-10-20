@@ -168,3 +168,15 @@ def test_discover_drops_urls_not_returned_by_real_search(conn, settings, owner):
     assert "https://inventada.example.com/x" not in urls
     assert conn.execute("SELECT COUNT(*) c FROM evidence WHERE verified=1").fetchone()["c"] == 3
     assert conn.execute("SELECT data_kind FROM llm_usage").fetchone()["data_kind"] == "simulation"
+
+
+def test_dotenv_with_windows_bom_is_read(tmp_path, monkeypatch):
+    from app.config import load_dotenv_file
+
+    monkeypatch.delenv("PRUEBA_BOM", raising=False)
+    f = tmp_path / ".env"
+    f.write_bytes("﻿PRUEBA_BOM=ok\r\n# comentario\r\nOTRA=\"x\"\r\n".encode("utf-8"))
+    load_dotenv_file(f)
+    import os
+    assert os.environ["PRUEBA_BOM"] == "ok" and os.environ["OTRA"] == "x"
+    monkeypatch.delenv("PRUEBA_BOM"); monkeypatch.delenv("OTRA")
