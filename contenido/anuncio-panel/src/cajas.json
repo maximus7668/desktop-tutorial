@@ -1,0 +1,44 @@
+{
+ "resumen": {
+  "x": 16,
+  "y": 77,
+  "width": 358,
+  "height": 266
+ },
+ "citaDeika": {
+  "x": 16,
+  "y": 274,
+  "width": 358,
+  "height": 114
+ },
+ "filaLaura": {
+  "x": 17,
+  "y": 275,
+  "width": 356,
+  "height": 74
+ },
+ "detalle": {
+  "x": 17,
+  "y": 349,
+  "width": 356,
+  "height": 299.59375
+ },
+ "urgente": {
+  "x": 16,
+  "y": 360,
+  "width": 358,
+  "height": 344.40625
+ },
+ "editar": {
+  "x": 302.6875,
+  "y": 73,
+  "width": 71.3125,
+  "height": 37
+ },
+ "horarioEdit": {
+  "x": 16,
+  "y": 403,
+  "width": 358,
+  "height": 234.578125
+ }
+}
