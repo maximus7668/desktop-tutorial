@@ -100,6 +100,7 @@ DEFAULT_SCHEDULES = [
     ("informe-diario", "ops.report", "operaciones", 24 * 3600),
     ("copia-seguridad", "ops.backup", "operaciones", 24 * 3600),
     ("vigilancia-presupuesto", "ops.watch", "operaciones", 3600),
+    ("bandeja-investigacion", "research.inbox", "investigador", 3600),
 ]
 
 

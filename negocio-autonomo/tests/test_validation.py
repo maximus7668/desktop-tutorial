@@ -109,3 +109,32 @@ def test_failed_checks_can_be_rebuilt_after_fixing_owner_data(conn, owner, setti
     p2 = builder.build_for_experiment(conn, agent("constructor"), settings, eid)
     assert p2["id"] == p["id"] and p2["status"] == "tested"
     assert approvals.pending(conn)[0]["kind"] == "product.publish"
+
+
+def test_inbox_imports_new_files_once_and_skips_invalid(conn, tmp_path):
+    import json as _json
+
+    inbox = tmp_path / "entrada"
+    inbox.mkdir()
+    (inbox / "2026-10-20.json").write_text(_json.dumps(research_fixture("semanal-1")), encoding="utf-8")
+    (inbox / "roto.json").write_text("{no es json", encoding="utf-8")
+    bad = research_fixture("semanal-2")
+    bad["opportunities"][0]["evidence"][0]["url"] = "http://127.0.0.1/x"
+    bad["opportunities"][0]["title"] = "Otra idea distinta"
+    (inbox / "malo.json").write_text(_json.dumps(bad), encoding="utf-8")
+    r1 = researcher.import_inbox(conn, agent("investigador"), inbox)
+    assert [i["file"] for i in r1["imported"]] == ["2026-10-20.json"]
+    assert sorted(r1["invalid"]) == ["malo.json", "roto.json"]
+    r2 = researcher.import_inbox(conn, agent("investigador"), inbox)
+    assert r2["imported"] == [] and "2026-10-20.json" in r2["skipped"]
+    assert conn.execute("SELECT COUNT(*) c FROM opportunities").fetchone()["c"] == 2
+
+
+def test_real_research_files_in_repo_are_valid():
+    import json as _json
+    from pathlib import Path
+
+    files = sorted((Path(__file__).resolve().parent.parent / "investigaciones" / "entrada").glob("*.json"))
+    assert files
+    for f in files:
+        researcher.ResearchIn.model_validate(_json.loads(f.read_text(encoding="utf-8")))

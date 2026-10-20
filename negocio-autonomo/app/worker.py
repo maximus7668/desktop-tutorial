@@ -36,6 +36,10 @@ def _h_discover(conn, settings, provider, payload):
     return researcher.discover(conn, agent("investigador"), provider, settings, payload["topic"], payload["run_id"])
 
 
+def _h_inbox(conn, settings, provider, payload):
+    return researcher.import_inbox(conn, agent("investigador"))
+
+
 def _h_report(conn, settings, provider, payload):
     return {"path": str(operations.report(conn, agent("operaciones"), settings))}
 
@@ -60,6 +64,7 @@ HANDLERS: dict[str, Handler] = {
     "director.cycle": _h_director,
     "product.build": _h_build,
     "research.discover": _h_discover,
+    "research.inbox": _h_inbox,
     "ops.report": _h_report,
     "ops.backup": _h_backup,
     "ops.watch": _h_watch,

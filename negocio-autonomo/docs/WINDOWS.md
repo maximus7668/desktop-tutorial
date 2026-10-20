@@ -122,6 +122,14 @@ Ten en cuenta:
 - Apagar: cierra las ventanas. Al volver a abrir `iniciar-windows.bat`, continúa donde estaba.
 - Aportar dinero el mes que viene: **Finanzas → Aportar capital**.
 
+## Investigación semanal con tu cuenta de Claude
+
+Cada semana, una sesión programada de Claude Code (con tu suscripción, sin coste extra) investiga oportunidades
+nuevas siguiendo `investigaciones/INSTRUCCIONES.md` y sube un fichero a `investigaciones/entrada/` en GitHub.
+
+En tu PC: doble clic en **`actualizar-windows.bat`** (descarga lo nuevo). El trabajador lo importa solo en menos
+de una hora y el director lo evalúa en su siguiente ciclo. Lo verás en **Oportunidades**.
+
 ## Problemas frecuentes
 
 | Síntoma | Solución |

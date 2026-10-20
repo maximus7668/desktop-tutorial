@@ -513,6 +513,7 @@ def create_app(settings: Settings) -> FastAPI:
 _MANUAL_TASKS = {
     "director.cycle": "director",
     "research.discover": "investigador",
+    "research.inbox": "investigador",
     "ops.report": "operaciones",
     "ops.backup": "operaciones",
     "ops.watch": "operaciones",

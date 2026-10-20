@@ -3,6 +3,8 @@
   python -m app.cli init                     crea/migra la BD y datos base
   python -m app.cli create-admin USUARIO     crea o cambia la contraseña de un administrador (la pide por teclado)
   python -m app.cli import-research FICHERO  importa una investigación en JSON
+  python -m app.cli validate-research FICHERO comprueba un JSON de investigación sin importarlo
+  python -m app.cli import-inbox             importa lo nuevo de investigaciones/entrada/
   python -m app.cli evaluate                 evalúa oportunidades nuevas
   python -m app.cli worker                   arranca el trabajador (cola + programación)
   python -m app.cli run-once                 procesa una sola tarea
@@ -75,6 +77,20 @@ def main(argv: list[str]) -> int:
         with open(args[0], encoding="utf-8") as f:
             data = json.load(f)
         print(json.dumps(researcher.import_research(conn, agent("investigador"), data), ensure_ascii=False, indent=2))
+    elif cmd == "validate-research":
+        # Comprueba un JSON de investigación sin tocar la BD (lo usa la sesión programada antes de subirlo).
+        from pydantic import ValidationError
+        with open(args[0], encoding="utf-8-sig") as f:
+            data = json.load(f)
+        try:
+            r = researcher.ResearchIn.model_validate(data)
+        except ValidationError as e:
+            print(f"NO VÁLIDO:\n{e}")
+            return 2
+        print(f"Válido: run_id={r.run_id}, {len(r.opportunities)} oportunidades, "
+              f"{sum(len(o.evidence) for o in r.opportunities)} evidencias")
+    elif cmd == "import-inbox":
+        print(json.dumps(researcher.import_inbox(conn, agent("investigador")), ensure_ascii=False, indent=2))
     elif cmd == "evaluate":
         for r in evaluator.evaluate_all_new(conn, agent("evaluador")):
             print(f"#{r['id']}: {r['score']}  {r['notes']}")

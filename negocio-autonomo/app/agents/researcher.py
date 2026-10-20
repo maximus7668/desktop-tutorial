@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+from pathlib import Path
 from datetime import datetime, timezone
 from typing import Literal
 
@@ -162,4 +163,35 @@ def discover(conn: sqlite3.Connection, actor: Actor, provider: LLMProvider, sett
         raise
     out["dropped_unverified_evidence"] = dropped
     out["data_kind"] = res.data_kind
+    return out
+
+
+INBOX = Path(__file__).resolve().parent.parent.parent / "investigaciones" / "entrada"
+
+
+def import_inbox(conn: sqlite3.Connection, actor: Actor, inbox: Path | None = None) -> dict:
+    """Importa los JSON nuevos de investigaciones/entrada/ (los deja ahí una sesión de Claude Code
+    programada). Cada run_id se importa una sola vez; un fichero inválido se salta y queda en auditoría."""
+    inbox = inbox or INBOX
+    done = {r["research_run"] for r in conn.execute("SELECT DISTINCT research_run FROM opportunities")}
+    done |= {r["ref"] for r in conn.execute("SELECT ref FROM memory WHERE kind='research'")}
+    out: dict = {"imported": [], "skipped": [], "invalid": []}
+    for f in sorted(inbox.glob("*.json")) if inbox.is_dir() else []:
+        try:
+            data = json.loads(f.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError) as e:
+            out["invalid"].append(f.name)
+            audit.log(conn, actor, "research.invalid_file", f.name, {"error": str(e)[:300]})
+            continue
+        if data.get("run_id") in done:
+            out["skipped"].append(f.name)
+            continue
+        try:
+            r = import_research(conn, actor, data)
+        except ValidationError as e:
+            out["invalid"].append(f.name)
+            audit.log(conn, actor, "research.invalid_file", f.name, {"error": str(e)[:500]})
+            continue
+        done.add(data["run_id"])
+        out["imported"].append({"file": f.name, **r})
     return out

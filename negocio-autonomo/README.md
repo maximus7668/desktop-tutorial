@@ -51,7 +51,7 @@ python -m app.cli worker
 ### Comprobar que funciona
 
 ```bash
-python -m pytest -q                                   # 54 pruebas, ~4 s
+python -m pytest -q                                   # 56 pruebas, ~4 s
 python examples/demo_validacion.py                    # ciclo completo en data/demo.db → docs/ejemplo-validacion.md
 python -m app.cli import-research examples/investigacion_2026-10-20.json
 python -m app.cli evaluate                            # puntuaciones
@@ -76,6 +76,15 @@ Levanta `web` (panel + páginas públicas + webhook) y `worker` sobre el mismo v
 El puerto solo escucha en 127.0.0.1: publícalo detrás de un proxy con HTTPS (Caddy, Nginx, Cloudflare Tunnel).
 **Nota:** el Dockerfile y el compose no se han podido probar en el entorno donde se desarrolló (no había
 demonio de Docker); sí se ha probado todo lo demás directamente con Python.
+
+## Investigación con tu cuenta de Claude (0 €)
+
+El sistema no usa la suscripción de claude.ai directamente (no da una clave de API, y usar sus credenciales
+en otro programa no está permitido). En su lugar, una **sesión de Claude Code programada** hace de investigador:
+cada semana sigue [`investigaciones/INSTRUCCIONES.md`](investigaciones/INSTRUCCIONES.md), valida el JSON con
+`python -m app.cli validate-research` y lo sube a `investigaciones/entrada/`. El trabajador importa esa carpeta
+cada hora (`research.inbox`); en Windows basta con `actualizar-windows.bat`. Cuando haya capital, la
+investigación también puede ir por la API (`LLM_PROVIDER=anthropic`).
 
 ## Agente de contenido (difusión)
 

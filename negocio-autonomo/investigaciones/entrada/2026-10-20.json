@@ -1,0 +1,227 @@
+{
+  "run_id": "real-2026-10-20",
+  "method": "Búsqueda web manual (sesión de Claude Code, 20/10/2026) con 7 consultas. Los extractos resumen lo que mostraban los resultados de búsqueda; no se han leído todas las páginas completas, por eso la fiabilidad máxima es 'medium' salvo datos oficiales. Las 'estimates' son juicio del investigador (data_kind=estimate), no mediciones.",
+  "opportunities": [
+    {
+      "title": "Plantillas de presupuesto para pequeñas empresas de reformas",
+      "description": "Las empresas de reformas hacen presupuestos a mano o con plantillas genéricas. Un kit en hoja de cálculo con partidas, mano de obra, materiales, IVA y margen podría ahorrar tiempo. Hay muchas plantillas gratuitas de proveedores de software que las usan para captar clientes, lo que limita el precio.",
+      "segment": "Empresas de reformas y autónomos de la construcción en España",
+      "product_idea": "Kit de plantillas de presupuesto de reformas (Excel/Google Sheets) con cálculo de margen e IVA",
+      "price_hint_eur": 12,
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 2,
+        "competition_intensity": 4,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 21,
+        "legal_risk": 1,
+        "fit": 3
+      },
+      "evidence": [
+        {
+          "url": "https://getquipu.com/blog/plantillas-de-presupuesto-para-reforma/",
+          "title": "Plantillas de presupuesto para reforma en formato Excel/PDF/Word [Descarga GRATIS]",
+          "publisher": "Quipu",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Ofrece tres plantillas gratuitas de presupuesto para reforma (Excel, Word, PDF) a cambio del email: competencia gratuita de un proveedor de software.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.stelorder.com/plantillas/presupuesto-obras-reformas",
+          "title": "Plantilla de presupuesto de obras y reformas",
+          "publisher": "STEL Order",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Plantilla gratuita en Excel, Word y PDF; el propio proveedor advierte de que una plantilla puede no ajustarse a las necesidades del negocio.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://hotmart.com/es/marketplace/productos/nivelkit-template-presupuesto-vivienda-latam/X106732054F",
+          "title": "Nivelkit Template presupuesto vivienda LATAM",
+          "publisher": "Hotmart",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Existe una plantilla de pago de presupuesto de vivienda (precios unitarios, costes directos, impuestos y precio de venta), orientada a Latinoamérica: alguien intenta cobrar por este tipo de producto.",
+          "kind": "price",
+          "reliability": "low"
+        },
+        {
+          "url": "https://www.bolsamania.com/noticias/mercados/economiaparo--uatae-destaca-afiliacion-practicamente-intacta-de-los-autonomos-en-julio-pese-a-perder-103-afiliados--23181463.html",
+          "title": "Uatae destaca afiliación prácticamente intacta de los autónomos en julio",
+          "publisher": "Bolsamanía / Europa Press",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "El RETA contaba con unos 3,47 millones de afiliados en julio de 2026 (+1,7 % interanual): tamaño del mercado general de autónomos, no del nicho de reformas.",
+          "kind": "demand",
+          "reliability": "medium"
+        }
+      ],
+      "benefits": [
+        "Presupuestos de reforma más rápidos, con partidas de materiales y mano de obra ya preparadas.",
+        "Calcula IVA y margen automáticamente.",
+        "Funciona en Excel y Google Sheets.",
+        "Descarga inmediata, editable con tu logo."
+      ]
+    },
+    {
+      "title": "Pack de instrucciones de IA en español para pequeños negocios",
+      "description": "El uso de IA en empresas españolas crece rápido, pero muchos pequeños negocios no saben qué pedirle. Un pack de instrucciones por sector (peluquería, taller, clínica) con ejemplos de uso real. Hay mucha oferta barata y genérica, en gran parte en inglés.",
+      "segment": "Pequeños negocios locales en España",
+      "product_idea": "Guía de 40 instrucciones de IA por sector con ejemplos de uso, en español",
+      "price_hint_eur": 15,
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 2,
+        "competition_intensity": 4,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 21,
+        "legal_risk": 1,
+        "fit": 4
+      },
+      "evidence": [
+        {
+          "url": "https://www.bolsamania.com/noticias/empresas/economia--el-211-de-empresas-en-espana-de-10-o-mas-empleados-uso-la-ia-en-el-primer-trimestre-del-ano-segun-el-ine--21080387.html",
+          "title": "El 21,1% de empresas en España de 10 o más empleados usó la IA en el primer trimestre, según el INE",
+          "publisher": "Bolsamanía / Europa Press (dato INE)",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Según el INE, el 21,1 % de las empresas de 10 o más empleados usó IA en el primer trimestre de 2025, 8,7 puntos más que en 2024. No mide a microempresas.",
+          "kind": "demand",
+          "reliability": "high"
+        },
+        {
+          "url": "https://menteprompt.gumroad.com/l/15kprompts",
+          "title": "Pack de 15.000 prompts para empresas",
+          "publisher": "Gumroad",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Pack en español de 15.000 instrucciones para empresas, marketing y contenidos a 19,99 €: referencia de precio y de competencia directa.",
+          "kind": "price",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.lilachbullock.com/ai-prompt-packs-worth-buying/",
+          "title": "AI prompt packs worth buying",
+          "publisher": "Lilach Bullock",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Reseña que advierte que muchos packs recopilan instrucciones gratuitas de Reddit, Twitter o blogs; el valor está en el contexto del negocio, no en el pack genérico.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://ecosistemastartup.com/?p=108334",
+          "title": "El 45,8% de las pymes frena la adopción de IA en España",
+          "publisher": "Ecosistema Startup",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Titular según el resultado de búsqueda: casi la mitad de las pymes frena la adopción de IA. Posible dolor (no saben cómo empezar), sin verificar el estudio de origen.",
+          "kind": "pain",
+          "reliability": "low"
+        }
+      ],
+      "benefits": [
+        "Ejemplos de instrucciones listos para copiar, pensados para tu tipo de negocio.",
+        "Secciones por sector: peluquería, taller, clínica y comercio.",
+        "Cada instrucción incluye un ejemplo de uso y qué revisar antes de usar el resultado.",
+        "En español y sin tecnicismos."
+      ]
+    },
+    {
+      "title": "Plantilla de hoja de cálculo para gestionar citas de peluquerías",
+      "description": "Plantilla para registrar citas y clientes en una peluquería pequeña. La evidencia muestra que hay aplicaciones gratuitas especializadas y que los propios proveedores desaconsejan Excel para citas, lo que debilita mucho la idea.",
+      "segment": "Peluquerías y centros de estética pequeños",
+      "product_idea": "Plantilla de agenda y fichas de clientes para peluquería",
+      "price_hint_eur": 9,
+      "estimates": {
+        "demand": 2,
+        "willingness_to_pay": 1,
+        "competition_intensity": 5,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 30,
+        "legal_risk": 2,
+        "fit": 3
+      },
+      "evidence": [
+        {
+          "url": "https://biz.booksy.com/es-es/blog/por-que-no-debes-utilizar-un-excel-para-peluquerias-y-salones-de-belleza-para-gestionar-las-citas",
+          "title": "Por qué no debes utilizar un Excel para peluquerías para gestionar las citas",
+          "publisher": "Booksy",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Un proveedor de software desaconseja Excel para citas (solo accesible desde un ordenador, sin copias automáticas). Booksy Biz parte de 29,99 $/mes.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.zenoti.com/es/thecheckin/best-hair-salon-scheduling-apps-2026",
+          "title": "Las mejores aplicaciones de gestión de citas para peluquerías en 2026",
+          "publisher": "Zenoti",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Comparativa de 9 aplicaciones de citas para peluquerías; según el resumen de búsqueda, Fresha y Square Appointments ofrecen planes gratuitos.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.jotform.com/es/table-templates/calendario-de-citas-para-salon-estetico",
+          "title": "Calendario de citas para salón estético",
+          "publisher": "Jotform",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Plantilla gratuita en línea para gestionar citas de salón estético.",
+          "kind": "competition",
+          "reliability": "medium"
+        }
+      ],
+      "benefits": [
+        "Agenda semanal y fichas de clientes en una sola hoja.",
+        "Funciona sin conexión.",
+        "Editable y sin cuotas mensuales."
+      ]
+    },
+    {
+      "title": "Kit para explicar Verifactu a los clientes de una gestoría",
+      "description": "Verifactu se ha aplazado y obliga a los autónomos a partir del 1 de julio de 2027. Las gestorías necesitan explicar el cambio a cientos de clientes. Un kit con email, guía de una página y lista de comprobación personalizable por la gestoría. Contenido con riesgo: debe revisarlo un asesor y actualizarse si cambia la norma.",
+      "segment": "Gestorías y asesorías pequeñas en España",
+      "product_idea": "Kit de comunicación Verifactu para gestorías: emails, guía de una página y lista de comprobación editables",
+      "price_hint_eur": 29,
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 3,
+        "competition_intensity": 3,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 30,
+        "legal_risk": 3,
+        "fit": 3
+      },
+      "evidence": [
+        {
+          "url": "https://getquipu.com/blog/verifactu-se-retrasa/",
+          "title": "VeriFactu se retrasa a 2027: nuevo calendario para autónomos, pymes y asesorías",
+          "publisher": "Quipu",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "El Real Decreto-ley 15/2025 aplaza Verifactu: sociedades desde el 1/1/2027 y resto de obligados (muchos autónomos) desde el 1/7/2027. Hay que contrastarlo con el BOE.",
+          "kind": "regulation",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://copilotgestoria.com/blog/verifactu-aplazado-2027-fechas-oficiales-comunicar-clientes-gestorias",
+          "title": "VeriFactu aplazado a 2027: fechas oficiales y plantilla de email",
+          "publisher": "Copilot Gestoría",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Ya se ofrece gratis una plantilla de email para que las gestorías comuniquen el aplazamiento a sus clientes: señal de necesidad y, a la vez, de competencia gratuita.",
+          "kind": "pain",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.genbeta.com/actualidad/gobierno-retrasa-pesadilla-para-empresas-autonomos-verifactu-no-sera-obligatorio-2027/amp",
+          "title": "El Gobierno retrasa la pesadilla para empresas y autónomos: Verifactu no será obligatorio hasta 2027",
+          "publisher": "Genbeta",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "La prensa general presenta Verifactu como una 'pesadilla' para empresas y autónomos: tema con atención y confusión.",
+          "kind": "demand",
+          "reliability": "medium"
+        }
+      ],
+      "benefits": [
+        "Email listo para enviar a tus clientes explicando las fechas de Verifactu.",
+        "Guía de una página en lenguaje claro, editable con tu marca.",
+        "Lista de comprobación para cada cliente.",
+        "Actualización gratuita si cambia el calendario oficial."
+      ]
+    }
+  ]
+}
