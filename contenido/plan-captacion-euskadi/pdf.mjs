@@ -1,0 +1,11 @@
+import { createRequire } from 'node:module';
+const require = createRequire('/home/user/Deika-panel/package.json') // Playwright del repo Deika-panel (npm ci);
+const { chromium } = require('playwright');
+const dir = process.argv[2];
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+const page = await browser.newPage();
+await page.goto(`file://${dir}/plan.html`);
+await page.evaluate(() => document.fonts.ready);
+await page.pdf({ path: `${dir}/DEIKA-plan-captacion-Euskadi.pdf`, preferCSSPageSize: true, printBackground: true });
+await browser.close();
+console.log('ok');

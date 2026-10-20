@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DEIKA · Plan de captación en Euskadi</title>
+<style>
+  @font-face { font-family: Manrope; font-weight: 500; src: url(manrope-latin-500-normal.woff2); }
+  @font-face { font-family: Manrope; font-weight: 600; src: url(manrope-latin-600-normal.woff2); }
+  @font-face { font-family: Manrope; font-weight: 700; src: url(manrope-latin-700-normal.woff2); }
+  @font-face { font-family: Manrope; font-weight: 800; src: url(manrope-latin-800-normal.woff2); }
+
+  :root { --azul: #3B5BDB; --azul-suave: #EDF1FF; --tinta: #12162B; --tinta-2: #4A5068; --tinta-3: #7A8099; --borde: #E2E5EF; --fondo: #F6F7FB; --ambar: #FFF6DD; --ambar-borde: #F2D27A; --ambar-texto: #6E5200; --verde: #E8F7EE; --verde-texto: #1E6B3E; }
+
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm;
+    @bottom-left { content: "DEIKA · Plan de captación en Euskadi"; font-family: Manrope; font-size: 8pt; color: #7A8099; }
+    @bottom-right { content: counter(page); font-family: Manrope; font-size: 8pt; color: #7A8099; } }
+  @page portada { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: Manrope, sans-serif; font-weight: 500; font-size: 10pt; line-height: 1.5; color: var(--tinta); }
+  p { margin: 0 0 7pt; }
+  b, strong { font-weight: 700; }
+  h1, h2, h3 { margin: 0; line-height: 1.15; }
+  h2 { font-size: 17pt; font-weight: 800; letter-spacing: -0.3pt; margin: 0 0 4pt; display: flex; align-items: center; gap: 9pt; }
+  h2 .n { display: inline-flex; align-items: center; justify-content: center; width: 22pt; height: 22pt; border-radius: 7pt; background: var(--azul); color: #fff; font-size: 11pt; flex: none; }
+  h3 { font-size: 11pt; font-weight: 800; margin: 11pt 0 4pt; }
+  .entradilla { color: var(--tinta-2); font-size: 10.5pt; margin-bottom: 10pt; }
+  ul, ol { margin: 0 0 8pt; padding-left: 15pt; }
+  li { margin-bottom: 2.5pt; }
+  li::marker { color: var(--azul); font-weight: 700; }
+  a { color: var(--azul); text-decoration: none; }
+  .seccion { break-before: page; }
+  .junto { break-inside: avoid; }
+
+  /* Portada */
+  .portada { page: portada; height: 297mm; background: var(--tinta); color: #fff; position: relative; overflow: hidden; padding: 30mm 22mm; display: flex; flex-direction: column; }
+  .portada::before { content: ""; position: absolute; width: 170mm; height: 170mm; border-radius: 50%; right: -60mm; top: -50mm; background: radial-gradient(circle, rgba(59,91,219,0.55), rgba(59,91,219,0) 70%); }
+  .portada::after { content: ""; position: absolute; width: 140mm; height: 140mm; border-radius: 50%; left: -50mm; bottom: -40mm; background: radial-gradient(circle, rgba(59,91,219,0.35), rgba(59,91,219,0) 70%); }
+  .portada > * { position: relative; z-index: 1; }
+  .marca { display: flex; align-items: center; gap: 10pt; font-size: 20pt; font-weight: 800; letter-spacing: 1pt; }
+  .marca img { width: 30pt; }
+  .portada .etiqueta { margin-top: 60mm; font-size: 10pt; font-weight: 700; letter-spacing: 2pt; text-transform: uppercase; color: #9DB0FF; }
+  .portada h1 { font-size: 40pt; font-weight: 800; letter-spacing: -1pt; line-height: 1.05; margin-top: 8pt; }
+  .portada h1 span { color: #9DB0FF; }
+  .portada .sub { font-size: 14pt; color: #C9D2F5; margin-top: 14pt; max-width: 135mm; line-height: 1.4; }
+  .portada .pie { margin-top: auto; display: flex; justify-content: space-between; font-size: 9.5pt; color: #C9D2F5; border-top: 1px solid rgba(255,255,255,0.18); padding-top: 10pt; }
+
+  /* Bloques */
+  .caja { border: 1px solid var(--borde); border-radius: 10pt; padding: 10pt 12pt; margin: 8pt 0 10pt; background: #fff; break-inside: avoid; }
+  .caja.azul { background: var(--azul-suave); border-color: #D3DCFF; }
+  .caja.ojo { background: var(--ambar); border-color: var(--ambar-borde); }
+  .caja.ojo .t { color: var(--ambar-texto); }
+  .caja.decide { background: var(--verde); border-color: #BFE6CC; }
+  .caja.decide .t { color: var(--verde-texto); }
+  .caja .t { font-weight: 800; font-size: 9pt; letter-spacing: 0.8pt; text-transform: uppercase; color: var(--azul); margin-bottom: 4pt; display: block; }
+  .caja p:last-child, .caja ul:last-child { margin-bottom: 0; }
+  .cita { border-left: 3pt solid var(--azul); background: var(--fondo); padding: 8pt 11pt; border-radius: 0 8pt 8pt 0; margin: 6pt 0 10pt; font-size: 9.6pt; break-inside: avoid; }
+  .cita p { margin-bottom: 5pt; }
+  .cita p:last-child { margin-bottom: 0; }
+  .fichas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7pt; margin: 6pt 0 12pt; }
+  .ficha { background: var(--fondo); border-radius: 8pt; padding: 7pt 9pt; }
+  .ficha small { display: block; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.8pt; text-transform: uppercase; color: var(--tinta-3); }
+  .ficha b { font-size: 10pt; }
+
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 9pt; break-inside: auto; }
+  th { text-align: left; font-weight: 800; font-size: 8pt; letter-spacing: 0.6pt; text-transform: uppercase; color: var(--tinta-3); border-bottom: 1.5px solid var(--tinta); padding: 5pt 6pt; }
+  td { border-bottom: 1px solid var(--borde); padding: 4.5pt 6pt; vertical-align: top; }
+  tr { break-inside: avoid; }
+  td.c { white-space: nowrap; }
+  .punto { display: inline-block; width: 7pt; height: 7pt; border-radius: 50%; margin-right: 2pt; background: var(--azul); }
+  .punto.vacio { background: var(--borde); }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 12pt; }
+  .pequeno { font-size: 8.5pt; color: var(--tinta-2); }
+  .fuentes li { font-size: 7.8pt; margin-bottom: 1pt; color: var(--tinta-2); word-break: break-all; }
+</style>
+</head>
+<body>
+
+<!-- Portada -->
+<section class="portada">
+  <div class="marca"><img src="marca.png" alt=""> DEIKA</div>
+  <div class="etiqueta">Plan de captación · Euskadi</div>
+  <h1>Clientes sin ir<br>de <span>puerta en puerta</span>.</h1>
+  <p class="sub">Que vengan ellos, o que te los presente alguien en quien ya confían. Seis palancas, en qué orden activarlas y qué decir en cada una.</p>
+  <div class="pie"><span>Álava · Bizkaia · Gipuzkoa</span><span>20 de octubre de 2026</span></div>
+</section>
+
+<!-- Resumen -->
+<section>
+  <h2>La idea en una página</h2>
+  <p class="entradilla">Ir negocio por negocio funciona, pero no escala: una mañana da para 8–10 visitas. Mandar mensajes o emails en frío escala, pero en España es arriesgado. Este plan cambia el sentido: <b>el negocio te pide información</b> (y así ya puedes llamarle) o <b>te lo presenta alguien de confianza</b>.</p>
+
+  <table>
+    <tr><th style="width:30%">Palanca</th><th>Qué es</th><th class="c">Coste</th><th class="c">Rapidez</th><th class="c">Tu tiempo</th></tr>
+    <tr><td><b>1. Anuncios en Instagram y Facebook</b></td><td>Reels que ya tienes, solo en Euskadi, con formulario dentro del anuncio.</td><td class="c">5–10 €/día</td><td class="c">Días</td><td class="c">Bajo</td></tr>
+    <tr><td><b>2. Google</b></td><td>Ficha de DEIKA en Google Maps y anuncios en búsquedas de quien ya busca solución.</td><td class="c">0–5 €/día</td><td class="c">Semanas</td><td class="c">Bajo</td></tr>
+    <tr><td><b>3. Socios</b></td><td>Gestorías, proveedores del sector, asociaciones de comercio y Cámaras.</td><td class="c">Comisión</td><td class="c">1–2 meses</td><td class="c">Medio</td></tr>
+    <tr><td><b>4. Referidos</b></td><td>Cada cliente contento trae a otro negocio.</td><td class="c">Un mes gratis</td><td class="c">Con clientes</td><td class="c">Bajo</td></tr>
+    <tr><td><b>5. Demo que se prueba sola</b></td><td>Número público para hablar con la recepcionista y botón «te llamamos ahora».</td><td class="c">Minutos</td><td class="c">Al tener número</td><td class="c">Bajo</td></tr>
+    <tr><td><b>6. Páginas por sector y ciudad</b></td><td>«Recepcionista para peluquerías en Bilbao», etc. Tráfico de Google gratis.</td><td class="c">0 €</td><td class="c">Meses</td><td class="c">Medio</td></tr>
+  </table>
+
+  <div class="caja azul junto">
+    <span class="t">Orden recomendado</span>
+    <ul>
+      <li><b>Semanas 1–2:</b> anuncios (1), ficha de Google (2) y primeras llamadas a gestorías (3).</li>
+      <li><b>Semanas 3–4:</b> revisar números, Google Ads (2), contactar 3 asociaciones o Cámaras (3).</li>
+      <li><b>Mes 2–3:</b> primera charla, programa de referidos (4), número de demo (5) y páginas por sector (6). Subir presupuesto solo en lo que dé clientes.</li>
+    </ul>
+  </div>
+
+  <div class="caja ojo junto">
+    <span class="t">Lo que no hacemos, y por qué</span>
+    <ul>
+      <li><b>Mensajes directos o emails en frío ofreciendo DEIKA.</b> Es publicidad por medios electrónicos sin permiso: la LSSI (art. 21) lo prohíbe salvo consentimiento, y el 9/10 decidiste «email y WhatsApp solo con permiso». Instagram además restringe las cuentas que lo hacen. Pendiente de confirmar con tu gestor.</li>
+      <li><b>Llamadas en frío con la voz de IA</b> y <b>bases de datos compradas</b>.</li>
+      <li><b>Prometer euskera:</b> la recepcionista habla castellano (decisión del 10/10). Los anuncios pueden ir en las dos lenguas, pero sin prometerlo.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 1. Anuncios -->
+<section class="seccion">
+  <h2><span class="n">1</span> Anuncios en Instagram y Facebook</h2>
+  <p class="entradilla">Lo más rápido para tener contactos esta misma semana. El anuncio lleva un formulario: quien lo rellena te da permiso para llamarle.</p>
+  <div class="fichas">
+    <div class="ficha"><small>Presupuesto de prueba</small><b>5–10 €/día · 14 días</b></div>
+    <div class="ficha"><small>Dónde</small><b>Álava, Bizkaia, Gipuzkoa</b></div>
+    <div class="ficha"><small>Objetivo en Meta</small><b>Clientes potenciales</b></div>
+  </div>
+
+  <h3>Cómo montarlo</h3>
+  <ol>
+    <li><b>Campaña</b> de «Clientes potenciales» con <b>formulario instantáneo</b>, desde la cuenta de @deika.eu en Meta Business Suite.</li>
+    <li><b>Público:</b> las tres provincias, mayores de 25. Deja que Meta amplíe el público y añade como pista intereses de pequeña empresa, emprendedores y los sectores (peluquería, estética, talleres, clínica dental).</li>
+    <li><b>Anuncios:</b> los dos reels («Tu teléfono, siempre atendido» y el del panel) y el carrusel «¿Se nota que es una IA?». Que Meta reparta el presupuesto y a los 7 días quédate con el que traiga contactos más baratos.</li>
+    <li><b>Formulario corto:</b> nombre, teléfono, tipo de negocio y municipio. Una pregunta que filtra: «¿Cuántas llamadas no puedes coger a la semana?». Casilla de permiso con enlace a la política de privacidad de deika.eu.</li>
+    <li><b>Que lleguen al panel:</b> conectar el formulario de Meta con los leads del panel para que salgan en Administración como los de la web. Mientras tanto, descargarlos cada día desde Meta Business Suite.</li>
+    <li><b>Llamar rápido:</b> el mismo día, mejor en la primera hora. El contacto se enfría enseguida. Si no contesta, otra llamada al día siguiente y un SMS (aquí sí, porque lo ha pedido).</li>
+  </ol>
+
+  <h3>Textos del anuncio</h3>
+  <div class="dos">
+    <div class="cita"><p><b>A · El dolor</b></p><p>¿Cuántas llamadas se te escapan mientras trabajas? Cada una es un cliente que llama al siguiente de la lista.</p><p>DEIKA contesta por ti, da la cita en tu agenda y te avisa al móvil. Con tu mismo número. Desde 29 €/mes, sin permanencia.</p><p>👉 Déjanos tu teléfono y la pruebas con los datos de tu negocio.</p></div>
+    <div class="cita"><p><b>B · La garantía</b></p><p>Tu teléfono, siempre atendido. Una recepcionista con IA para tu peluquería, taller o clínica, aquí en Euskadi.</p><p>Te la dejamos montada nosotros. Si el primer mes no te convence, te devolvemos la cuota.</p><p>👉 Pide que te la enseñemos en 5 minutos.</p></div>
+  </div>
+
+  <div class="caja decide junto">
+    <span class="t">Cómo saber si funciona</span>
+    <p>Apunta por semana: contactos, coste por contacto, cuántos cogen el teléfono, cuántos prueban la demo y cuántos se dan de alta. <b>Regla para subir el presupuesto:</b> mientras conseguir un cliente cueste menos de lo que paga en tres meses (por ejemplo, menos de 117 € en el plan Básico), sube un 20–30 % por semana. Si a los 14 días no hay ni una demo, cambia el anuncio antes que el presupuesto.</p>
+  </div>
+</section>
+
+<!-- 2. Google -->
+<section class="seccion">
+  <h2><span class="n">2</span> Google: estar donde ya buscan</h2>
+  <p class="entradilla">Quien busca «centralita virtual» o «secretaria telefónica» ya tiene el problema y busca solución. Son los contactos que mejor convierten.</p>
+
+  <h3>Ficha de empresa en Google (gratis)</h3>
+  <ul>
+    <li>Crear la ficha de DEIKA en Vitoria-Gasteiz con zona de servicio Álava, Bizkaia y Gipuzkoa. Categoría: la más cercana a atención telefónica.</li>
+    <li>Fotos del panel y de los reels, horario y enlace a deika.eu.</li>
+    <li><b>Reseñas:</b> pedírsela a cada cliente al mes de usarla. Es lo que más pesa para salir arriba en Maps.</li>
+    <li>Una publicación cada semana en la ficha (la misma de Instagram).</li>
+  </ul>
+
+  <h3>Google Ads en búsquedas (cuando la ficha esté lista)</h3>
+  <table>
+    <tr><th>Grupo</th><th>Búsquedas de ejemplo</th></tr>
+    <tr><td><b>Lo que ya conocen</b></td><td>centralita virtual Bilbao · secretaria telefónica Vitoria · servicio de contestador para empresas · atención telefónica externa</td></tr>
+    <tr><td><b>El problema</b></td><td>no puedo coger el teléfono en el trabajo · perder llamadas de clientes · contestar llamadas peluquería</td></tr>
+    <tr><td><b>La solución nueva</b></td><td>recepcionista virtual con inteligencia artificial · asistente de voz para negocios</td></tr>
+    <tr><td><b>Palabras negativas</b></td><td>gratis · empleo · trabajo de recepcionista · curso · plantilla</td></tr>
+  </table>
+  <p>Empieza con <b>5 €/día</b>, solo en las tres provincias, enviando a deika.eu (formulario y calculadora de llamadas perdidas). Misma regla de presupuesto que los anuncios de Instagram.</p>
+</section>
+
+<!-- 3. Socios -->
+<section class="seccion">
+  <h2><span class="n">3</span> Socios que ya tienen la confianza</h2>
+  <p class="entradilla">Un socio que ve a 200 negocios al año te ahorra 200 visitas. Aquí sí hay reuniones, pero cada una vale por muchas puertas. El primer contacto, por teléfono o en persona (no por email en frío).</p>
+
+  <h3>3.1 · Gestorías y asesorías</h3>
+  <p>Llevan los papeles de cientos de autónomos y pequeños negocios y su recomendación pesa. Lista de las de Vitoria, Bilbao y Donostia desde Google Maps; empieza por las que trabajan con comercio y hostelería.</p>
+  <div class="cita"><p><b>Llamada a una gestoría</b></p><p>Hola, soy [nombre], de DEIKA, una empresa de Vitoria. Hemos hecho una recepcionista con IA que coge el teléfono de los negocios cuando ellos no pueden, da la cita y les avisa al móvil. Muchos de vuestros clientes, peluquerías, talleres, clínicas, pierden llamadas cada día.</p><p>Os quería proponer algo sencillo: si se lo recomendáis a vuestros clientes, os lleváis una comisión por cada uno que se dé de alta, y ellos tienen una condición especial por venir de vuestra parte. ¿Te parece que te lo enseñe en 15 minutos, en vuestra oficina o por videollamada?</p></div>
+  <p class="pequeno">Lleva: una hoja de una cara para que la den a sus clientes, con un enlace o código de la gestoría para saber de dónde viene cada alta.</p>
+
+  <h3>3.2 · Proveedores del sector</h3>
+  <p>Visitan a tus clientes cada semana: <b>distribuidores de productos de peluquería y estética</b>, <b>tiendas de recambios</b> para talleres y <b>depósitos dentales</b>. Misma propuesta que a las gestorías. Para el comercial del proveedor es un detalle más que ofrecer a sus clientes.</p>
+
+  <h3>3.3 · Asociaciones de comercio y Cámaras</h3>
+  <p>Propuesta: una <b>charla de 30 minutos</b>, «Cómo no perder llamadas mientras atiendes», con la demo en directo y una condición para sus socios. A cambio, difusión en su boletín o en sus redes.</p>
+  <table>
+    <tr><th style="width:30%">Organización</th><th>Qué es</th><th class="c">Dónde</th></tr>
+    <tr><td><b>Gasteiz On</b></td><td>Principal asociación de comerciantes y hosteleros de Vitoria.</td><td class="c">Álava</td></tr>
+    <tr><td><b>Comercio Vitoria</b></td><td>Asociación de comerciantes alternativa a Gasteiz On.</td><td class="c">Álava</td></tr>
+    <tr><td><b>Aenkomer</b></td><td>Federación de comercios de Álava, con programas de presencia digital.</td><td class="c">Álava</td></tr>
+    <tr><td><b>SEA Empresas Alavesas</b></td><td>La patronal de Álava (empresas y autónomos).</td><td class="c">Álava</td></tr>
+    <tr><td><b>bilbaoDendak</b></td><td>Plataforma del comercio y la hostelería de Bilbao, con las asociaciones de barrio dentro.</td><td class="c">Bizkaia</td></tr>
+    <tr><td><b>San Sebastián Shops</b></td><td>Plataforma de comercio de Donostia (Federación Mercantil de Gipuzkoa y asociaciones de barrio).</td><td class="c">Gipuzkoa</td></tr>
+    <tr><td><b>Cámaras de Álava, Bilbao y Gipuzkoa</b></td><td>Llevan programas de digitalización del comercio (como eus-COMMERCE) y son oficinas Acelera pyme del Kit Digital.</td><td class="c">Las tres</td></tr>
+  </table>
+  <p class="pequeno"><b>Antes de llamar:</b> los nombres están comprobados el 20/10/2026, pero contactos y programas cambian; mira su web. Pregunta también a las Cámaras y a la Diputación (programa DendaTIC en Álava) si DEIKA puede entrar en sus ayudas de digitalización: si el negocio lo puede pagar con una ayuda, decide antes.</p>
+</section>
+
+<!-- 4, 5, 6 -->
+<section class="seccion">
+  <h2><span class="n">4</span> Referidos: que te recomienden</h2>
+  <p>Un dueño de peluquería conoce a otros diez. Cuando tengas los primeros clientes contentos:</p>
+  <ul>
+    <li><b>Propuesta:</b> «Trae a un negocio y tenéis un mes gratis los dos», cuando el nuevo lleve un mes de alta.</li>
+    <li>Pedirlo en el mejor momento: cuando el cliente te cuente que la recepcionista le ha dado citas.</li>
+    <li>Más adelante, un botón «Recomendar DEIKA» en el panel con su enlace propio.</li>
+  </ul>
+
+  <h2 style="margin-top:16pt"><span class="n">5</span> Una demo que se prueba sola</h2>
+  <p>Oírla convence más que leer sobre ella. Dos piezas:</p>
+  <ul>
+    <li><b>Número público de demo:</b> «Llama al 9XX XX XX XX y habla con ella». Va en la bio de Instagram, en los anuncios y en la web. Pendiente de comprar el número (el 400/945 en la consola de Twilio), y siempre aparte del número del cliente piloto.</li>
+    <li><b>«Te llamamos ahora»</b> en deika.eu: el negocio deja su teléfono y la recepcionista le llama al momento con su caso.</li>
+    <li>Con <b>tope de gasto diario</b> (como el de 30 demos al día de la visita) para no gastar minutos de más.</li>
+  </ul>
+
+  <h2 style="margin-top:16pt"><span class="n">6</span> Páginas por sector y ciudad</h2>
+  <p>Google premia las páginas que responden justo a lo que se busca. Una página por combinación, con su ejemplo de llamada y sus preguntas:</p>
+  <ul>
+    <li>Recepcionista con IA para <b>peluquerías</b> en Bilbao · Vitoria · Donostia.</li>
+    <li>Para <b>talleres</b>, <b>clínicas dentales</b>, <b>fisioterapeutas</b>, <b>inmobiliarias</b>…</li>
+    <li>Ya estaba en las mejoras pendientes de la web («landings por sector»). Tarda meses en dar fruto; por eso va al final.</li>
+  </ul>
+
+  <h3 style="margin-top:22pt">Fuentes (consultadas el 20/10/2026)</h3>
+  <ul class="fuentes">
+    <li>Gasteiz On y Comercio Vitoria: gasteizhoy.com/comercios-abiertos-vitoria-en-agosto · gasteizhoy.com/asociaciones-comerciantes</li>
+    <li>bilbaoDendak: deia.eus/bilbao/2025/09/25/bilbaodendak-avanzar-nuevo-modelo-asociativo-comercial-urbano-10125053.html</li>
+    <li>San Sebastián Shops: donostia.eus (acuerdo con el Ayuntamiento) · euskadi.eus (asociacionismo comercial, 2024)</li>
+    <li>SEA Empresas Alavesas: gasteizhoy.com/sea-premios-empresarios</li>
+    <li>Cámaras, Kit Digital, DendaTIC y Aenkomer: red.es (Kit Digital Vitoria-Gasteiz) · ondavasca.com (DendaTIC; Aenkomer) · camarabilbao.com (pliego de digitalización del comercio)</li>
+    <li>LSSI, art. 21 (comunicaciones comerciales no solicitadas): Ley 34/2002, BOE-A-2002-13758</li>
+  </ul>
+</section>
+
+<!-- Calendario y números -->
+<section class="seccion">
+  <h2>Calendario de 8 semanas</h2>
+  <table>
+    <tr><th style="width:16%">Semana</th><th>Qué se hace</th></tr>
+    <tr><td><b>1</b></td><td>Montar la campaña de Instagram/Facebook con formulario y lanzarla. Crear la ficha de Google. Hacer la lista de 20 gestorías.</td></tr>
+    <tr><td><b>2</b></td><td>Llamar a los contactos del anuncio cada día. Llamar a 10 gestorías y cerrar 2–3 reuniones. Hoja para socios.</td></tr>
+    <tr><td><b>3</b></td><td>Primer repaso de números: quitar el anuncio que peor va. Lanzar Google Ads. Llamar a las 10 gestorías restantes.</td></tr>
+    <tr><td><b>4</b></td><td>Contactar a 3 asociaciones o Cámaras (Gasteiz On, bilbaoDendak, Cámara de Álava) para proponer la charla.</td></tr>
+    <tr><td><b>5–6</b></td><td>Primera charla. Programa de referidos con los clientes actuales. Hablar con 2 proveedores del sector.</td></tr>
+    <tr><td><b>7–8</b></td><td>Número de demo público. Primeras páginas por sector. Subir presupuesto solo en los canales que den altas.</td></tr>
+  </table>
+
+  <h2 style="margin-top:10pt">El cuadro de cada semana</h2>
+  <p>Cinco minutos cada lunes. Si un canal no da demos en un mes, se cambia o se apaga.</p>
+  <table>
+    <tr><th>Canal</th><th class="c">Gasto</th><th class="c">Contactos</th><th class="c">Coste/contacto</th><th class="c">Demos</th><th class="c">Altas</th><th class="c">Coste/alta</th></tr>
+    <tr><td>Instagram/Facebook</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Google</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Gestorías</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Asociaciones</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Referidos</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+
+  <div class="caja decide junto">
+    <span class="t">Lo que tienes que decidir tú</span>
+    <ul>
+      <li><b>Presupuesto de anuncios</b> para las dos semanas de prueba (propuesta: 5–10 €/día en Meta y 5 €/día en Google).</li>
+      <li><b>Comisión para socios:</b> por ejemplo, una cuota mensual por cada alta que siga a los 3 meses, o un 10 % de lo que pague el cliente durante el primer año.</li>
+      <li><b>Programa de referidos:</b> el mes gratis para los dos, o lo que prefieras.</li>
+      <li><b>Quién llama a los contactos y en qué horario</b>, para hacerlo el mismo día.</li>
+      <li><b>Comprar el número de demo</b> y su tope de gasto diario.</li>
+    </ul>
+  </div>
+</section>
+
+</body>
+</html>
