@@ -88,6 +88,8 @@ Abre el navegador en http://127.0.0.1:8000 y entra con tu usuario.
 2. **Tareas → director.cycle → Encolar**. En unos segundos aparecerá un experimento en **Aprobaciones**.
 3. Apruébalo. El constructor crea la página y te pide aprobar su publicación: apruébala.
 4. **Productos → vista previa** para verla.
+5. **Contenido**: el agente habrá preparado textos para TikTok, Instagram, X, LinkedIn y grupos. Aprueba los que
+   te gusten, cópialos, publícalos en tus cuentas y pulsa «Marcar publicado». En «Visitas por canal» verás qué red funciona.
 
 ## 8. Hacerla visible en Internet (gratis)
 
@@ -99,6 +101,9 @@ cloudflared tunnel --url http://localhost:8000
 
 Saldrá una dirección como `https://palabras-al-azar.trycloudflare.com`. Tu página estará en
 `https://palabras-al-azar.trycloudflare.com/p/<slug>` (el slug está en **Productos**).
+
+Pon esa dirección en `.env` como `PUBLIC_BASE_URL=https://palabras-al-azar.trycloudflare.com` y reinicia
+(`iniciar-windows.bat`) para que los textos del agente de contenido lleven el enlace correcto.
 
 Ten en cuenta:
 - Esa dirección **cambia cada vez** que reinicias cloudflared, y Cloudflare la ofrece para pruebas, sin garantías.

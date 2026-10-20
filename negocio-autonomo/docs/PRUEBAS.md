@@ -2,7 +2,7 @@
 
 Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `python -m pytest -v`.
 
-**Resultado: 45 pruebas, 45 superadas, 0 fallidas (≈ 3 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
+**Resultado: 54 pruebas, 54 superadas, 0 fallidas (≈ 4 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
 
 ## Qué se comprueba
 
@@ -20,6 +20,7 @@ Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `py
 | Aprobaciones humanas funcionan | `test_full_cycle` (por HTTP, con login y CSRF) | ✔ |
 | Se pueden detener todas las acciones externas | `test_kill_switch_stops_all_external_actions` + paso 8 de `test_full_cycle` | ✔ |
 | Arranque con 0 € | `tests/test_zero_capital.py`: todo gasto rechazado (también API con sobre), el modelo no se llama, la vigilancia no activa la parada, el flujo gratuito funciona, aportar capital desbloquea y queda en el libro, reiniciar no duplica el capital; la E2E arranca con 0 € y aporta 300 € desde el panel | ✔ |
+| Agente de contenido | `tests/test_content.py`: borradores al publicar con enlace por canal, sin duplicados, solo productos publicados, filtro de promesas/urgencia/estado, texto de IA solo si pasa el filtro, solo personas aprueban y publican, visitas y registros atribuidos a su canal, mayúsculas de nombres propios | ✔ |
 | Auditoría inalterable / detectable | `test_audit_log_is_append_only_and_tamper_evident` | ✔ |
 | Inyección de instrucciones | `test_prompt_injection_in_research_is_data_not_instruction`, `test_sales_agent_escalates_suspicious_or_unknown`, `test_discover_drops_urls_not_returned_by_real_search` | ✔ |
 | Validación honesta | `test_score_penalizes_thin_evidence`, `test_criteria_locked_after_approval`, `test_simulated_traffic_never_validates`, `test_signups_give_interest_but_not_validation`, `test_low_interest_is_abandoned_and_remembered`, `test_only_real_purchases_validate` | ✔ |
@@ -47,7 +48,10 @@ Tras restaurar el código, todas vuelven a pasar.
 2. **Análisis interno publicado**: la página de prueba copiaba la descripción interna de la oportunidad (p. ej.
    «hay mucha oferta barata…») como argumentos de venta. Detectado al revisar la captura de la página; ahora solo
    se publican los `benefits` y hay una prueba que lo comprueba.
-3. **Reserva de API infraestimada** para llamadas con búsqueda web (los resultados entran como tokens de entrada):
+3. **Contenido duplicado por idempotencia**: dos peticiones de borradores con IA en el mismo segundo compartían clave y la
+   segunda se descartaba. Detectado por una prueba; ahora la clave es única por petición.
+4. **Mayúsculas en los textos**: «España» e «IA» salían en minúscula. Detectado al revisar los borradores reales; corregido con prueba.
+5. **Reserva de API infraestimada** para llamadas con búsqueda web (los resultados entran como tokens de entrada):
    se reservaba menos de lo que podría costar. Ahora la reserva supone ~60k tokens de entrada.
 
 ## Otras verificaciones manuales

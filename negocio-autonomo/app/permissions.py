@@ -38,6 +38,7 @@ CATALOG: dict[tuple[str, str], tuple[bool, bool, bool]] = {
     ("email", "send"): (True, False, False),
     ("inquiry", "reply_draft"): (False, False, False),
     ("report", "generate"): (False, False, False),
+    ("content", "draft"): (False, False, False),
     ("backup", "run"): (False, False, False),
 }
 
@@ -69,6 +70,7 @@ DEFAULT_PERMISSIONS: dict[str, list[tuple[str, str, str, int | None]]] = {
                     ("product", "update", "approval", 10), ("llm", "complete", "allow", 20)],
     "ventas": [("inquiry", "reply_draft", "allow", 100), ("email", "send", "approval", 20),
                ("payments", "checkout", "approval", None)],
+    "contenido": [("content", "draft", "allow", 10), ("llm", "complete", "allow", 10)],
     "operaciones": [("report", "generate", "allow", None), ("backup", "run", "allow", None),
                     ("analytics", "read", "allow", None), ("payments", "refund", "approval", None)],
 }
@@ -80,6 +82,7 @@ AGENT_ROLES = {
     "constructor": "Genera prototipos y páginas de prueba y los valida técnicamente",
     "ventas": "Responde consultas solo con respuestas verificadas; escala el resto",
     "operaciones": "Informes, alertas, copias de seguridad y control de presupuesto",
+    "contenido": "Redacta borradores para redes con enlace medible; nunca publica",
 }
 
 

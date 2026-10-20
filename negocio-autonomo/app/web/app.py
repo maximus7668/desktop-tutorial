@@ -10,6 +10,7 @@ import re
 import secrets
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
@@ -18,7 +19,7 @@ from fastapi.templating import Jinja2Templates
 from .. import (approvals, audit, budget, compliance, finance, memory, permissions, settings_store, tasks,
                 validation)
 from ..actors import PUBLIC, PermissionDenied, human
-from ..agents import builder
+from ..agents import builder, content
 from ..config import Settings
 from ..core import bootstrap
 from ..db import connect, now_iso, one, rows, transaction
@@ -105,10 +106,23 @@ def create_app(settings: Settings) -> FastAPI:
         raw = f"{salt}|{client_ip(request)}|{request.headers.get('user-agent', '')}"
         return hashlib.sha256(raw.encode()).hexdigest()[:32]
 
+    def _source(request: Request) -> str:
+        """Canal: utm_source de la URL; si no (p. ej. el formulario), el de la página de la que viene;
+        si no, el dominio que la enlazó."""
+        if request.query_params.get("utm_source"):
+            return request.query_params["utm_source"]
+        ref = urlparse(request.headers.get("referer", ""))
+        utm = parse_qs(ref.query).get("utm_source")
+        if utm:
+            return utm[0]
+        host = ref.hostname or ""
+        own = urlparse(settings.public_base_url).hostname or ""
+        return "" if host in ("", own, "localhost", "127.0.0.1") or host.endswith("trycloudflare.com") else host
+
     def _event(conn, product_id: int, etype: str, request: Request) -> None:
         if BOT_RE.search(request.headers.get("user-agent", "")):
             return
-        src = clean(request.query_params.get("utm_source", "") or request.headers.get("referer", ""), 200)
+        src = clean(_source(request), 60)
         with transaction(conn):
             conn.execute("INSERT INTO events (product_id, ts, type, visitor_hash, source, data_kind) VALUES (?,?,?,?,?,?)",
                          (product_id, now_iso(), etype, _visitor(request), src, settings.live_data_kind))
@@ -358,6 +372,34 @@ def create_app(settings: Settings) -> FastAPI:
     @app.get("/memoria", response_class=HTMLResponse)
     def memory_page(request: Request, sess=Depends(session), conn=Depends(get_conn)):
         return _table(request, sess, "Memoria (investigaciones, decisiones, lecciones)", memory.recall(conn, None, 300))
+
+    @app.get("/contenido", response_class=HTMLResponse)
+    def content_page(request: Request, sess=Depends(session), conn=Depends(get_conn)):
+        drafts = rows(conn, "SELECT d.*, p.name AS producto FROM content_drafts d JOIN products p ON p.id=d.product_id"
+                            " ORDER BY CASE d.status WHEN 'draft' THEN 0 WHEN 'approved' THEN 1 ELSE 2 END, d.id DESC")
+        for d in drafts:
+            d["text"] = content.render_body(d, settings.public_base_url)
+        return page(request, "content.html", sess, drafts=drafts, base_url=settings.public_base_url,
+                    real=content.visits_by_channel(conn, "real"), sim=content.visits_by_channel(conn, "simulation"),
+                    published=rows(conn, "SELECT id, name FROM products WHERE status='published'"))
+
+    @app.post("/contenido/{did}")
+    def content_decide(did: int, request: Request, status: str = Form(...), published_url: str = Form(""),
+                       csrf: str = Form(""), sess=Depends(session), conn=Depends(get_conn)):
+        check_csrf(sess, csrf)
+        try:
+            content.decide(conn, human(sess["u"]), did, status, published_url)
+        except (ValueError, KeyError) as e:
+            return PlainTextResponse(f"No se pudo: {e}", status_code=409)
+        return RedirectResponse("/contenido", status_code=303)
+
+    @app.post("/contenido/generar/{pid}")
+    def content_generate(pid: int, request: Request, csrf: str = Form(""), sess=Depends(session), conn=Depends(get_conn)):
+        check_csrf(sess, csrf)
+        key = f"manual:content:{pid}:{secrets.token_hex(4)}"
+        tasks.enqueue(conn, "content.drafts", content.AGENT, {"product_id": pid}, key)
+        audit.log(conn, human(sess["u"]), "task.enqueue", "content.drafts", {"product_id": pid})
+        return RedirectResponse("/contenido", status_code=303)
 
     @app.get("/consultas", response_class=HTMLResponse)
     def inquiries_page(request: Request, sess=Depends(session), conn=Depends(get_conn)):

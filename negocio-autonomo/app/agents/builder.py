@@ -145,6 +145,8 @@ def _publish(conn: sqlite3.Connection, actor: Actor, product_id: int) -> None:
     if p["experiment_id"]:
         validation.start(conn, p["experiment_id"])
     audit.log(conn, actor, "product.publish", f"product:{product_id}")
+    from .. import tasks  # importación local: evita ciclo de importaciones
+    tasks.enqueue(conn, "content.drafts", "contenido", {"product_id": product_id}, f"content:auto:{product_id}")
 
 
 def _on_publish_decision(conn: sqlite3.Connection, actor: Actor, ap: dict, approve: bool) -> None:

@@ -10,7 +10,7 @@ from typing import Callable
 
 from . import settings_store, tasks
 from .actors import agent
-from .agents import builder, director, operations, researcher, sales
+from .agents import builder, content, director, operations, researcher, sales
 from .budget import BudgetError
 from .config import Settings
 from .db import now_iso, transaction
@@ -48,6 +48,10 @@ def _h_watch(conn, settings, provider, payload):
     return operations.watch(conn, agent("operaciones"))
 
 
+def _h_content(conn, settings, provider, payload):
+    return content.generate(conn, agent("contenido"), settings, int(payload["product_id"]), provider)
+
+
 def _h_inquiry(conn, settings, provider, payload):
     return {"status": sales.handle_inquiry(conn, agent("ventas"), int(payload["inquiry_id"]))}
 
@@ -60,6 +64,7 @@ HANDLERS: dict[str, Handler] = {
     "ops.backup": _h_backup,
     "ops.watch": _h_watch,
     "sales.inquiry": _h_inquiry,
+    "content.drafts": _h_content,
 }
 
 # Errores que no se arreglan reintentando: se marcan como fallidos (nunca como éxito).

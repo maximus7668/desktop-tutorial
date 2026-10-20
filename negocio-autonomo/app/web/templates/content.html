@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Contenido{% endblock %}
+{% block content %}
+<h1>Contenido para redes</h1>
+<p class="small muted">El agente de contenido redacta; <strong>tú decides y publicas</strong>. El sistema no tiene acceso a tus redes.
+Flujo: revisa → <em>Aprobar</em> → copia el texto y publícalo tú → <em>Marcar publicado</em> (pega el enlace de tu publicación).
+Cada texto lleva un enlace con la etiqueta de su canal para medir qué red trae visitas.</p>
+{% if 'localhost' in base_url or '127.0.0.1' in base_url %}
+<div class="alert">Los enlaces usan <code>{{ base_url }}</code>, que solo funciona en tu ordenador. Pon en <code>.env</code>
+<code>PUBLIC_BASE_URL=</code> la dirección https de cloudflared y reinicia, o cambia el principio del enlace al copiarlo.</div>
+{% endif %}
+
+{% if published %}<div class="card" style="margin:10px 0">Generar borradores nuevos para:
+{% for p in published %}<form method="post" action="/contenido/generar/{{ p.id }}" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><button class="ghost">{{ p.name }}</button></form>{% endfor %}
+<span class="small muted">(se crean al publicar un producto; aquí puedes pedir otra tanda cuando no queden pendientes)</span></div>{% endif %}
+
+<h2>Visitas por canal</h2>
+<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">
+{% for label, data in [('real', real), ('simulation', sim)] %}
+<div class="tablewrap"><table><tr><th colspan="4"><span class="badge {{ label }}">{{ label }}</span></th></tr>
+<tr><th>Producto</th><th>Canal</th><th>Visitantes</th><th>Registros</th></tr>
+{% for r in data %}<tr><td class="small">{{ r.producto }}</td><td>{{ r.canal }}</td><td class="num">{{ r.visitantes }}</td><td class="num">{{ r.registros }}</td></tr>
+{% else %}<tr><td colspan="4" class="muted small">Sin visitas.</td></tr>{% endfor %}
+</table></div>{% endfor %}
+</div>
+
+<h2>Borradores</h2>
+{% for d in drafts %}
+<div class="card" style="margin-bottom:10px">
+  <div class="k">#{{ d.id }} · {{ d.channel }} · {{ d.status }} · {{ d.producto }} · {{ d.generator }}{% if d.published_url %} · <a href="{{ d.published_url }}" rel="noopener noreferrer" target="_blank">publicación</a>{% endif %}</div>
+  <p><strong>{{ d.title }}</strong></p>
+  <textarea readonly rows="{{ [d.text.count('\n') + (d.text|length // 90) + 2, 18]|min }}" style="width:100%">{{ d.text }}</textarea>
+  {% if d.status == 'draft' %}
+  <form method="post" action="/contenido/{{ d.id }}" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    <button name="status" value="approved">Aprobar</button><button name="status" value="rejected" class="danger">Descartar</button></form>
+  {% elif d.status == 'approved' %}
+  <form method="post" action="/contenido/{{ d.id }}" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    <input name="published_url" placeholder="enlace de tu publicación (opcional)" size="40">
+    <button name="status" value="published">Marcar publicado</button></form>
+  {% endif %}
+</div>
+{% else %}<p class="muted">Sin borradores. Se generan automáticamente al publicar un producto.</p>{% endfor %}
+{% endblock %}

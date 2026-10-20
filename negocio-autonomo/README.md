@@ -21,7 +21,7 @@ que la persona fijó antes). Todo queda en un registro de auditoría a prueba de
 | Cola de tareas | `app/tasks.py`, `app/worker.py` | Persistente, idempotente, reintentos limitados, recuperación tras caída, pausa/reanudar |
 | Memoria | `app/memory.py` | Investigaciones, decisiones, lecciones; evita repetir experimentos fallidos |
 | Validación | `app/validation.py` | Hipótesis + presupuesto + criterio fijados antes; solo compras reales validan |
-| Agentes | `app/agents/` | investigador, evaluador, director, constructor, ventas, operaciones |
+| Agentes | `app/agents/` | investigador, evaluador, director, constructor, contenido, ventas, operaciones |
 | Integraciones | `app/integrations/` | Modelo (Anthropic), búsqueda web, Stripe (webhooks), SMTP, analítica propia |
 | Cumplimiento | `app/compliance.py` | Checklist legal/fiscal que bloquea publicar y cobrar hasta que lo confirmes |
 | Panel | `app/web/` | Resumen, aprobaciones, finanzas, auditoría, ajustes, exportación CSV/JSON |
@@ -51,7 +51,7 @@ python -m app.cli worker
 ### Comprobar que funciona
 
 ```bash
-python -m pytest -q                                   # 45 pruebas, ~3 s
+python -m pytest -q                                   # 54 pruebas, ~4 s
 python examples/demo_validacion.py                    # ciclo completo en data/demo.db → docs/ejemplo-validacion.md
 python -m app.cli import-research examples/investigacion_2026-10-20.json
 python -m app.cli evaluate                            # puntuaciones
@@ -76,6 +76,15 @@ Levanta `web` (panel + páginas públicas + webhook) y `worker` sobre el mismo v
 El puerto solo escucha en 127.0.0.1: publícalo detrás de un proxy con HTTPS (Caddy, Nginx, Cloudflare Tunnel).
 **Nota:** el Dockerfile y el compose no se han podido probar en el entorno donde se desarrolló (no había
 demonio de Docker); sí se ha probado todo lo demás directamente con Python.
+
+## Agente de contenido (difusión)
+
+Al publicarse una página, el agente **contenido** redacta borradores para TikTok/Reels, Instagram, X, LinkedIn
+y grupos donde ya participas. Cada uno lleva un enlace con `utm_source=<canal>`, y el panel (**Contenido →
+Visitas por canal**) muestra qué red trae visitantes y registros reales. Un filtro descarta promesas de
+ingresos, urgencia falsa o testimonios inventados, y exige decir «lista de espera» mientras no se cobre.
+**Nunca publica**: tú apruebas, copias, publicas en tu cuenta y lo marcas como publicado. Con 0 € usa
+plantillas; con modelo de IA configurado y capital, redacta con IA y pasa el mismo filtro.
 
 ## Qué hace con 0 € y qué cambia al aportar dinero
 
