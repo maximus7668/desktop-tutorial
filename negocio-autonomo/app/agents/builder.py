@@ -74,8 +74,10 @@ def build_for_experiment(conn: sqlite3.Connection, actor: Actor, settings: Setti
     if exp is None or exp["status"] not in ("approved", "running"):
         raise ValueError("el experimento no está aprobado")
     existing = one(conn, "SELECT * FROM products WHERE experiment_id=?", (experiment_id,))
-    if existing:
+    if existing and existing["status"] not in ("draft", "failed_checks"):
         return existing
+    if existing:  # repetir las comprobaciones (p. ej. tras configurar los datos del titular)
+        return _check_and_request(conn, actor, settings, existing["id"])
     opp = one(conn, "SELECT * FROM opportunities WHERE id=?", (exp["opportunity_id"],))
     # Solo texto pensado para el público: la descripción de la oportunidad es análisis interno y no se publica.
     benefits = json.loads(opp["inputs"]).get("benefits") or []
@@ -98,6 +100,10 @@ def build_for_experiment(conn: sqlite3.Connection, actor: Actor, settings: Setti
              actor.label, now_iso()),
         )
         pid = cur.lastrowid
+    return _check_and_request(conn, actor, settings, pid)
+
+
+def _check_and_request(conn: sqlite3.Connection, actor: Actor, settings: Settings, pid: int) -> dict:
     product = one(conn, "SELECT * FROM products WHERE id=?", (pid,))
     html = render(conn, settings, product)
     result = technical_checks(html, settings)

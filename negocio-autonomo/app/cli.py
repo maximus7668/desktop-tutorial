@@ -7,6 +7,8 @@
   python -m app.cli worker                   arranca el trabajador (cola + programación)
   python -m app.cli run-once                 procesa una sola tarea
   python -m app.cli status                   resumen en texto
+  python -m app.cli approvals                 lista las aprobaciones pendientes
+  python -m app.cli approve|reject ID [QUIEN] [nota]  decide una aprobación en nombre de QUIEN
   python -m app.cli add-capital EUROS [nota] aportar dinero (queda en el libro contable)
   python -m app.cli stop "motivo"            parada de emergencia
   python -m app.cli backup                   copia de seguridad ahora
@@ -23,7 +25,7 @@ import os
 import shutil
 import sys
 
-from . import audit, budget, finance, settings_store, tasks
+from . import approvals, audit, budget, finance, settings_store, tasks
 from .actors import agent, human
 from .agents import evaluator, operations, researcher
 from .config import load_settings
@@ -84,6 +86,15 @@ def main(argv: list[str]) -> int:
         ttype, ag = args[0], args[1]
         payload = json.loads(args[2]) if len(args) > 2 else {}
         print(tasks.enqueue(conn, ttype, ag, payload, args[3] if len(args) > 3 else f"cli:{ttype}:{os.getpid()}"))
+    elif cmd == "approvals":
+        for a in approvals.pending(conn):
+            print(f"#{a['id']} [{a['kind']}] {a['summary']}")
+    elif cmd in ("approve", "reject"):
+        # Decisión del propietario tomada fuera del panel (p. ej. por chat); queda firmada con su nombre.
+        aid, by = int(args[0]), (args[1] if len(args) > 1 else getpass.getuser())
+        note = " ".join(args[2:]) or "decisión registrada por línea de órdenes"
+        approvals.decide(conn, human(by), aid, cmd == "approve", note)
+        print(f"Aprobación #{aid}: {'aprobada' if cmd == 'approve' else 'rechazada'} por {by}")
     elif cmd == "add-capital":
         euros = float(args[0].replace(",", "."))
         bal = budget.add_capital(conn, human(getpass.getuser()), round(euros * 100), " ".join(args[1:]))

@@ -93,3 +93,19 @@ def test_only_real_purchases_validate(conn):
     for i in range(3):
         finance.record_order(conn, PUBLIC, "stripe", f"real{i}", 1900, "real", pid)
     assert validation.evaluate(conn, agent("director"), eid)["verdict"] == "validada"
+
+
+def test_failed_checks_can_be_rebuilt_after_fixing_owner_data(conn, owner, settings):
+    from app.agents import builder
+
+    researcher.import_research(conn, agent("investigador"), research_fixture())
+    director.cycle(conn, agent("director"))
+    approvals.decide(conn, owner, approvals.pending(conn)[0]["id"], True)
+    eid = conn.execute("SELECT id FROM experiments").fetchone()["id"]
+    settings.owner_legal_name = ""
+    p = builder.build_for_experiment(conn, agent("constructor"), settings, eid)
+    assert p["status"] == "failed_checks" and approvals.pending(conn) == []
+    settings.owner_legal_name = "Titular de Prueba"
+    p2 = builder.build_for_experiment(conn, agent("constructor"), settings, eid)
+    assert p2["id"] == p["id"] and p2["status"] == "tested"
+    assert approvals.pending(conn)[0]["kind"] == "product.publish"
