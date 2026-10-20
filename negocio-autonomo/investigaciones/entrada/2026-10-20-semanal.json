@@ -1,0 +1,237 @@
+{
+  "run_id": "semanal-2026-10-20",
+  "method": "Sesión programada (20/10/2026). 4 consultas web sobre reseñas de Google, control de stock, redes sociales para clínicas y presupuestos de taller. Los extractos resumen lo que mostraban los resultados de búsqueda; no se leyeron las páginas completas, por eso la fiabilidad máxima es 'medium'. Estimates = juicio del investigador. No se encontraron datos oficiales de demanda específicos de cada nicho.",
+  "opportunities": [
+    {
+      "title": "Pack de plantillas de respuesta a reseñas de Google para negocios locales",
+      "description": "Peluquerías, talleres y clínicas reciben reseñas y no saben responderlas. Un pack de respuestas en español de España por puntuación y tipo de queja, con guía breve. Mucho contenido gratuito de empresas de software (que venden herramientas) y generadores con IA gratis; la disposición a pagar es baja salvo que el pack sea muy específico por sector. Riesgo: no prometer mejoras de posicionamiento.",
+      "segment": "Pequeños negocios locales en España (peluquerías, talleres, clínicas, comercios)",
+      "product_idea": "Pack editable (PDF y Google Docs) con 60 respuestas a reseñas por sector y puntuación, más guía de tono y errores a evitar",
+      "price_hint_eur": 9,
+      "benefits": [
+        "Respuestas listas para adaptar a reseñas positivas, neutras y negativas.",
+        "Ejemplos por sector: peluquería, taller, clínica y comercio.",
+        "Guía corta para responder con calma a las quejas.",
+        "Descarga inmediata y editable."
+      ],
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 2,
+        "competition_intensity": 4,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 28,
+        "legal_risk": 1,
+        "fit": 4
+      },
+      "evidence": [
+        {
+          "url": "https://blabla.ai/es/blog/google-my-business-auto-reply",
+          "title": "google my business auto reply",
+          "publisher": "Blabla",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Recomienda crear plantillas distintas para reseñas de 1-2, 3 y 4-5 estrellas; es contenido de un proveedor de software (competencia gratuita).",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://trengo.com/es/blog/how-to-respond-to-google-reviews",
+          "title": "Cómo responder a reseñas de Google",
+          "publisher": "Trengo",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Propone un marco de tres pasos (reconocer, disculparse, actuar) para reseñas negativas; guía gratuita de un proveedor de software.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://visu.network/es/herramientas/responder-resenas-google/",
+          "title": "Responder reseñas de Google",
+          "publisher": "VISU",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Generador que redacta respuestas según estrellas y contenido de la reseña: sustituto gratuito con IA.",
+          "kind": "competition",
+          "reliability": "low"
+        },
+        {
+          "url": "https://www.pipedrive.com/es/blog/resena-de-google",
+          "title": "Cómo contestar a una reseña de Google y mejorar tu reputación en línea",
+          "publisher": "Pipedrive",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Insiste en no responder movido por las emociones; indica que hay interés en guías sobre cómo contestar reseñas.",
+          "kind": "pain",
+          "reliability": "low"
+        }
+      ]
+    },
+    {
+      "title": "Plantilla de control de stock para comercios pequeños en español",
+      "description": "Muchos comercios llevan el inventario en papel o Excel improvisado. Hay plantillas gratuitas de Tiendanube, Crehana y Gerencie, y plantillas de pago muy baratas (~5 USD) en Gumroad. Diferenciación posible: versión para comercio físico en España con IVA, márgenes y alertas de reposición. Precio muy limitado por la competencia.",
+      "segment": "Comercios minoristas y tiendas de barrio en España",
+      "product_idea": "Hoja de cálculo (Excel/Google Sheets) de inventario con entradas, salidas, alertas de reposición, margen e IVA",
+      "price_hint_eur": 8,
+      "benefits": [
+        "Control de entradas, salidas y existencias en una sola hoja.",
+        "Avisos visuales cuando un producto baja del mínimo.",
+        "Cálculo de margen e IVA por producto.",
+        "Funciona en Excel y Google Sheets, sin instalar nada."
+      ],
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 1,
+        "competition_intensity": 5,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 28,
+        "legal_risk": 0,
+        "fit": 3
+      },
+      "evidence": [
+        {
+          "url": "https://www.tiendanube.com/recursos/planillas/plantilla-excel-control-inventario",
+          "title": "Plantilla de Excel de control de inventario",
+          "publisher": "Tiendanube",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Plantilla gratuita para Excel o Google Sheets con entradas, salidas, alertas de stock y control de ventas.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.crehana.com/business/descargables/control-stock-excel/",
+          "title": "Control de stock en Excel",
+          "publisher": "Crehana",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Formato gratuito con código, descripción, existencias y coste unitario; requiere registro.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://agendapro.com/blog/como-usar-excel-para-el-control-de-inventario/",
+          "title": "¿Cómo usar Excel para el control de inventario?",
+          "publisher": "AgendaPro",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Explica la estructura básica para una tienda pequeña y advierte que Excel se queda corto con varios almacenes o integración con ecommerce.",
+          "kind": "pain",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://robervaldes.gumroad.com/l/timye",
+          "title": "Plantilla de inventario (Gumroad)",
+          "publisher": "Gumroad",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Aparece una plantilla de inventario, compras, ventas y dashboard de pago, de unos 5 USD según el resumen del resultado: referencia de precio bajo.",
+          "kind": "price",
+          "reliability": "low"
+        }
+      ]
+    },
+    {
+      "title": "Kit de presupuesto y orden de reparación para talleres mecánicos",
+      "description": "Los talleres necesitan presupuestos con datos del vehículo y órdenes de trabajo. Hay plantillas gratuitas (Quipu, Jotform) y de pago en Etsy desde unos 7 €. Hueco: kit en español de España con presupuesto, orden de reparación, hoja de recepción del vehículo y cálculo de IVA/mano de obra. Mismo patrón que el kit de reformas ya investigado: disposición a pagar baja.",
+      "segment": "Talleres mecánicos independientes en España",
+      "product_idea": "Kit editable (Excel/Google Sheets + PDF) con presupuesto, orden de reparación y hoja de recepción del vehículo",
+      "price_hint_eur": 12,
+      "benefits": [
+        "Presupuestos con datos del vehículo, mano de obra y recambios.",
+        "Orden de reparación imprimible.",
+        "Cálculo automático de IVA y totales.",
+        "Editable con el logo y datos de tu taller."
+      ],
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 2,
+        "competition_intensity": 4,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 28,
+        "legal_risk": 1,
+        "fit": 4
+      },
+      "evidence": [
+        {
+          "url": "https://getquipu.com/blog/plantillas-de-presupuesto-de-taller-mecanico/",
+          "title": "Plantillas de presupuesto de taller mecánico en Excel/PDF/Word [Descarga GRATIS]",
+          "publisher": "Quipu",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Ofrece tres plantillas gratuitas y explica los datos que debe incluir un presupuesto (taller, cliente, vehículo, matrícula, kilometraje).",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.jotform.com/es/pdf-templates/work-order",
+          "title": "Work order",
+          "publisher": "Jotform",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Plantilla gratuita de orden de reparación personalizable y descargable en PDF.",
+          "kind": "competition",
+          "reliability": "low"
+        },
+        {
+          "url": "https://www.etsy.com/listing/4549421139",
+          "title": "Plantilla de orden de trabajo de mecánico (Etsy)",
+          "publisher": "Etsy",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Existen plantillas de pago de orden de trabajo en Excel/Google Sheets; el resumen del resultado habla de precios desde unos 7 €, y el listado mostraba 31,42 €.",
+          "kind": "price",
+          "reliability": "low"
+        },
+        {
+          "url": "https://academiaxray.cl/blog/formato-presupuesto-reparacion-vehiculo/",
+          "title": "La importancia de un presupuesto detallado para la reparación de vehículos",
+          "publisher": "AcademiaXray",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Señala que las plantillas gratuitas suelen ser genéricas y conviene adaptarlas; blog de Chile.",
+          "kind": "pain",
+          "reliability": "low"
+        }
+      ]
+    },
+    {
+      "title": "Pack de publicaciones para redes sociales de clínicas dentales y de estética en español",
+      "description": "Existen packs de plantillas de Canva para odontología (12,99 USD en Gumroad) y plantillas gratuitas de SocialPilot, pero mayormente genéricos o en inglés/Latam. Hueco: textos y calendario adaptados a España. Riesgo legal: la publicidad sanitaria está regulada en España; el pack debe evitar promesas de resultados y no dar consejo sanitario; revisar antes de vender. Competencia alta.",
+      "segment": "Clínicas dentales y centros de estética pequeños en España",
+      "product_idea": "Calendario de 12 semanas con 60 textos de publicaciones e ideas de imagen editables en Canva gratuito, sin promesas de resultados",
+      "price_hint_eur": 15,
+      "benefits": [
+        "Calendario de publicaciones listo para adaptar a tu clínica.",
+        "Textos en español de España para Instagram y Facebook.",
+        "Plantillas editables con tu logo y colores.",
+        "Ideas de contenido informativo sin promesas de resultados."
+      ],
+      "estimates": {
+        "demand": 3,
+        "willingness_to_pay": 2,
+        "competition_intensity": 4,
+        "build_cost_eur": 0,
+        "time_to_first_sale_days": 35,
+        "legal_risk": 3,
+        "fit": 3
+      },
+      "evidence": [
+        {
+          "url": "https://graficdesig.gumroad.com/l/plantillas-de-odontologos",
+          "title": "Plantillas de odontólogos",
+          "publisher": "Gumroad",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Pack de plantillas de odontología para Canva a 12,99 USD: 60 publicaciones, 50 historias y 12 historias destacadas (según el resumen del resultado).",
+          "kind": "price",
+          "reliability": "low"
+        },
+        {
+          "url": "https://www.socialpilot.co/es/social-media-post-templates/dental-services",
+          "title": "Plantillas de redes sociales para servicios dentales",
+          "publisher": "SocialPilot",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Plantillas gratuitas para dentistas (testimonios, consejos, anuncios): competencia gratuita.",
+          "kind": "competition",
+          "reliability": "medium"
+        },
+        {
+          "url": "https://www.canva.com/es_mx/docs/calendario-de-contenido/",
+          "title": "Calendario de contenido",
+          "publisher": "Canva",
+          "retrieved_at": "2026-10-20",
+          "excerpt": "Guía con plantillas gratuitas de calendario de contenido: competencia gratuita de la propia plataforma.",
+          "kind": "competition",
+          "reliability": "medium"
+        }
+      ]
+    }
+  ]
+}
