@@ -9,6 +9,8 @@
   python -m app.cli status                   resumen en texto
   python -m app.cli approvals                 lista las aprobaciones pendientes
   python -m app.cli approve|reject ID [QUIEN] [nota]  decide una aprobación en nombre de QUIEN
+  python -m app.cli compliance                lista el checklist legal/fiscal
+  python -m app.cli confirm CLAVE|publish QUIEN [nota]  confirma requisitos revisados por el propietario
   python -m app.cli add-capital EUROS [nota] aportar dinero (queda en el libro contable)
   python -m app.cli stop "motivo"            parada de emergencia
   python -m app.cli backup                   copia de seguridad ahora
@@ -25,7 +27,7 @@ import os
 import shutil
 import sys
 
-from . import approvals, audit, budget, finance, settings_store, tasks
+from . import approvals, audit, budget, compliance, finance, settings_store, tasks
 from .actors import agent, human
 from .agents import evaluator, operations, researcher
 from .config import load_settings
@@ -95,6 +97,18 @@ def main(argv: list[str]) -> int:
         note = " ".join(args[2:]) or "decisión registrada por línea de órdenes"
         approvals.decide(conn, human(by), aid, cmd == "approve", note)
         print(f"Aprobación #{aid}: {'aprobada' if cmd == 'approve' else 'rechazada'} por {by}")
+    elif cmd == "compliance":
+        for c in compliance.list_items(conn):
+            print(f"{c['key']:20} [{c['required_for']}] {c['status']:15} {c['title']}")
+    elif cmd == "confirm":
+        # confirm CLAVE|publish|commerce QUIEN [nota]: el propietario confirma requisitos legales revisados
+        target, by = args[0], args[1]
+        note = " ".join(args[2:]) or "confirmado por línea de órdenes"
+        keys = [c["key"] for c in compliance.list_items(conn)
+                if target in ("publish", "commerce") and c["required_for"] == target] or [target]
+        for k in keys:
+            compliance.confirm(conn, human(by), k, "done", note)
+            print(f"{k}: confirmado por {by}")
     elif cmd == "add-capital":
         euros = float(args[0].replace(",", "."))
         bal = budget.add_capital(conn, human(getpass.getuser()), round(euros * 100), " ".join(args[1:]))
