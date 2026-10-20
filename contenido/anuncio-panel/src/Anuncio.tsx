@@ -40,7 +40,7 @@ const zoom = (c: Caja, s: number) => ({ s, ...centro(c) });
 const INTRO = { s: 1.25, x: 540, y: MOVIL_Y + BISEL + 355 * K };
 const PLANOS: Plano[] = [
   { f: 0, ...INTRO },
-  { f: f('intro', 2.6), ...INTRO },
+  { f: f('panel', -0.3), ...INTRO },
   { f: f('panel', 0.4), ...BASE },
   { f: f('panel', 1.1), ...zoom(cajas.resumen, 1.42) },
   { f: f('llamadas'), ...zoom(cajas.resumen, 1.42) },
@@ -84,7 +84,7 @@ const PANTALLAS: { desde: number; img: string | 'bloqueo' }[] = [
   { desde: f('recepcion', 1.15), img: 'recepcion-editar.png' },
 ];
 const TOQUES = [
-  { x: 195, y: 318, f: f('intro', 2.45), bloqueo: true },
+  { x: 195, y: 318, f: f('panel', -0.35), bloqueo: true },
   { x: cajas.filaLaura.x + 120, y: cajas.filaLaura.y + cajas.filaLaura.height / 2, f: f('llamadas', 1.0) },
   { x: 60, y: 511, f: f('escuchar', 0.35) },
   { x: cajas.editar.x + cajas.editar.width / 2, y: cajas.editar.y + cajas.editar.height / 2, f: f('recepcion', 0.9) },

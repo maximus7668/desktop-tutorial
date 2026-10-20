@@ -1,10 +1,16 @@
 # Anuncio con voz del panel DEIKA (Reel 9:16, ~27 s)
 
-Estado (20/10/2026): **borrador sin voz**, pendiente de aprobar el guion. Falta la locución (ElevenLabs,
-voz Cristina, eleven_v4) y, si se quiere, música. En esta sesión no había clave de ElevenLabs: se añade como
-variable `ELEVENLABS_API_KEY` en los ajustes del entorno y la recoge una sesión nueva.
+Estado (20/10/2026): **terminado, pendiente de aprobación del dueño**. No publicado ni programado.
 
-- Borrador: `deika-anuncio-panel-borrador.mp4` (1080×1920, sin sonido).
+- Vídeo: `deika-anuncio-panel.mp4` (25 s, 1080×1920, con voz y música, −14,5 LUFS, pico −1,3 dB).
+- Locución: ElevenLabs eleven_v4, voz «Cristina - Premium Spanish Advertising Voice» (1CeqBeXMOqCleeQjfYfO),
+  una sola toma con `[confident]` y `[warmly]` en el cierre (`audio/locucion-toma1.mp3` y sus tiempos por letra).
+  Comprobada con el transcriptor de ElevenLabs: dice el guion palabra por palabra. Montada con 0,5 s de entrada y
+  0,2 s más en cada pausa entre frases (`public/voz.mp3`).
+- Música: ElevenLabs Music con plan de secciones (`audio/musica-plan.json`), instrumental (el transcriptor no
+  encuentra palabras). Se quitan los primeros 0,8 s, la subida final se baja 4,8 dB para que el volumen sea
+  constante, y va unos 13 dB por debajo de la voz. Mezcla final: `public/mezcla.wav`.
+- Créditos de ElevenLabs gastados en esta pieza: 1.162 (voz, 3 tomas de música y comprobaciones).
 - Panel con **datos de ejemplo** de un negocio inventado (Peluquería Marta); lo dice una etiqueta arriba.
 - Pantallas reales del panel (`Deika-panel`, compilado y servido en local) con la API simulada:
   `capturar.mjs` (necesita `npx vite preview --port 4173` en Deika-panel y `LANG=es_ES.UTF-8` para la hora en 24 h).
@@ -22,8 +28,7 @@ variable `ELEVENLABS_API_KEY` en los ajustes del entorno y la recoge una sesión
 | recepcion | ¿Cambias el horario? Lo tocas aquí, y ella ya lo sabe. | Tu recepcionista → Editar → horario |
 | cierre | DEIKA. Tu teléfono, siempre atendido. | Logo, lema y deika.eu |
 
-## Terminarlo con la voz
+## Volver a renderizar
 
-1. Generar la locución (una toma por frase o todo seguido) y dejarla en `public/voz.mp3`.
-2. Ajustar `dur` de cada escena en `src/guion.ts` a lo que dura cada frase (+0,3 s de aire).
-3. `npm ci` y `bash render.sh out/deika-anuncio-panel.mp4 voz.mp3 [musica.mp3]`.
+`npm ci` y `bash render.sh out/deika-anuncio-panel.mp4 mezcla.wav`. Si cambia la locución, las duraciones de
+`src/guion.ts` se recalculan con los tiempos de cada frase (cada escena empieza en mitad de la pausa anterior).
