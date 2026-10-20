@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Finanzas{% endblock %}
+{% block content %}
+<h1>Finanzas</h1>
+<form method="get" class="inline"><label class="small">Desde <input type="date" name="desde" value="{{ desde }}"></label>
+  <label class="small">Hasta <input type="date" name="hasta" value="{{ hasta }}"></label><button class="ghost">Filtrar</button></form>
+<div class="tablewrap" style="margin-top:10px"><table>
+<tr><th></th><th>Ingresos</th><th>Reembolsos</th><th>Gastos</th><th>Neto</th></tr>
+{% for dk in ['real','estimate','simulation'] %}<tr><td><span class="badge {{ dk }}">{{ dk }}</span></td>
+<td class="num">{{ fin[dk].revenue_cents|eur }}</td><td class="num">{{ fin[dk].refunds_cents|eur }}</td><td class="num">{{ fin[dk].expenses_cents|eur }}</td><td class="num">{{ fin[dk].net_cents|eur }}</td></tr>{% endfor %}
+</table></div>
+<p class="small muted">Saldo: capital {{ fin.budget.capital_cents|eur }} · gastado {{ fin.budget.spent_cents|eur }} · reservado {{ fin.budget.reserved_cents|eur }} · disponible {{ fin.budget.available_cents|eur }}. Los ingresos no amplían el presupuesto automáticamente.</p>
+<h2>Solicitudes de gasto</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Agente</th><th>Categoría</th><th>Importe</th><th>Real</th><th>Estado</th><th>Autorizado por</th><th>Motivo</th><th>Descripción</th></tr>
+{% for s in spends %}<tr><td>{{ s.id }}</td><td>{{ s.agent }}</td><td>{{ s.category }}</td><td class="num">{{ s.amount_cents|eur }}</td><td class="num">{{ s.actual_cents|eur }}</td><td>{{ s.status }}</td><td>{{ s.authorized_by or '' }}</td><td class="small">{{ s.reason or '' }}</td><td class="small">{{ s.description }}</td></tr>{% endfor %}
+</table></div>
+<h2>Pedidos</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Proveedor</th><th>Ref.</th><th>Importe</th><th>Estado</th><th>Tipo</th><th>Fecha</th></tr>
+{% for o in orders %}<tr><td>{{ o.id }}</td><td>{{ o.provider }}</td><td class="small">{{ o.external_id }}</td><td class="num">{{ o.amount_cents|eur }}</td><td>{{ o.status }}</td><td><span class="badge {{ o.data_kind }}">{{ o.data_kind }}</span></td><td class="small">{{ o.created_at }}</td></tr>
+{% else %}<tr><td colspan="7" class="muted">Sin pedidos.</td></tr>{% endfor %}
+</table></div>
+<h2>Libro</h2>
+<div class="tablewrap"><table><tr><th>Fecha</th><th>Tipo</th><th>Importe</th><th>Dato</th><th>Categoría</th><th>Origen</th><th>Notas</th></tr>
+{% for l in ledger %}<tr><td class="small">{{ l.ts }}</td><td>{{ l.kind }}</td><td class="num">{{ l.amount_cents|eur }}</td><td><span class="badge {{ l.data_kind }}">{{ l.data_kind }}</span></td><td>{{ l.category or '' }}</td><td>{{ l.source }}</td><td class="small">{{ l.notes or '' }}</td></tr>{% endfor %}
+</table></div>
+<h2>Uso del modelo</h2>
+<div class="tablewrap"><table><tr><th>Fecha</th><th>Agente</th><th>Modelo</th><th>Tokens entrada/salida</th><th>Coste</th><th>Dato</th></tr>
+{% for u in llm %}<tr><td class="small">{{ u.ts }}</td><td>{{ u.agent }}</td><td>{{ u.model }}</td><td class="num">{{ u.input_tokens }} / {{ u.output_tokens }}</td><td class="num">{{ u.cost_cents|eur }}</td><td>{{ u.data_kind }}</td></tr>
+{% else %}<tr><td colspan="6" class="muted">Sin llamadas.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

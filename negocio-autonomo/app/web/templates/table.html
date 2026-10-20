@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+{% if note %}<p><strong>{{ note }}</strong></p>{% endif %}
+<form method="get" class="inline"><label class="small">Desde <input type="date" name="desde" value="{{ desde }}"></label>
+  <label class="small">Hasta <input type="date" name="hasta" value="{{ hasta }}"></label><button class="ghost">Filtrar</button></form>
+<div class="tablewrap" style="margin-top:10px"><table>
+<tr>{% for c in cols %}<th>{{ c }}</th>{% endfor %}</tr>
+{% for r in data %}<tr>{% for c in cols %}<td class="small">{{ r[c] if r[c] is not none else '' }}</td>{% endfor %}</tr>
+{% else %}<tr><td class="muted">Sin datos.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

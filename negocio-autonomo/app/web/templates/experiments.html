@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Experimentos{% endblock %}
+{% block content %}
+<h1>Experimentos de validación</h1>
+<p class="small muted">Criterio de éxito y presupuesto se fijan antes de empezar y quedan bloqueados al aprobarse. Solo las compras reales validan; registros o visitas como mucho dan «interés sin validar».</p>
+{% for e in items %}
+<div class="card" style="margin-bottom:12px">
+  <div class="k">#{{ e.id }} · {{ e.status }}{% if e.criteria_locked_at %} · criterios bloqueados {{ e.criteria_locked_at }}{% endif %}</div>
+  <h2 style="margin:6px 0">{{ e.title }}</h2>
+  <p><strong>Hipótesis:</strong> {{ e.hypothesis }}</p>
+  <p><strong>Diseño:</strong> {{ e.design }}</p>
+  <p><strong>Éxito si:</strong> {{ e.success_metric }} ≥ {{ e.success_threshold }} · mínimo {{ e.min_visits }} visitantes · {{ e.duration_days }} días · presupuesto máx. {{ e.max_budget_cents|eur }}</p>
+  <p><span class="badge real">real</span> {{ e.live }}</p>
+  <p><span class="badge simulation">simulación</span> {{ e.sim }}</p>
+  {% if e.verdict %}<p><strong>Veredicto:</strong> {{ e.verdict }} → {{ e.decision }}. {{ e.conclusion }}</p>{% endif %}
+</div>
+{% else %}<p class="muted">Aún no hay experimentos. El director los propone cuando hay una oportunidad con puntuación suficiente.</p>{% endfor %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Aprobaciones{% endblock %}
+{% block content %}
+<h1>Aprobaciones pendientes</h1>
+<p class="muted small">Los agentes solo pueden pedir. Aprobar un gasto lo autoriza dentro de los límites del servidor; si el presupuesto ya no alcanza, se rechaza automáticamente.</p>
+{% for a in pending %}
+<div class="card" style="margin-bottom:10px">
+  <div class="k">#{{ a.id }} · {{ a.kind }} · pedido por {{ a.requested_by }} · {{ a.created_at }}</div>
+  <p><strong>{{ a.summary }}</strong></p>
+  {% set pl = a.payload|fromjson %}{% if pl %}<pre class="muted">{{ pl|tojson(indent=2) }}</pre>{% endif %}
+  <form method="post" action="/aprobaciones/{{ a.id }}" class="inline">
+    <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    <input name="note" placeholder="Nota (opcional)" maxlength="500">
+    <button name="decision" value="approve">Aprobar</button>
+    <button name="decision" value="reject" class="danger">Rechazar</button>
+  </form>
+</div>
+{% else %}<p class="muted">No hay aprobaciones pendientes.</p>{% endfor %}
+<h2>Historial reciente</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Tipo</th><th>Resumen</th><th>Estado</th><th>Decidido por</th><th>Fecha</th><th>Nota</th></tr>
+{% for a in recent %}<tr><td>{{ a.id }}</td><td>{{ a.kind }}</td><td>{{ a.summary }}</td><td>{{ a.status }}</td><td>{{ a.decided_by or '' }}</td><td class="small">{{ a.decided_at or a.created_at }}</td><td>{{ a.note or '' }}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Panel{% endblock %} · Negocio supervisado</title>
+<style>
+:root{--bg:#f7f7f4;--fg:#1c1c1a;--muted:#62625c;--card:#fff;--line:#e2e1db;--accent:#1f5f4a;--warn:#9a5b00;--bad:#a12a2a;--ok:#1f6f3f;
+--real:#1f5f4a;--est:#7a5a12;--sim:#5b4a9a}
+@media (prefers-color-scheme:dark){:root{--bg:#131312;--fg:#ecebe6;--muted:#a3a29a;--card:#1c1c1a;--line:#30302c;--accent:#6cc4a1;--warn:#e0a84a;--bad:#ef7b7b;--ok:#79d39a;--real:#6cc4a1;--est:#e0b85a;--sim:#ad9cf0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{border-bottom:1px solid var(--line);background:var(--card)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+nav{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;padding:10px 0}
+nav a{color:var(--fg);text-decoration:none;font-weight:500}nav a:hover{color:var(--accent)}
+nav .brand{font-weight:700;margin-right:8px}
+.envtag{font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+main{padding:20px 0 60px}
+h1{font-size:22px;margin:4px 0 16px}h2{font-size:17px;margin:26px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.v{font-size:22px;font-weight:650;font-variant-numeric:tabular-nums;margin-top:4px}
+.real{color:var(--real)}.estimate{color:var(--est)}.simulation{color:var(--sim)}
+.badge{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;border:1px solid currentColor;font-weight:600}
+.tablewrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);white-space:nowrap}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.alert{border-left:4px solid var(--warn);padding:8px 12px;background:var(--card);margin:6px 0;border-radius:6px}
+.alert.critical{border-color:var(--bad)}
+.kill{background:var(--bad);color:#fff;padding:10px 14px;border-radius:8px;font-weight:600;margin-bottom:14px}
+button,.btn{background:var(--accent);color:#fff;border:0;border-radius:6px;padding:6px 12px;font:inherit;cursor:pointer;text-decoration:none}
+button.danger{background:var(--bad)}button.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+input,select,textarea{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);max-width:100%}
+form.inline{display:inline-flex;gap:6px;flex-wrap:wrap;align-items:center;margin:2px 0}
+.muted{color:var(--muted)}.small{font-size:12px}
+details summary{cursor:pointer}
+pre{white-space:pre-wrap;word-break:break-word;font-size:12px;margin:0}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+  <span class="brand">Negocio supervisado</span>
+  {% if sess %}
+  <a href="/">Resumen</a><a href="/aprobaciones">Aprobaciones</a><a href="/oportunidades">Oportunidades</a>
+  <a href="/experimentos">Experimentos</a><a href="/productos">Productos</a><a href="/finanzas">Finanzas</a>
+  <a href="/tareas">Tareas</a><a href="/consultas">Consultas</a><a href="/memoria">Memoria</a><a href="/auditoria">Auditoría</a><a href="/ajustes">Ajustes</a>
+  <span class="envtag">{{ env }}</span>
+  <form method="post" action="/logout" class="inline"><button class="ghost" type="submit">Salir</button></form>
+  {% endif %}
+</nav></div></header>
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

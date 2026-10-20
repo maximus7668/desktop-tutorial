@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Oportunidades{% endblock %}
+{% block content %}
+<h1>Oportunidades investigadas</h1>
+<p class="small muted">Puntuación determinista 0-100 a partir de estimaciones (<span class="badge estimate">estimación</span>) limitadas por la evidencia disponible. Una puntuación alta no valida nada: solo decide qué probar primero.</p>
+{% for o in items %}
+<div class="card" style="margin-bottom:12px">
+  <div class="k">#{{ o.id }} · {{ o.status }} · {{ o.segment }} · investigación {{ o.research_run }}</div>
+  <h2 style="margin:6px 0">{{ o.title }} — {{ o.score if o.score is not none else 'sin evaluar' }}</h2>
+  <p>{{ o.description }}</p>
+  <p><strong>Producto:</strong> {{ o.product_idea }} · <strong>Precio orientativo:</strong> {{ o.price_hint_cents|eur }}</p>
+  {% set b = o.score_breakdown|fromjson %}
+  {% if b %}<p class="small">Fuentes independientes: {{ b.independent_sources }} · verificadas por búsqueda: {{ b.verified_sources }} · puntos: {{ b.points }}</p>
+  {% for n in b.notes %}<p class="small estimate">⚠ {{ n }}</p>{% endfor %}{% endif %}
+  <details><summary>Evidencias ({{ o.evidence|length }})</summary>
+    <div class="tablewrap"><table><tr><th>Tipo</th><th>Fiabilidad</th><th>Fuente</th><th>Extracto</th><th>Consultada</th></tr>
+    {% for e in o.evidence %}<tr><td>{{ e.kind }}</td><td>{{ e.reliability }}{% if e.verified %} ✔{% endif %}</td>
+      <td><a href="{{ e.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ e.title }}</a><div class="small muted">{{ e.publisher }}</div></td>
+      <td class="small">{{ e.excerpt }}</td><td class="small">{{ e.retrieved_at }}</td></tr>{% endfor %}
+    </table></div>
+  </details>
+</div>
+{% else %}<p class="muted">Sin oportunidades. Importa una investigación (<code>python -m app.cli import-research archivo.json</code>) o lanza una búsqueda desde Tareas si hay proveedor de modelos.</p>{% endfor %}
+{% endblock %}

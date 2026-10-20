@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Ajustes{% endblock %}
+{% block content %}
+<h1>Ajustes, permisos y cumplimiento</h1>
+
+<h2>Operación</h2>
+<div class="card">
+  <p>Parada de emergencia: <strong>{{ vals.kill_switch }}</strong>
+    <form method="post" action="/ajustes/parada" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    {% if vals.kill_switch == 'on' %}<input type="hidden" name="state" value="off"><button>Reanudar</button>{% else %}<input type="hidden" name="state" value="on"><button class="danger">Detener todo</button>{% endif %}</form></p>
+  <p class="small muted">Modo 1: solo investigación. Modo 2: validación controlada (publicar, gastar y cobrar requieren aprobación). Modo 3: operación supervisada (manda la tabla de permisos; el dinero siempre requiere aprobación).</p>
+  <div class="tablewrap"><table><tr><th>Ajuste</th><th>Valor</th><th>Cambiar</th></tr>
+  {% for k, v in vals.items() if k != 'kill_switch' %}<tr><td>{{ k }}</td><td>{% if k.endswith('_cents') %}{{ v|int|eur }}{% else %}{{ v }}{% endif %}</td>
+  <td><form method="post" action="/ajustes/valor" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="key" value="{{ k }}"><input name="value" value="{{ v }}" size="10"><button class="ghost">Guardar</button></form></td></tr>{% endfor %}
+  </table></div>
+  <p class="small muted">Los importes van en céntimos (50000 = 500 €). commerce_authorized=on solo se acepta con el checklist de cobros completo.</p>
+</div>
+
+<h2>Cumplimiento legal y fiscal</h2>
+<p class="small muted">El sistema no decide si estás exento de nada. Marca cada punto solo tras revisarlo (idealmente con un profesional). Publicar exige los puntos «publish»; cobrar, todos.</p>
+<div class="tablewrap"><table><tr><th>Requisito</th><th>Para</th><th>Estado</th><th>Confirmar</th></tr>
+{% for c in compliance %}<tr><td><strong>{{ c.title }}</strong><div class="small muted">{{ c.description }}</div></td><td>{{ c.required_for }}</td><td>{{ c.status }}{% if c.confirmed_by %}<div class="small muted">{{ c.confirmed_by }} {{ c.confirmed_at }}</div>{% endif %}</td>
+<td><form method="post" action="/ajustes/cumplimiento" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="key" value="{{ c.key }}">
+<select name="status"><option value="done">hecho</option><option value="not_applicable">no aplica (justificar)</option><option value="pending">pendiente</option></select><input name="note" placeholder="nota" size="12"><button class="ghost">Guardar</button></form></td></tr>{% endfor %}
+</table></div>
+
+<h2>Permisos por agente</h2>
+<div class="tablewrap"><table><tr><th>Agente</th><th>Herramienta.acción</th><th>Política</th><th>Límite diario</th><th>Actualizado</th></tr>
+{% for p in perms %}<tr><td>{{ p.agent }}</td><td>{{ p.tool }}.{{ p.action }}</td><td>{{ p.policy }}</td><td>{{ p.daily_limit if p.daily_limit is not none else '—' }}</td><td class="small">{{ p.updated_by }} {{ p.updated_at }}</td></tr>{% endfor %}
+</table></div>
+<form method="post" action="/ajustes/permiso" class="inline" style="margin-top:8px"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+<select name="agent_name">{% for a in agents %}<option>{{ a }}</option>{% endfor %}</select>
+<select name="tool_action">{% for c in catalog %}<option>{{ c }}</option>{% endfor %}</select>
+<select name="policy"><option>deny</option><option>approval</option><option>allow</option></select>
+<input name="daily_limit" placeholder="límite/día" size="8"><button>Aplicar</button></form>
+<p class="small muted">Las acciones con dinero nunca pasan de «approval», aunque aquí se ponga «allow».</p>
+
+<h2>Enlaces de pago (Stripe Payment Links)</h2>
+{% for p in products %}<form method="post" action="/ajustes/enlace-pago" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="product_id" value="{{ p.id }}">
+#{{ p.id }} {{ p.name }} <input name="link" value="{{ p.payment_link or '' }}" placeholder="https://buy.stripe.com/..." size="40"><button class="ghost">Guardar</button></form><br>{% else %}<p class="muted">Sin productos.</p>{% endfor %}
+
+<h2>Tareas programadas</h2>
+{% for s in schedules %}<form method="post" action="/ajustes/programacion" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="name" value="{{ s.name }}">
+{{ s.name }} ({{ 'activa' if s.enabled else 'en pausa' }}) <input type="hidden" name="enabled" value="{{ 0 if s.enabled else 1 }}"><button class="ghost">{{ 'Pausar' if s.enabled else 'Reanudar' }}</button></form><br>{% endfor %}
+
+<h2>Integraciones</h2>
+<div class="tablewrap"><table><tr><th>Integración</th><th>Configurada</th><th>Probada</th><th>Permisos</th><th>Notas / cómo configurar</th></tr>
+{% for i in integrations %}<tr><td>{{ i.name }}</td><td>{{ 'sí' if i.configured else 'no' }}</td><td>{% if i.tested_at %}{{ 'OK' if i.test_ok else 'FALLO' }} {{ i.tested_at }}{% else %}no probada{% endif %}</td><td class="small">{{ i.permissions }}</td><td class="small">{{ i.message }}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

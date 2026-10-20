@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ c.name }}</title>
+<meta name="description" content="{{ c.headline }}">
+<style>
+:root{--bg:#fafaf7;--fg:#1d1d1b;--muted:#5d5d58;--accent:#1f5f4a;--card:#fff;--line:#e3e2dc}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--fg:#efeee9;--muted:#a8a69e;--accent:#6cc4a1;--card:#1e1e1c;--line:#33332f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:680px;margin:0 auto;padding:40px 16px 64px}
+h1{font-size:clamp(28px,6vw,40px);line-height:1.15;margin:.2em 0 .4em}
+.tag{color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:.06em}
+ul{padding-left:1.2em}li{margin:.35em 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:28px 0}
+.price{font-size:24px;font-weight:650}
+.note{color:var(--muted);font-size:14px}
+input[type=email],textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg);color:var(--fg)}
+button,.btn{display:inline-block;margin-top:12px;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:12px 20px;font:inherit;font-weight:600;text-decoration:none;cursor:pointer}
+label.consent{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin-top:10px;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <div class="tag">{{ c.segment }}</div>
+  <h1>{{ c.headline }}</h1>
+  {% if c.description %}<p>{{ c.description }}</p>{% endif %}
+  {% if c.bullets %}<ul>{% for b in c.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+
+  <div class="card">
+    <div class="price">{{ c.price_text }} <span class="note">(precio final, IVA incluido)</span></div>
+    {% if c.commerce %}
+      <a class="btn" href="{{ c.checkout_path }}">Comprar</a>
+      <p class="note">Pago seguro con Stripe. Recibirás factura. Consulta las condiciones de venta y el derecho de desistimiento en el aviso legal.</p>
+    {% else %}
+      <p class="note">Producto en preparación: todavía no está a la venta y no se cobra nada. Déjanos tu email y te avisamos cuando esté disponible.</p>
+      <form method="post" action="{{ c.signup_path }}">
+        <input type="email" name="email" required maxlength="200" placeholder="tu@email.com" aria-label="Email">
+        <label class="consent"><input type="checkbox" name="consent" value="yes" required>
+          <span>{{ c.consent_text }} <a href="/legal/privacidad">Política de privacidad</a>.</span></label>
+        <button type="submit">Avisadme</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <details class="card"><summary>¿Tienes una pregunta?</summary>
+    <form method="post" action="{{ c.inquiry_path }}">
+      <textarea name="message" rows="3" maxlength="1000" required aria-label="Pregunta"></textarea>
+      <button type="submit">Enviar pregunta</button>
+    </form>
+    <p class="note">Las respuestas automáticas solo usan información verificada; lo demás lo revisa una persona.</p>
+  </details>
+
+  <footer>{{ c.owner_name }} · <a href="/legal/aviso-legal">Aviso legal</a> · <a href="/legal/privacidad">Privacidad</a>
+  {% if c.is_test %}<p><strong>Entorno de pruebas:</strong> los datos de esta página son simulados.</p>{% endif %}</footer>
+</main>
+</body>
+</html>

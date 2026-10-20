@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+{% block content %}
+<h1>Productos y páginas</h1>
+<div class="tablewrap"><table><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Precio</th><th>Comprobaciones técnicas</th><th>Enlace de pago</th><th>Ver</th></tr>
+{% for p in items %}{% set ch = p.checks|fromjson %}
+<tr><td>{{ p.id }}</td><td>{{ p.name }}</td><td>{{ p.status }}</td><td class="num">{{ p.price_cents|eur }}</td>
+<td class="small">{% if ch %}{{ 'OK' if ch.ok else 'FALLAN:' }}{% for k, v in ch.checks.items() %}{% if not v %} {{ k }}{% endif %}{% endfor %}{% endif %}</td>
+<td class="small">{{ 'configurado' if p.payment_link else '—' }}</td>
+<td><a href="/productos/{{ p.id }}/vista-previa" target="_blank">vista previa</a>{% if p.status == 'published' %} · <a href="/p/{{ p.slug }}" target="_blank">pública</a>{% endif %}</td></tr>
+{% else %}<tr><td colspan="7" class="muted">Sin productos.</td></tr>{% endfor %}
+</table></div>
+<p class="small muted">Si falla «titular_configurado», define OWNER_LEGAL_NAME y OWNER_CONTACT_EMAIL y vuelve a lanzar la construcción.</p>
+{% endblock %}

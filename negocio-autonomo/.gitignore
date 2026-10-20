@@ -1,0 +1,8 @@
+.env
+data/*.db
+data/*.db-*
+backups/*.db
+reports/*.json
+__pycache__/
+.pytest_cache/
+.ruff_cache/

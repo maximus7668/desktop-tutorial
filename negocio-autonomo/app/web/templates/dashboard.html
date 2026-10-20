@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Resumen{% endblock %}
+{% block content %}
+{% if kill %}<div class="kill">PARADA DE EMERGENCIA ACTIVA — todas las acciones externas están bloqueadas.
+  <form method="post" action="/ajustes/parada" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="state" value="off"><button class="ghost" style="color:#fff;border-color:#fff">Reanudar</button></form></div>
+{% endif %}
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
+  <h1>Resumen · modo {{ mode }}{% if queue_paused %} · cola en pausa{% endif %}</h1>
+  <div>
+    <form method="get" class="inline"><label class="small">Desde <input type="date" name="desde" value="{{ desde }}"></label>
+      <label class="small">Hasta <input type="date" name="hasta" value="{{ hasta }}"></label><button class="ghost">Filtrar</button></form>
+    {% if not kill %}<form method="post" action="/ajustes/parada" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><input type="hidden" name="state" value="on"><button class="danger">Parada de emergencia</button></form>{% endif %}
+  </div>
+</div>
+<p class="small muted">Leyenda: <span class="badge real">real</span> datos medidos o cobrados · <span class="badge estimate">estimación</span> calculado (p. ej. coste de API por tokens) · <span class="badge simulation">simulación</span> pruebas, nunca cuenta como ingreso.</p>
+
+<h2>Dinero</h2>
+<div class="grid">
+  <div class="card"><div class="k">Capital inicial</div><div class="v">{{ fin.budget.capital_cents|eur }}</div></div>
+  <div class="card"><div class="k">Gasto acumulado</div><div class="v">{{ fin.budget.spent_cents|eur }}</div></div>
+  <div class="card"><div class="k">Reservado (pendiente)</div><div class="v">{{ fin.budget.reserved_cents|eur }}</div></div>
+  <div class="card"><div class="k">Disponible para gastar</div><div class="v">{{ fin.budget.available_cents|eur }}</div><div class="small muted">respeta un suelo de {{ fin.budget.reserve_floor_cents|eur }}</div></div>
+  <div class="card"><div class="k">Ingresos cobrados <span class="badge real">real</span></div><div class="v real">{{ fin.real.revenue_cents|eur }}</div><div class="small muted">{{ fin.orders_real }} ventas confirmadas</div></div>
+  <div class="card"><div class="k">Reembolsos <span class="badge real">real</span></div><div class="v">{{ fin.real.refunds_cents|eur }}</div><div class="small muted">{{ fin.refunds_count }} pedidos</div></div>
+  <div class="card"><div class="k">Costes API <span class="badge estimate">estim.</span></div><div class="v estimate">{{ fin.api_spend_cents|eur }}</div></div>
+  <div class="card"><div class="k">Herramientas y servicios</div><div class="v">{{ fin.tools_spend_cents|eur }}</div></div>
+  <div class="card"><div class="k">Publicidad</div><div class="v">{{ fin.ads_spend_cents|eur }}</div></div>
+  <div class="card"><div class="k">Beneficio operativo <span class="badge estimate">estim.</span></div><div class="v">{{ fin.operating_profit_cents|eur }}</div></div>
+  <div class="card"><div class="k">Ventas simuladas <span class="badge simulation">sim.</span></div><div class="v simulation">{{ fin.simulation.revenue_cents|eur }}</div><div class="small muted">{{ fin.orders_simulation }} pedidos; no son ingresos</div></div>
+</div>
+
+<h2>Actividad</h2>
+<div class="grid">
+  <div class="card"><div class="k">Oportunidades investigadas</div><div class="v">{{ opps }}</div></div>
+  <div class="card"><div class="k">Productos creados</div><div class="v">{{ products.values()|sum }}</div></div>
+  <div class="card"><div class="k">Productos publicados</div><div class="v">{{ products.get('published', 0) }}</div></div>
+  <div class="card"><div class="k">Tareas pendientes</div><div class="v">{{ tasks.get('pending',0) + tasks.get('running',0) }}</div></div>
+  <div class="card"><div class="k">Tareas completadas</div><div class="v">{{ tasks.get('done',0) }}</div></div>
+  <div class="card"><div class="k">Tareas fallidas</div><div class="v">{{ tasks.get('failed',0) }}</div></div>
+  {% for dk, f in funnel.items() %}
+  <div class="card"><div class="k">Visitas / registros <span class="badge {{ dk }}">{{ dk }}</span></div>
+    <div class="v {{ dk }}">{{ f.get('unique',0) }} / {{ f.get('signup',0) }}</div><div class="small muted">conversión {{ f.conversion }} % · clics de compra {{ f.get('checkout_click',0) }}</div></div>
+  {% endfor %}
+</div>
+
+<h2>Aprobaciones pendientes ({{ pending|length }})</h2>
+{% if pending %}<div class="tablewrap"><table><tr><th>#</th><th>Tipo</th><th>Resumen</th><th>Pedido por</th></tr>
+{% for a in pending %}<tr><td>{{ a.id }}</td><td>{{ a.kind }}</td><td>{{ a.summary }}</td><td>{{ a.requested_by }}</td></tr>{% endfor %}
+</table></div><p><a class="btn" href="/aprobaciones">Revisar</a></p>{% else %}<p class="muted">Nada pendiente.</p>{% endif %}
+
+<h2>Alertas</h2>
+{% for al in alerts %}<div class="alert {{ al.level }}">{{ al.ts }} · {{ al.message }}
+  <form method="post" action="/alertas/{{ al.id }}/ok" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}"><button class="ghost">Visto</button></form></div>
+{% else %}<p class="muted">Sin alertas abiertas.</p>{% endfor %}
+
+<h2>Agentes</h2>
+<div class="tablewrap"><table><tr><th>Agente</th><th>Rol</th><th>Estado</th><th>Última ejecución</th><th>Último error</th></tr>
+{% for a in agents %}<tr><td>{{ a.name }}</td><td>{{ a.role }}</td><td>{{ a.status }}</td><td>{{ a.last_run_at or '—' }}</td><td class="small">{{ a.last_error or '' }}</td></tr>{% endfor %}
+</table></div>
+
+<h2>Últimas decisiones y acciones</h2>
+<div class="tablewrap"><table><tr><th>Fecha</th><th>Actor</th><th>Acción</th><th>Objeto</th></tr>
+{% for d in decisions %}<tr><td class="small">{{ d.ts }}</td><td>{{ d.actor_kind }}:{{ d.actor }}</td><td>{{ d.action }}</td><td>{{ d.target }}</td></tr>{% endfor %}
+</table></div>
+<p class="small">Exportar: {% for n in ['libro','gastos','pedidos','eventos','oportunidades','experimentos','auditoria'] %}<a href="/exportar/{{ n }}.csv?desde={{ desde }}&hasta={{ hasta }}">{{ n }}.csv</a> · {% endfor %}<a href="/exportar/libro.json?desde={{ desde }}&hasta={{ hasta }}">libro.json</a></p>
+{% endblock %}

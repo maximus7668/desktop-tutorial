@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Tareas{% endblock %}
+{% block content %}
+<h1>Cola de tareas</h1>
+<div class="card">
+  <form method="post" action="/tareas/encolar" class="inline">
+    <input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    <select name="task_type">{% for h in handlers %}<option>{{ h }}</option>{% endfor %}</select>
+    <input name="payload" value="{}" size="50" aria-label="payload JSON">
+    <button>Encolar</button>
+  </form>
+  <p class="small muted">research.discover necesita {"topic": "...", "run_id": "..."} y un proveedor de modelos configurado.</p>
+</div>
+<h2>Programación</h2>
+<div class="tablewrap"><table><tr><th>Nombre</th><th>Tarea</th><th>Cada</th><th>Próxima</th><th>Activa</th></tr>
+{% for s in schedules %}<tr><td>{{ s.name }}</td><td>{{ s.task_type }}</td><td>{{ s.interval_seconds // 3600 }} h</td><td class="small">{{ s.next_run_at }}</td><td>{{ 'sí' if s.enabled else 'no' }}</td></tr>{% endfor %}
+</table></div>
+<h2>Tareas</h2>
+<div class="tablewrap"><table><tr><th>#</th><th>Tipo</th><th>Agente</th><th>Estado</th><th>Intentos</th><th>Ejecutar tras</th><th>Error</th></tr>
+{% for t in data %}<tr><td>{{ t.id }}</td><td>{{ t.type }}</td><td>{{ t.agent }}</td><td>{{ t.status }}</td><td>{{ t.attempts }}/{{ t.max_attempts }}</td><td class="small">{{ t.run_after }}</td><td class="small">{{ t.last_error or '' }}</td></tr>{% endfor %}
+</table></div>
+{% endblock %}
