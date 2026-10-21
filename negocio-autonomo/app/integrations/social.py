@@ -13,12 +13,21 @@ LinkedIn (documentación oficial, Microsoft Learn):
 - Identidad: GET https://api.linkedin.com/v2/userinfo → campo "sub" → autor urn:li:person:{sub}.
 - Publicar: POST https://api.linkedin.com/rest/posts con cabeceras Linkedin-Version (AAAAMM) y
   X-Restli-Protocol-Version: 2.0.0; el id llega en la cabecera x-restli-id.
-- El texto usa el formato «little»: hay que escapar | { } @ [ ] ( ) < > # \\ * _ ~."""
+- El texto usa el formato «little»: hay que escapar | { } @ [ ] ( ) < > # \\ * _ ~.
+
+Instagram («API de Instagram con inicio de sesión de Instagram», Meta for Developers):
+- Cuenta profesional (empresa o creador); no hace falta página de Facebook. Permisos
+  instagram_business_basic e instagram_business_content_publish.
+- Identidad: GET https://graph.instagram.com/{versión}/me?fields=user_id,username.
+- Publicar: un contenedor por imagen (POST /{id}/media con image_url, is_carousel_item), el carrusel
+  (media_type=CAROUSEL, children, caption), esperar status_code=FINISHED y POST /{id}/media_publish.
+- Instagram descarga las imágenes de una URL pública: las sirve este sistema en /media/ig/{borrador}/{n}.jpg."""
 from __future__ import annotations
 
 import json
 import os
 import sqlite3
+import time
 import urllib.error
 import urllib.request
 from datetime import date, datetime, timezone
@@ -114,7 +123,7 @@ class LinkedIn:
             raise IntegrationError("LinkedIn no devolvió el identificador de la cuenta")
         return {"sub": data["sub"], "name": data.get("name", "")}
 
-    def publish(self, text: str) -> dict:
+    def publish(self, text: str, **_) -> dict:
         me = self.whoami()
         payload = {
             "author": f"urn:li:person:{me['sub']}",
@@ -134,7 +143,102 @@ class LinkedIn:
         return {"id": post_id, "url": f"https://www.linkedin.com/feed/update/{post_id}/"}
 
 
-PUBLISHERS = {"linkedin": LinkedIn}
+INSTAGRAM_API = "https://graph.instagram.com"
+
+
+def image_urls(draft: dict, base_url: str) -> list[str]:
+    """URLs públicas de las diapositivas de un borrador de Instagram (las sirve /media/ig/...)."""
+    from .slides import parse_carousel
+
+    texts, _ = parse_carousel(draft["body"])
+    return [f"{base_url.rstrip('/')}/media/ig/{draft['id']}/{n}.jpg" for n in range(1, len(texts) + 1)]
+
+
+class Instagram:
+    name = "instagram"
+
+    def __init__(self, http: HttpFn | None = None, sleep: Callable[[float], None] | None = None):
+        self.token = os.environ.get("INSTAGRAM_ACCESS_TOKEN", "").strip()
+        self.version = os.environ.get("INSTAGRAM_API_VERSION", "").strip() or "v23.0"
+        self.expires = os.environ.get("INSTAGRAM_TOKEN_EXPIRES", "").strip()
+        self.http = http or _http
+        self.sleep = sleep or time.sleep
+
+    def info(self) -> IntegrationInfo:
+        return IntegrationInfo(
+            "red_instagram", bool(self.token),
+            "publicar carruseles en tu cuenta profesional solo de borradores aprobados; sin leer mensajes",
+            "Crea una app en developers.facebook.com con el producto «API de Instagram» (inicio de sesión de "
+            "Instagram), genera un token para tu cuenta profesional y ponlo en INSTAGRAM_ACCESS_TOKEN (y su "
+            "caducidad en INSTAGRAM_TOKEN_EXPIRES=AAAA-MM-DD). Guía: docs/REDES.md")
+
+    days_left = LinkedIn.days_left
+
+    def _url(self, path: str) -> str:
+        return f"{INSTAGRAM_API}/{self.version}/{path.lstrip('/')}"
+
+    def _call(self, method: str, path: str, what: str, data: dict | None = None) -> dict:
+        headers = {"Authorization": f"Bearer {self.token}"}
+        body = None
+        if data is not None:
+            headers["Content-Type"] = "application/json"
+            body = json.dumps(data, ensure_ascii=False).encode("utf-8")
+        status, _, raw = self.http(method, self._url(path), headers, body)
+        if status != 200:
+            try:
+                msg = json.loads(raw).get("error", {}).get("message", "")
+            except (ValueError, AttributeError):
+                msg = raw[:200].decode("utf-8", "replace")
+            hint = {400: " (revisa que la cuenta sea profesional y que la imagen sea accesible)",
+                    401: " (token caducado o no válido: genera uno nuevo)",
+                    403: " (faltan permisos: instagram_business_content_publish)"}.get(status, "")
+            raise IntegrationError(redact(f"Instagram {what}: HTTP {status} {msg}{hint}")[:300])
+        return json.loads(raw or b"{}")
+
+    def whoami(self) -> dict:
+        if not self.token:
+            raise IntegrationNotConfigured(self.info().setup)
+        data = self._call("GET", "me?fields=user_id,username", "al identificar la cuenta")
+        if not data.get("user_id"):
+            raise IntegrationError("Instagram no devolvió el identificador de la cuenta")
+        return {"id": str(data["user_id"]), "name": data.get("username", "")}
+
+    def _wait(self, container: str) -> None:
+        for _ in range(10):
+            st = self._call("GET", f"{container}?fields=status_code", "al comprobar el contenedor").get("status_code")
+            if st == "FINISHED":
+                return
+            if st in ("ERROR", "EXPIRED"):
+                raise IntegrationError(f"Instagram no pudo procesar la publicación (estado {st})")
+            self.sleep(3)
+        raise IntegrationError("Instagram tarda demasiado en procesar las imágenes; inténtalo más tarde")
+
+    def publish(self, text: str, images: list[str] | None = None, **_) -> dict:
+        if not images:
+            raise ValueError("Instagram solo publica con imagen y este borrador no tiene diapositivas")
+        me = self.whoami()
+        uid = me["id"]
+        if len(images) == 1:
+            container = self._call("POST", f"{uid}/media", "al subir la imagen",
+                                   {"image_url": images[0], "caption": text})["id"]
+        else:
+            children = [self._call("POST", f"{uid}/media", f"al subir la imagen {i}",
+                                   {"image_url": url, "is_carousel_item": True})["id"]
+                        for i, url in enumerate(images, 1)]
+            for child in children:
+                self._wait(child)
+            container = self._call("POST", f"{uid}/media", "al crear el carrusel",
+                                   {"media_type": "CAROUSEL", "children": ",".join(children), "caption": text})["id"]
+        self._wait(container)
+        media_id = self._call("POST", f"{uid}/media_publish", "al publicar", {"creation_id": container})["id"]
+        try:
+            url = self._call("GET", f"{media_id}?fields=permalink", "al pedir el enlace").get("permalink", "")
+        except IntegrationError:
+            url = ""
+        return {"id": media_id, "url": url or f"https://www.instagram.com/{me['name']}/"}
+
+
+PUBLISHERS = {"linkedin": LinkedIn, "instagram": Instagram}
 
 
 def publish_draft(conn: sqlite3.Connection, actor: Actor, settings: Settings, draft_id: int,
@@ -162,9 +266,15 @@ def publish_draft(conn: sqlite3.Connection, actor: Actor, settings: Settings, dr
     if used >= settings_store.get_int(conn, "social_daily_limit"):
         raise PermissionError(f"límite diario de publicaciones en {draft['channel']} alcanzado")
     text = render_body(draft, settings.public_base_url)
+    images = None
+    if draft["channel"] == "instagram":
+        from .slides import parse_carousel
+
+        images = image_urls(draft, settings.public_base_url)
+        text = parse_carousel(text)[1]
     publisher = cls(http=http)
     try:
-        res = publisher.publish(text)
+        res = publisher.publish(text, images=images)
     except (IntegrationError, IntegrationNotConfigured) as e:
         audit.log(conn, actor, "social.publish_failed", f"draft:{draft_id}", {"channel": draft["channel"], "error": str(e)})
         raise

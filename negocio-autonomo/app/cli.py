@@ -13,7 +13,7 @@
   python -m app.cli approve|reject ID [QUIEN] [nota]  decide una aprobación en nombre de QUIEN
   python -m app.cli compliance                lista el checklist legal/fiscal
   python -m app.cli confirm CLAVE|publish QUIEN [nota]  confirma requisitos revisados por el propietario
-  python -m app.cli social-test [linkedin]   comprueba el permiso de una red sin publicar nada
+  python -m app.cli social-test [linkedin|instagram] comprueba el permiso de una red sin publicar nada
   python -m app.cli add-capital EUROS [nota] aportar dinero (queda en el libro contable)
   python -m app.cli stop "motivo"            parada de emergencia
   python -m app.cli backup                   copia de seguridad ahora
@@ -140,7 +140,7 @@ def main(argv: list[str]) -> int:
         record_status(conn, p.info(), tested=True, message=f"cuenta: {me['name']}")
         left = p.days_left() if hasattr(p, "days_left") else None
         print(f"OK: conectado como {me['name']}" + (f" · el permiso caduca en {left} días" if left is not None else
-                                                     " · pon LINKEDIN_TOKEN_EXPIRES=AAAA-MM-DD para recibir avisos"))
+                                                     f" · pon {net.upper()}_TOKEN_EXPIRES=AAAA-MM-DD para recibir avisos"))
     elif cmd == "add-capital":
         euros = float(args[0].replace(",", "."))
         bal = budget.add_capital(conn, human(getpass.getuser()), round(euros * 100), " ".join(args[1:]))

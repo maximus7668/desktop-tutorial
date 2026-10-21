@@ -197,6 +197,20 @@ def create_app(settings: Settings) -> FastAPI:
             raise HTTPException(404)
         return page(request, f"public/{doc}.html", None, s=settings)
 
+    @app.get("/media/ig/{draft_id}/{n}.jpg")
+    def instagram_slide(draft_id: int, n: int, conn=Depends(get_conn)):
+        # Pública porque Instagram descarga de aquí las imágenes; solo de borradores ya aprobados por una persona.
+        from ..integrations.slides import parse_carousel, render_slide
+
+        d = one(conn, "SELECT * FROM content_drafts WHERE id=? AND channel='instagram' AND status IN ('approved','published')",
+                (draft_id,))
+        texts = parse_carousel(d["body"])[0] if d else []
+        if not 1 <= n <= len(texts):
+            raise HTTPException(404)
+        footer = urlparse(settings.public_base_url).netloc
+        return Response(render_slide(texts[n - 1], n, len(texts), footer), media_type="image/jpeg",
+                        headers={"Cache-Control": "public, max-age=3600"})
+
     # ------------------------------------------------------------------ acceso
     @app.get("/login", response_class=HTMLResponse)
     def login_form(request: Request):
