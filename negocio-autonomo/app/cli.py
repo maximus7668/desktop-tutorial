@@ -20,6 +20,7 @@
   python -m app.cli restore FICHERO          restaura una copia (con el sistema parado)
   python -m app.cli verify-audit             comprueba la cadena de auditoría
   python -m app.cli serve                    arranca el panel web (uvicorn)
+  python -m app.cli make-video GUION.json SALIDA.mp4  vídeo vertical con la mascota (voz: ElevenLabs o Piper)
 """
 from __future__ import annotations
 
@@ -59,6 +60,14 @@ def main(argv: list[str]) -> int:
         conn = bootstrap(settings)
         ok, broken = audit.verify_chain(conn)
         print(f"Restaurado desde {src}. Auditoría íntegra: {ok}" + ("" if ok else f" (rota en {broken})"))
+        return 0
+
+    if cmd == "make-video":
+        # Vídeo vertical con la mascota a partir de un guion JSON (no toca la base de datos).
+        from pathlib import Path
+
+        from .video.render import make_video_from_file
+        print(json.dumps(make_video_from_file(Path(args[0]), Path(args[1])), ensure_ascii=False))
         return 0
 
     conn = bootstrap(settings)
