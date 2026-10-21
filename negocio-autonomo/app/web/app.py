@@ -63,6 +63,17 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(LoginRequired)
     async def _login_redirect(request: Request, exc: LoginRequired):
+        # Quien llega a la portada sin sesión es un visitante (p. ej. desde la bio de una red): va al
+        # producto publicado más reciente. El panel sigue en /login.
+        if request.url.path == "/":
+            conn = connect(settings.database_path)
+            try:
+                p = one(conn, "SELECT slug FROM products WHERE status='published' ORDER BY published_at DESC LIMIT 1")
+            finally:
+                conn.close()
+            if p:
+                return RedirectResponse(f"/p/{p['slug']}?{request.url.query}" if request.url.query else f"/p/{p['slug']}",
+                                        status_code=302)
         return RedirectResponse("/login", status_code=303)
 
     @app.exception_handler(PermissionDenied)
