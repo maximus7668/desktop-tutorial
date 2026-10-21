@@ -8,3 +8,5 @@ pydantic==2.13.5
 pillow==13.0.0
 # Opcional: solo si LLM_PROVIDER=anthropic
 anthropic==1.15.0
+# Voz local gratuita para los vídeos (alternativa a ElevenLabs)
+piper-tts==1.8.0
