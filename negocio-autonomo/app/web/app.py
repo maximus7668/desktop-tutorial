@@ -298,6 +298,14 @@ def create_app(settings: Settings) -> FastAPI:
                     return prod.estado(settings, fecha)
                 if paso == "limpiar":
                     return prod.limpiar(settings)
+                if paso == "referentes":
+                    import os
+
+                    from ..productora import referentes
+                    nichos = body.get("nichos") or [os.environ.get("PRODUCTORA_NICHO", "ia")]
+                    nichos = [nichos] if isinstance(nichos, str) else nichos
+                    return {"paso": "referentes", "resultados": [referentes.analizar(prod.root(settings), n)
+                                                                 for n in nichos if n in referentes.NICHOS]}
                 if paso == "copia":
                     from ..actors import agent as _agent
                     from ..agents import operations

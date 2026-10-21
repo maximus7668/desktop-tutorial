@@ -152,12 +152,15 @@ def guion(conn: sqlite3.Connection, settings: Settings, provider: llm.LLMProvide
         return {"paso": "guion", "saltado": True, "titulo": _read(d / "guion.json")["titulo"]}
     cands = _read(d / "candidatas.json")["candidatas"]
     learn = root(settings) / "aprendizajes.md"
+    comunidad = root(settings) / "referentes" / f"{os.environ.get('PRODUCTORA_NICHO', 'ia').strip() or 'ia'}.md"
     brief = [{"i": i, "medios": c["medios"],
               "noticias": [{k: n[k] for k in ("medio", "titulo", "url", "fecha", "resumen")} for n in c["noticias"]]}
              for i, c in enumerate(cands)]
     user = (f"Fecha de hoy: {date.today().isoformat()}.\nCandidatas:\n{json.dumps(brief, ensure_ascii=False)}\n\n"
             + (f"Aprendizajes de las métricas del canal:\n{learn.read_text(encoding='utf-8')[:3000]}\n\n"
                if learn.exists() else "")
+            + (f"Patrones de lo que funciona en otros canales del nicho (aplica el patrón, nunca copies frases):\n"
+               f"{comunidad.read_text(encoding='utf-8')[:3000]}\n\n" if comunidad.exists() else "")
             + FORMAT)
     feedback = ""
     for n in range(1, intentos + 1):

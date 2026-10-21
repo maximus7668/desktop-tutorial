@@ -1,0 +1,21 @@
+{
+  "id": "prodReferentes01",
+  "name": "Productora · Lo que funciona en la comunidad (semanal)",
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Europe/Madrid", "errorWorkflow": "prodErrores00001"},
+  "nodes": [
+    {"id": "r1", "name": "Lunes 05:30", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 300],
+     "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "30 5 * * 1"}]}}},
+    {"id": "r2", "name": "Analizar referentes (TikTok + YouTube)", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [260, 300],
+     "retryOnFail": true, "maxTries": 2, "waitBetweenTries": 5000,
+     "credentials": {"httpHeaderAuth": {"id": "prodToken0000001", "name": "Productora · token"}},
+     "parameters": {"method": "POST", "url": "http://127.0.0.1:8000/prod/referentes", "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json",
+                    "jsonBody": "{\"nichos\": [\"ia\", \"ciencia\", \"videojuegos\", \"ciberseguridad\"]}",
+                    "options": {"timeout": 3600000}}}
+  ],
+  "connections": {
+    "Lunes 05:30": {"main": [[{"node": "Analizar referentes (TikTok + YouTube)", "type": "main", "index": 0}]]}
+  },
+  "pinData": {}
+}
