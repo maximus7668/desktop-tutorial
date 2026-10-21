@@ -144,9 +144,25 @@ def _chunks(words: list[voice.Word], max_words: int = 3, max_chars: int = 20):
     return [(" ".join(x.text for x in c), c[0].start, c[-1].end) for c in out]
 
 
-def make_video(script: dict, out: Path, voice_name: str | None = None) -> dict:
+def _overlay_presenter(base: Path, presenter: Path, out: Path) -> None:
+    """Pone el vídeo del presentador (p. ej. HeyGen 9:16) recortado dentro del panel inferior; el audio es el del montaje."""
+    pw, ph = BOTTOM[2] - BOTTOM[0], BOTTOM[3] - BOTTOM[1]
+    filt = (f"[1:v]scale={pw}:-2,crop={pw}:{ph}:0:'min(ih-{ph},ih*0.10)',setsar=1[p];"
+            f"[0:v][p]overlay={BOTTOM[0]}:{BOTTOM[1]}:shortest=1[v]")
+    cmd = ["ffmpeg", "-v", "error", "-y", "-i", str(base), "-i", str(presenter), "-filter_complex", filt,
+           "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p",
+           "-c:a", "copy", "-movflags", "+faststart", str(out)]
+    if subprocess.run(cmd).returncode != 0:
+        raise RuntimeError("ffmpeg no pudo montar el presentador")
+
+
+def make_video(script: dict, out: Path, voice_name: str | None = None, speech: voice.Speech | None = None,
+               presenter: Path | None = None) -> dict:
+    """speech: voz ya generada (si no, se genera aquí). presenter: vídeo del presentador hecho con esa misma voz;
+    sustituye a la mascota en el panel inferior."""
     segs = [Segment(s["texto"], s.get("panel") or script.get("titulo", ""), s.get("imagen")) for s in script["segmentos"]]
-    speech = voice.speak([s.text for s in segs], voice_name)
+    speech = speech or voice.speak([s.text for s in segs], voice_name)
+    final_out, out = out, (out.with_name(out.stem + "-base.mp4") if presenter else out)
     # Tiempos de cada segmento a partir de sus palabras
     i = 0
     for s in segs:
@@ -184,9 +200,10 @@ def make_video(script: dict, out: Path, voice_name: str | None = None) -> dict:
             frame = base.copy()
             card, mask = panels[id(seg)]
             frame.paste(card, TOP[:2], mask)
-            lvl = levels[f] if f < len(levels) else 0.0
-            m = _mascot(f, lvl, f in blink_frames)
-            frame.paste(m, ((W - m.width) // 2, BOTTOM[1] + 60), m)
+            if not presenter:
+                lvl = levels[f] if f < len(levels) else 0.0
+                m = _mascot(f, lvl, f in blink_frames)
+                frame.paste(m, ((W - m.width) // 2, BOTTOM[1] + 60), m)
             sub = next((c for c in chunks if c[1] <= t < c[2] + 0.05), None)
             if sub:
                 d = ImageDraw.Draw(frame)
@@ -197,7 +214,10 @@ def make_video(script: dict, out: Path, voice_name: str | None = None) -> dict:
         proc.stdin.close()
         if proc.wait() != 0:
             raise RuntimeError("ffmpeg no pudo crear el vídeo")
-    return {"archivo": str(out), "segundos": round(speech.duration, 1), "fotogramas": total}
+    if presenter:
+        _overlay_presenter(out, presenter, final_out)
+        out.unlink(missing_ok=True)
+    return {"archivo": str(final_out), "segundos": round(speech.duration, 1), "fotogramas": total}
 
 
 def make_video_from_file(path: Path, out: Path, voice_name: str | None = None) -> dict:

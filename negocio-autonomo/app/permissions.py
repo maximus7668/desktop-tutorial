@@ -72,6 +72,7 @@ DEFAULT_PERMISSIONS: dict[str, list[tuple[str, str, str, int | None]]] = {
     "ventas": [("inquiry", "reply_draft", "allow", 100), ("email", "send", "approval", 20),
                ("payments", "checkout", "approval", None)],
     "contenido": [("content", "draft", "allow", 10), ("llm", "complete", "allow", 10)],
+    "productora": [("llm", "complete", "allow", 6), ("web", "search", "allow", 6)],
     "operaciones": [("report", "generate", "allow", None), ("backup", "run", "allow", None),
                     ("analytics", "read", "allow", None), ("payments", "refund", "approval", None)],
 }
@@ -84,6 +85,7 @@ AGENT_ROLES = {
     "ventas": "Responde consultas solo con respuestas verificadas; escala el resto",
     "operaciones": "Informes, alertas, copias de seguridad y control de presupuesto",
     "contenido": "Redacta borradores para redes con enlace medible; nunca publica",
+    "productora": "Elige la noticia del día, la contrasta y escribe el guion del vídeo de TikTok",
 }
 
 

@@ -1,0 +1,20 @@
+{
+  "id": "prodErrores00001",
+  "name": "Productora · Errores y alertas",
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Europe/Madrid"},
+  "nodes": [
+    {"id": "e1", "name": "Al fallar un workflow", "type": "n8n-nodes-base.errorTrigger", "typeVersion": 1, "position": [0, 300], "parameters": {}},
+    {"id": "e2", "name": "Registrar alerta en el panel", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [260, 300],
+     "retryOnFail": true, "maxTries": 3, "waitBetweenTries": 5000,
+     "credentials": {"httpHeaderAuth": {"id": "prodToken0000001", "name": "Productora · token"}},
+     "parameters": {"method": "POST", "url": "http://127.0.0.1:8000/prod/alerta", "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json",
+                    "jsonBody": "={{ JSON.stringify({ origen: $json.workflow.name, mensaje: 'Falló «' + ($json.execution.lastNodeExecuted || '?') + '»: ' + (($json.execution.error && $json.execution.error.message) || 'sin mensaje') + ' · ejecución ' + ($json.execution.id || '?') }) }}",
+                    "options": {"timeout": 30000}}}
+  ],
+  "connections": {
+    "Al fallar un workflow": {"main": [[{"node": "Registrar alerta en el panel", "type": "main", "index": 0}]]}
+  },
+  "pinData": {}
+}

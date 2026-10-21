@@ -1,0 +1,34 @@
+{
+  "id": "prodMetricas0001",
+  "name": "Productora · Métricas, limpieza y copias",
+  "active": false,
+  "settings": {"executionOrder": "v1", "timezone": "Europe/Madrid", "errorWorkflow": "prodErrores00001"},
+  "nodes": [
+    {"id": "m1", "name": "Cada día 23:30", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 300],
+     "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "30 23 * * *"}]}}},
+    {"id": "m2", "name": "Métricas de TikTok", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [240, 300],
+     "retryOnFail": true, "maxTries": 3, "waitBetweenTries": 5000, "onError": "continueRegularOutput",
+     "credentials": {"httpHeaderAuth": {"id": "prodToken0000001", "name": "Productora · token"}},
+     "parameters": {"method": "POST", "url": "http://127.0.0.1:8000/prod/metricas", "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json", "jsonBody": "{}",
+                    "options": {"timeout": 300000}}},
+    {"id": "m3", "name": "Limpiar intermedios (+30 días)", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [480, 300],
+     "retryOnFail": true, "maxTries": 2, "waitBetweenTries": 5000, "onError": "continueRegularOutput",
+     "credentials": {"httpHeaderAuth": {"id": "prodToken0000001", "name": "Productora · token"}},
+     "parameters": {"method": "POST", "url": "http://127.0.0.1:8000/prod/limpiar", "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json", "jsonBody": "{}",
+                    "options": {"timeout": 300000}}},
+    {"id": "m4", "name": "Copia de seguridad", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [720, 300],
+     "retryOnFail": true, "maxTries": 3, "waitBetweenTries": 5000,
+     "credentials": {"httpHeaderAuth": {"id": "prodToken0000001", "name": "Productora · token"}},
+     "parameters": {"method": "POST", "url": "http://127.0.0.1:8000/prod/copia", "authentication": "genericCredentialType",
+                    "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json", "jsonBody": "{}",
+                    "options": {"timeout": 300000}}}
+  ],
+  "connections": {
+    "Cada día 23:30": {"main": [[{"node": "Métricas de TikTok", "type": "main", "index": 0}]]},
+    "Métricas de TikTok": {"main": [[{"node": "Limpiar intermedios (+30 días)", "type": "main", "index": 0}]]},
+    "Limpiar intermedios (+30 días)": {"main": [[{"node": "Copia de seguridad", "type": "main", "index": 0}]]}
+  },
+  "pinData": {}
+}

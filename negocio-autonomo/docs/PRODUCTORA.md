@@ -88,11 +88,50 @@ n8n (local, http://127.0.0.1:5678)                     Servicio local de producc
 - **Credenciales.** Las claves de API se guardan en el `.env` (fuera de git) o en el almacén cifrado de n8n. Nunca van dentro de los workflows exportados.
 - **Almacenamiento.** `data/productora/AAAA-MM-DD/`, con `guion.json`, `fuentes.json`, `voz.wav`, `presentador.mp4`, `final.mp4`, `qc.json` y `derechos.json`.
 
+## 3 bis. Implementación (2026-10-21)
+
+**Presentador: HeyGen**, por decisión del dueño. Se usa su API v3: nuestro audio va como voz (`/v3/assets` y `/v3/videos` con `aspect_ratio: 9:16` y `1080p`). La v1/v2 deja de funcionar el 31-10-2026. Si HeyGen no está configurado, el vídeo sale con la mascota propia.
+
+| Pieza | Dónde | Estado |
+|---|---|---|
+| Recogida de noticias (14 feeds, agrupado, sin repetidos) | `app/productora/noticias.py` | **Probado en real**: 268 noticias, 0 feeds caídos, 8 candidatas |
+| Guion contrastado (≥2 dominios por afirmación; los dominios deben aparecer en los feeds o en la búsqueda; reintento con los errores) | `app/productora/pipeline.py` → `guion` | Validación probada con tests. **La llamada al modelo está sin probar: falta la clave** (Anthropic o Gemini) |
+| Voz, montaje 1080×1920 y volumen −14 LUFS | `producir` | **Probado** con Piper y la mascota (38 s de vídeo en 18 s) |
+| Presentador HeyGen | `app/productora/servicios.py` | **Sin probar: falta `HEYGEN_API_KEY`** |
+| Control de calidad (resolución, audio, duración, ritmo, volumen, guion, derechos, etiqueta IA) | `calidad` | **Probado** |
+| Web `/noticias`, con NewsArticle, VideoObject, fuentes y vídeo | `app/web/app.py` | **Probado** en local (después se quitó la página de prueba) |
+| TikTok: OAuth, subida como borrador y métricas | `servicios.py`, `/tiktok/conectar` | **Sin probar: falta la app de TikTok** |
+| API para n8n con token | `POST /prod/{paso}` | **Probado**: 403 sin token, 404 en pasos desconocidos, 500 con el motivo |
+| Workflows de n8n | `n8n/*.json` | **Importados, activos y probados**: el diario se ejecuta, se para en el guion por falta de clave y el workflow de errores registra la alerta |
+
+### Instalación (ya hecha en este PC)
+1. n8n 2.44.4 con un Node 24 portátil en `D:\IA\n8n` (`n8n.bat start`). Arranca con Windows (acceso directo «n8n productora» en Inicio). Su panel está en http://127.0.0.1:5678; la primera vez te pedirá crear tu usuario.
+2. Credencial «Productora · token» (cabecera `X-Productora-Token`), importada cifrada desde `PRODUCTORA_TOKEN` del `.env`.
+3. Workflows: «Vídeo diario» (07:00, Europe/Madrid), «Métricas, limpieza y copias» (23:30) y «Errores y alertas».
+4. En otro PC: `n8n.bat import:workflow --separate --input=n8n`, después `n8n.bat publish:workflow --id=…`.
+
+### Ejecutar a mano
+- `python -m app.cli productora recoger|guion|producir|calidad|publicar|metricas|estado [AAAA-MM-DD] [--forzar]`
+- En n8n: abrir «Vídeo diario» → «Ejecutar ahora».
+
+### Supervisión
+- **Fallos:** cualquier fallo de un workflow queda en `data/productora/alertas.log` y en la auditoría del panel. n8n guarda cada ejecución 30 días.
+- **Vídeos que no pasan el control:** después de rehacerse una vez, quedan como borrador con una aprobación en el panel (`/aprobaciones`).
+- **Archivos de cada día:** `data/productora/AAAA-MM-DD/` (candidatas, guion, rechazos, QC, derechos, artículo, vídeo).
+- **Copias:** copia diaria de la base de datos (`backups/`). Los vídeos intermedios se borran a los 30 días.
+
+### Pendiente (siguiente iteración)
+- Whisper local para comparar la transcripción con el guion (pronunciación y subtítulos).
+- Música de fondo con licencia CC0.
+- Gestión de comentarios: hay que comprobar antes qué permite la API para cuentas de la UE.
+
 ## 4. Lo que solo puedes hacer tú
 
 | Paso | Por qué |
 |---|---|
 | Aprobar el gasto (≈ 33 €/mes más luz) o elegir la opción gratis | El dinero lo decides tú |
+| HeyGen: cuenta y plan de API (de pago por uso; sin créditos gratis desde 02-2026). Elegir el avatar y poner `HEYGEN_API_KEY` y `HEYGEN_AVATAR_ID` en `.env` | Pago y cuenta a tu nombre |
+| Crear tu usuario en n8n (http://127.0.0.1:5678) | Cuenta local tuya |
 | Clave de la API de Anthropic con límite de gasto | Cuenta y pago a tu nombre |
 | ElevenLabs Creator: suscribirte y crear la clave | Pago |
 | Crear la app en developers.tiktok.com (Login Kit, Content Posting API y Display API) y pedir la auditoría | Cuenta de desarrollador a tu nombre. La auditoría la revisa TikTok. |

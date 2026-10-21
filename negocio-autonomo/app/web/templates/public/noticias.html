@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noticias de IA y tecnología</title>
+<meta name="description" content="Cada día, una noticia de inteligencia artificial y tecnología contrastada con varias fuentes, en vídeo y por escrito.">
+<link rel="canonical" href="{{ base }}/noticias">
+<style>body{font:17px/1.6 system-ui,sans-serif;max-width:760px;margin:0 auto;padding:32px 16px;background:#F6F7FB;color:#11162A}
+a{color:#3C5BDA}h1{font-size:2rem;margin:0 0 4px}.sub{color:#5b6080;margin:0 0 28px}
+article{border-top:1px solid #d9dcea;padding:18px 0}article h2{font-size:1.25rem;margin:0 0 6px}time{color:#5b6080;font-size:.9rem}
+@media (prefers-color-scheme:dark){body{background:#11162A;color:#F6F7FB}a{color:#8FA3FA}.sub,time{color:#a9aed0}article{border-color:#2a3155}}</style></head>
+<body>
+<h1>Noticias de IA y tecnología</h1>
+<p class="sub">Una noticia al día, contrastada con al menos dos fuentes independientes. Vídeos con voz y presentador generados con IA.</p>
+{% for a in articulos %}
+<article><time datetime="{{ a.fecha }}">{{ a.fecha }}</time>
+<h2><a href="/noticias/{{ a.slug }}">{{ a.titulo }}</a></h2>
+<p>{{ a.meta }}</p></article>
+{% else %}
+<p>Todavía no hay noticias publicadas.</p>
+{% endfor %}
+</body></html>

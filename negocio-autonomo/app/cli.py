@@ -168,6 +168,18 @@ def main(argv: list[str]) -> int:
         ok, broken = audit.verify_chain(conn)
         print("Cadena íntegra" if ok else f"Cadena ALTERADA en el registro {broken}")
         return 0 if ok else 2
+    elif cmd == "productora":
+        # productora PASO [AAAA-MM-DD] [--forzar]: los mismos pasos que llama n8n (recoger, guion, producir…)
+        from .productora import pipeline as prod
+        paso, rest = args[0], [a for a in args[1:] if a != "--forzar"]
+        fecha, forzar = (rest[0] if rest else None), "--forzar" in args
+        calls = {"recoger": lambda: prod.recoger(settings, fecha, forzar),
+                 "guion": lambda: prod.guion(conn, settings, build_provider(settings), fecha, forzar),
+                 "producir": lambda: prod.producir(settings, fecha, forzar),
+                 "calidad": lambda: prod.calidad(settings, fecha),
+                 "publicar": lambda: prod.publicar(conn, settings, fecha),
+                 "metricas": lambda: prod.metricas(settings), "estado": lambda: prod.estado(settings, fecha)}
+        print(json.dumps(calls[paso](), ensure_ascii=False, indent=1))
     elif cmd == "serve":
         import uvicorn
 

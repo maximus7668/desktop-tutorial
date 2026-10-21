@@ -222,6 +222,115 @@ def create_app(settings: Settings) -> FastAPI:
         return Response(render_slide(texts[n - 1], n, len(texts), footer), media_type="image/jpeg",
                         headers={"Cache-Control": "public, max-age=3600"})
 
+    # ------------------------------------------------------------------ productora (noticias + n8n)
+    from ..productora import pipeline as prod
+    from ..productora import servicios as prod_srv
+
+    def _articulo_publico(a: dict) -> dict:
+        a = dict(a)
+        a["fuentes"] = [f for f in a.get("fuentes", []) if str(f.get("url", "")).startswith(("https://", "http://"))]
+        return a
+
+    @app.get("/noticias", response_class=HTMLResponse)
+    def noticias_list(request: Request):
+        return page(request, "public/noticias.html", None, articulos=prod.articulos(settings),
+                    base=settings.public_base_url)
+
+    @app.get("/noticias/{slug}", response_class=HTMLResponse)
+    def noticia(slug: str, request: Request):
+        a = next((x for x in prod.articulos(settings) if x["slug"] == slug), None)
+        if a is None:
+            raise HTTPException(404)
+        a = _articulo_publico(a)
+        ld = {"@context": "https://schema.org", "@type": "NewsArticle", "headline": a["titulo"],
+              "description": a["meta"], "datePublished": a["publicado_en"], "inLanguage": "es-ES",
+              "mainEntityOfPage": f"{settings.public_base_url}/noticias/{a['slug']}",
+              "citation": [f["url"] for f in a["fuentes"]],
+              "author": {"@type": "Organization", "name": urlparse(settings.public_base_url).netloc}}
+        if a["video"]:
+            ld["video"] = {"@type": "VideoObject", "name": a["titulo"], "description": a["meta"],
+                           "uploadDate": a["publicado_en"],
+                           "contentUrl": f"{settings.public_base_url}/media/noticias/{a['fecha']}.mp4"}
+        return page(request, "public/noticia.html", None, a=a, base=settings.public_base_url,
+                    ld=json.dumps(ld, ensure_ascii=False).replace("</", "<\\/"))
+
+    @app.get("/media/noticias/{fecha}.mp4")
+    def noticia_video(fecha: str):
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", fecha):
+            raise HTTPException(404)
+        d = prod.root(settings) / fecha
+        if not (d / "articulo.json").exists() or not (d / "final.mp4").exists():
+            raise HTTPException(404)  # solo vídeos ya publicados
+        from fastapi.responses import FileResponse
+        return FileResponse(d / "final.mp4", media_type="video/mp4", headers={"Cache-Control": "public, max-age=86400"})
+
+    def _prod_token(request: Request) -> None:
+        import os
+        expected = os.environ.get("PRODUCTORA_TOKEN", "").strip()
+        if len(expected) < 24 or not hmac.compare_digest(expected, request.headers.get("x-productora-token", "")):
+            raise HTTPException(403, "token de la productora no válido")
+
+    @app.post("/prod/{paso}")
+    async def prod_step(paso: str, request: Request):
+        _prod_token(request)
+        body = await request.json() if request.headers.get("content-type", "").startswith("application/json") else {}
+        fecha, forzar = body.get("fecha"), bool(body.get("forzar"))
+
+        def run():
+            conn = connect(settings.database_path)
+            try:
+                if paso == "recoger":
+                    return prod.recoger(settings, fecha, forzar)
+                if paso == "guion":
+                    from ..integrations.llm import build_provider
+                    return prod.guion(conn, settings, build_provider(settings), fecha, forzar)
+                if paso == "producir":
+                    return prod.producir(settings, fecha, forzar)
+                if paso == "calidad":
+                    return prod.calidad(settings, fecha)
+                if paso == "publicar":
+                    return prod.publicar(conn, settings, fecha, bool(body.get("borrador")))
+                if paso == "metricas":
+                    return prod.metricas(settings)
+                if paso == "alerta":
+                    return prod.alerta(conn, settings, str(body.get("mensaje", ""))[:4000], str(body.get("origen", "n8n")))
+                if paso == "estado":
+                    return prod.estado(settings, fecha)
+                if paso == "limpiar":
+                    return prod.limpiar(settings)
+                if paso == "copia":
+                    from ..actors import agent as _agent
+                    from ..agents import operations
+                    return {"paso": "copia", "archivo": str(operations.backup(conn, _agent("operaciones"), settings))}
+                raise HTTPException(404, "paso desconocido")
+            finally:
+                conn.close()
+
+        from starlette.concurrency import run_in_threadpool
+        try:
+            return await run_in_threadpool(run)
+        except HTTPException:
+            raise
+        except Exception as e:  # n8n ve el fallo (HTTP 500 con el motivo) y reintenta o avisa
+            return JSONResponse({"ok": False, "paso": paso, "error": f"{type(e).__name__}: {e}"[:1500]}, status_code=500)
+
+    @app.get("/tiktok/conectar")
+    def tiktok_connect(request: Request, sess=Depends(session)):
+        if not prod_srv.tiktok_configured():
+            raise HTTPException(400, "Faltan TIKTOK_CLIENT_KEY y TIKTOK_CLIENT_SECRET en .env")
+        state = secrets.token_urlsafe(24)
+        resp = RedirectResponse(prod_srv.tiktok_auth_url(f"{settings.public_base_url}/tiktok/callback", state), 303)
+        resp.set_cookie("tt_state", state, max_age=600, httponly=True, secure=settings.is_production, samesite="lax")
+        return resp
+
+    @app.get("/tiktok/callback", response_class=PlainTextResponse)
+    def tiktok_callback(request: Request, code: str = "", state: str = "", sess=Depends(session)):
+        if not state or not hmac.compare_digest(state, request.cookies.get("tt_state", "")):
+            raise HTTPException(400, "estado OAuth no válido")
+        info = prod_srv.tiktok_exchange_code(code, f"{settings.public_base_url}/tiktok/callback",
+                                             prod.root(settings) / "tiktok_token.json")
+        return PlainTextResponse(f"TikTok conectado (permisos: {info.get('scope')}). Ya puedes cerrar esta pestaña.")
+
     # ------------------------------------------------------------------ acceso
     @app.get("/login", response_class=HTMLResponse)
     def login_form(request: Request):

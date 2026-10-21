@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ a.titulo }}</title>
+<meta name="description" content="{{ a.meta }}">
+<link rel="canonical" href="{{ base }}/noticias/{{ a.slug }}">
+<meta property="og:type" content="article"><meta property="og:title" content="{{ a.titulo }}">
+<meta property="og:description" content="{{ a.meta }}"><meta property="og:url" content="{{ base }}/noticias/{{ a.slug }}">
+{% if a.video %}<meta property="og:video" content="{{ base }}/media/noticias/{{ a.fecha }}.mp4">{% endif %}
+<script type="application/ld+json">{{ ld | safe }}</script>
+<style>body{font:17px/1.65 system-ui,sans-serif;max-width:760px;margin:0 auto;padding:32px 16px;background:#F6F7FB;color:#11162A}
+a{color:#3C5BDA}h1{font-size:2rem;line-height:1.2}time,.nota{color:#5b6080;font-size:.92rem}
+video{display:block;width:100%;max-width:360px;margin:20px auto;border-radius:16px;background:#000}
+.fuentes{border-top:1px solid #d9dcea;margin-top:28px;padding-top:12px}
+@media (prefers-color-scheme:dark){body{background:#11162A;color:#F6F7FB}a{color:#8FA3FA}time,.nota{color:#a9aed0}.fuentes{border-color:#2a3155}}</style></head>
+<body>
+<p><a href="/noticias">← Todas las noticias</a></p>
+<article>
+<h1>{{ a.titulo }}</h1>
+<time datetime="{{ a.publicado_en }}">{{ a.fecha }}</time>
+{% if a.video %}<video controls preload="metadata" playsinline src="/media/noticias/{{ a.fecha }}.mp4"></video>
+<p class="nota">Vídeo con voz y presentador generados con IA. Los hechos están contrastados con las fuentes de abajo.</p>{% endif %}
+{% for p in a.parrafos %}<p>{{ p }}</p>{% endfor %}
+<section class="fuentes"><h2>Fuentes</h2><ul>
+{% for f in a.fuentes %}<li><a href="{{ f.url }}" rel="noopener nofollow" target="_blank">{{ f.medio }}: {{ f.titulo }}</a></li>{% endfor %}
+</ul></section>
+</article>
+</body></html>
