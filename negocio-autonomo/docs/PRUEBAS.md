@@ -2,7 +2,7 @@
 
 Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `python -m pytest -v`.
 
-**Resultado: 56 pruebas, 56 superadas, 0 fallidas (≈ 4 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
+**Resultado: 63 pruebas, 63 superadas, 0 fallidas (≈ 5 s).** Análisis estático `ruff check --select F,E9,B`: sin avisos.
 
 ## Qué se comprueba
 
@@ -22,6 +22,7 @@ Entorno: Linux, Python 3.13, pytest 9.1.1, FastAPI 0.150.0, SQLite. Comando: `py
 | Arranque con 0 € | `tests/test_zero_capital.py`: todo gasto rechazado (también API con sobre), el modelo no se llama, la vigilancia no activa la parada, el flujo gratuito funciona, aportar capital desbloquea y queda en el libro, reiniciar no duplica el capital; la E2E arranca con 0 € y aporta 300 € desde el panel | ✔ |
 | Agente de contenido | `tests/test_content.py`: borradores al publicar con enlace por canal, sin duplicados, solo productos publicados, filtro de promesas/urgencia/estado, texto de IA solo si pasa el filtro, solo personas aprueban y publican, visitas y registros atribuidos a su canal, mayúsculas de nombres propios | ✔ |
 | Bandeja de investigación | `test_inbox_imports_new_files_once_and_skips_invalid` (importa una vez, salta JSON roto o con URL interna), `test_real_research_files_in_repo_are_valid` | ✔ |
+| Publicación en LinkedIn (API simulada) | `tests/test_social.py`: escape del formato «little» respetando hashtags, publica solo borradores aprobados y solo personas, parada y límite diario, rechaza enlaces locales, error de la API no marca publicado ni filtra el token, sin token = no configurado | ✔ |
 | Auditoría inalterable / detectable | `test_audit_log_is_append_only_and_tamper_evident` | ✔ |
 | Inyección de instrucciones | `test_prompt_injection_in_research_is_data_not_instruction`, `test_sales_agent_escalates_suspicious_or_unknown`, `test_discover_drops_urls_not_returned_by_real_search` | ✔ |
 | Validación honesta | `test_score_penalizes_thin_evidence`, `test_criteria_locked_after_approval`, `test_simulated_traffic_never_validates`, `test_signups_give_interest_but_not_validation`, `test_low_interest_is_abandoned_and_remembered`, `test_only_real_purchases_validate` | ✔ |
@@ -68,5 +69,6 @@ Tras restaurar el código, todas vuelven a pasar.
 - Webhooks reales de Stripe (sin cuenta). La verificación de firma sigue el esquema documentado por Stripe y se
   prueba con firmas generadas localmente.
 - Envío SMTP real.
+- Publicación real en LinkedIn (falta tu token): el conector sigue la documentación oficial (Posts API, versión 202610).
 - `docker compose` (no había demonio de Docker).
 - Carga con muchos usuarios simultáneos en el panel público.

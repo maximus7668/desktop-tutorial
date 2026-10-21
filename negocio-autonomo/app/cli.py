@@ -13,6 +13,7 @@
   python -m app.cli approve|reject ID [QUIEN] [nota]  decide una aprobación en nombre de QUIEN
   python -m app.cli compliance                lista el checklist legal/fiscal
   python -m app.cli confirm CLAVE|publish QUIEN [nota]  confirma requisitos revisados por el propietario
+  python -m app.cli social-test [linkedin]   comprueba el permiso de una red sin publicar nada
   python -m app.cli add-capital EUROS [nota] aportar dinero (queda en el libro contable)
   python -m app.cli stop "motivo"            parada de emergencia
   python -m app.cli backup                   copia de seguridad ahora
@@ -125,6 +126,21 @@ def main(argv: list[str]) -> int:
         for k in keys:
             compliance.confirm(conn, human(by), k, "done", note)
             print(f"{k}: confirmado por {by}")
+    elif cmd == "social-test":
+        # Comprueba el token de una red sin publicar nada (solo identifica la cuenta).
+        from .integrations import IntegrationError, IntegrationNotConfigured, record_status, social
+        net = args[0] if args else "linkedin"
+        p = social.PUBLISHERS[net]()
+        try:
+            me = p.whoami()
+        except (IntegrationError, IntegrationNotConfigured) as e:
+            record_status(conn, p.info(), tested=False, message=str(e))
+            print(f"FALLO: {e}")
+            return 2
+        record_status(conn, p.info(), tested=True, message=f"cuenta: {me['name']}")
+        left = p.days_left() if hasattr(p, "days_left") else None
+        print(f"OK: conectado como {me['name']}" + (f" · el permiso caduca en {left} días" if left is not None else
+                                                     " · pon LINKEDIN_TOKEN_EXPIRES=AAAA-MM-DD para recibir avisos"))
     elif cmd == "add-capital":
         euros = float(args[0].replace(",", "."))
         bal = budget.add_capital(conn, human(getpass.getuser()), round(euros * 100), " ".join(args[1:]))

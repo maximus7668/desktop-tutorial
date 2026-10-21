@@ -37,6 +37,11 @@ Cada texto lleva un enlace con la etiqueta de su canal para medir qué red trae 
   <form method="post" action="/contenido/{{ d.id }}" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
     <input name="published_url" placeholder="enlace de tu publicación (opcional)" size="40">
     <button name="status" value="published">Marcar publicado</button></form>
+  {% if d.channel in connected %}
+  <form method="post" action="/contenido/{{ d.id }}/publicar" class="inline"><input type="hidden" name="csrf" value="{{ sess.csrf }}">
+    <button>Publicar en {{ d.channel }} ahora</button></form>
+  <span class="small muted">Se publica tal cual, en público, con tu cuenta.</span>
+  {% endif %}
   {% endif %}
 </div>
 {% else %}<p class="muted">Sin borradores. Se generan automáticamente al publicar un producto.</p>{% endfor %}

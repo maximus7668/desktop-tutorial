@@ -21,6 +21,7 @@ DEFAULTS: dict[str, str] = {
     "llm_max_calls_per_agent_day": "40",
     "low_balance_alert_cents": "20000",
     "publish_daily_limit": "3",
+    "social_daily_limit": "2",            # publicaciones por API al día y por red
 }
 
 VALID_MODES = ("1", "2", "3")

@@ -15,7 +15,8 @@ Ningún modo de operación elimina estas aprobaciones. Las del bloque «dinero»
 - Empezar un experimento (fija criterios de éxito y presupuesto, que después no se pueden cambiar).
 - Publicar una página (modos 1 y 2; en modo 3, según la tabla de permisos).
 - Enviar emails (`email.send`).
-- Aprobar y publicar los borradores del agente de contenido: el sistema no tiene acceso a tus redes; publicas tú.
+- Aprobar y publicar los borradores del agente de contenido. En redes conectadas (LinkedIn) se publica solo
+  al pulsar «Publicar» sobre un borrador aprobado, máximo 2 al día por red; en el resto publicas tú a mano.
 - Responder consultas sin respuesta aprobada o que parezcan manipulación (se escalan).
 
 ## Control del sistema

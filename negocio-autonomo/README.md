@@ -51,7 +51,7 @@ python -m app.cli worker
 ### Comprobar que funciona
 
 ```bash
-python -m pytest -q                                   # 56 pruebas, ~4 s
+python -m pytest -q                                   # 63 pruebas, ~5 s
 python examples/demo_validacion.py                    # ciclo completo en data/demo.db → docs/ejemplo-validacion.md
 python -m app.cli import-research examples/investigacion_2026-10-20.json
 python -m app.cli evaluate                            # puntuaciones
@@ -127,6 +127,7 @@ Se cambia en **Ajustes** (`mode`). Ningún modo desactiva los controles financie
 
 ## Documentación
 
+- [`docs/REDES.md`](docs/REDES.md): conectar redes sociales (LinkedIn listo) para publicar borradores aprobados.
 - [`docs/WINDOWS.md`](docs/WINDOWS.md): puesta en marcha en Windows paso a paso (0 €).
 - [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md): plan, decisiones técnicas, criterios de aceptación, esquema de datos.
 - [`docs/OPERACION.md`](docs/OPERACION.md): despliegue, copias de seguridad, monitorización, parada de emergencia, limitaciones conocidas.

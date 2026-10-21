@@ -34,6 +34,9 @@ def watch(conn: sqlite3.Connection, actor: Actor) -> dict:
     if not ok:
         settings_store.activate_kill_switch(conn, actor, f"registro de auditoría alterado (id {broken})")
         out["actions"].append("auditoría alterada")
+    from ..integrations import social
+    for w in social.token_warnings():
+        _alert(conn, "warning", w)
     cutoff = (datetime.now(timezone.utc) - timedelta(days=3)).isoformat(timespec="seconds")
     stale = conn.execute("SELECT COUNT(*) c FROM approvals WHERE status='pending' AND created_at < ?", (cutoff,)).fetchone()["c"]
     if stale:

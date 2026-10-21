@@ -23,7 +23,7 @@ from ..agents import builder, content
 from ..config import Settings
 from ..core import bootstrap
 from ..db import connect, now_iso, one, rows, transaction
-from ..integrations import IntegrationError, list_status, payments
+from ..integrations import IntegrationError, IntegrationNotConfigured, list_status, payments, social
 from ..untrusted import clean
 from . import auth
 
@@ -380,6 +380,7 @@ def create_app(settings: Settings) -> FastAPI:
         for d in drafts:
             d["text"] = content.render_body(d, settings.public_base_url)
         return page(request, "content.html", sess, drafts=drafts, base_url=settings.public_base_url,
+                    connected={n for n, c in social.PUBLISHERS.items() if c().info().configured},
                     real=content.visits_by_channel(conn, "real"), sim=content.visits_by_channel(conn, "simulation"),
                     published=rows(conn, "SELECT id, name FROM products WHERE status='published'"))
 
@@ -391,6 +392,15 @@ def create_app(settings: Settings) -> FastAPI:
             content.decide(conn, human(sess["u"]), did, status, published_url)
         except (ValueError, KeyError) as e:
             return PlainTextResponse(f"No se pudo: {e}", status_code=409)
+        return RedirectResponse("/contenido", status_code=303)
+
+    @app.post("/contenido/{did}/publicar")
+    def content_publish(did: int, request: Request, csrf: str = Form(""), sess=Depends(session), conn=Depends(get_conn)):
+        check_csrf(sess, csrf)
+        try:
+            social.publish_draft(conn, human(sess["u"]), settings, did)
+        except (ValueError, KeyError, PermissionError, IntegrationError, IntegrationNotConfigured) as e:
+            return PlainTextResponse(f"No se publicó: {e}", status_code=409)
         return RedirectResponse("/contenido", status_code=303)
 
     @app.post("/contenido/generar/{pid}")

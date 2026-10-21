@@ -40,5 +40,8 @@ def refresh(conn: sqlite3.Connection, settings: Settings) -> None:
     record_status(conn, IntegrationInfo("publicacion_web", public, "servir páginas aprobadas en /p/<slug>",
                                         "Despliega la app en un dominio con HTTPS y define PUBLIC_BASE_URL."))
     record_status(conn, IntegrationInfo("base_de_datos", True, "SQLite local (WAL)", str(settings.database_path.name)))
+    from . import social
+    for i in social.info_all():
+        record_status(conn, i)
     for i in PENDING:
         record_status(conn, i)

@@ -39,6 +39,7 @@ CATALOG: dict[tuple[str, str], tuple[bool, bool, bool]] = {
     ("inquiry", "reply_draft"): (False, False, False),
     ("report", "generate"): (False, False, False),
     ("content", "draft"): (False, False, False),
+    ("social", "publish"): (True, False, False),  # solo personas (botón del panel); ningún agente lo tiene
     ("backup", "run"): (False, False, False),
 }
 

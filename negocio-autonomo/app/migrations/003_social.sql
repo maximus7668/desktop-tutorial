@@ -1,0 +1,3 @@
+-- Publicación en redes mediante API oficial: queda registrado por qué vía se publicó cada borrador.
+ALTER TABLE content_drafts ADD COLUMN published_via TEXT;   -- manual | api:linkedin | ...
+ALTER TABLE content_drafts ADD COLUMN external_id TEXT;     -- id de la publicación en la red
