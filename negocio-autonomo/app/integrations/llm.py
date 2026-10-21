@@ -93,6 +93,57 @@ class AnthropicProvider(LLMProvider):
         return LLMResult("".join(text_parts), tin, tout, self.model, "real", searches, sources)
 
 
+class GeminiProvider(LLMProvider):
+    """Gemini por su API REST con el nivel gratuito de Google AI Studio (GEMINI_API_KEY). En el nivel
+    gratuito Google puede usar las peticiones para mejorar sus productos: no mandar datos personales."""
+    name = "gemini"
+    free = True
+    API = "https://generativelanguage.googleapis.com/v1beta/models"
+
+    def __init__(self, model: str):
+        import os
+
+        self.key = os.environ.get("GEMINI_API_KEY", "").strip()
+        self.model = model if model.startswith("gemini") else "gemini-2.5-flash"
+
+    def info(self) -> IntegrationInfo:
+        if not self.key:
+            return IntegrationInfo("llm", False, "llm.complete",
+                                   "Falta GEMINI_API_KEY (gratis en aistudio.google.com → Get API key)")
+        return IntegrationInfo("llm", True, "llm.complete, web.search (Google Search de Gemini)",
+                               f"Gemini API (nivel gratuito), modelo {self.model}")
+
+    def complete(self, system: str, user: str, max_tokens: int, web_search: bool = False) -> LLMResult:
+        import json
+        import urllib.error
+        import urllib.request
+
+        body: dict = {"system_instruction": {"parts": [{"text": system}]},
+                      "contents": [{"role": "user", "parts": [{"text": user}]}],
+                      "generationConfig": {"maxOutputTokens": max_tokens}}
+        if web_search:
+            body["tools"] = [{"google_search": {}}]
+        req = urllib.request.Request(f"{self.API}/{self.model}:generateContent", data=json.dumps(body).encode(),
+                                     headers={"x-goog-api-key": self.key, "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=300) as r:
+                data = json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            raise IntegrationError(f"error de API de Gemini: HTTP {e.code}") from e
+        except urllib.error.URLError as e:
+            raise IntegrationError("no se pudo conectar con la API de Gemini") from e
+        cand = (data.get("candidates") or [{}])[0]
+        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
+        if not text:
+            raise IntegrationError(f"respuesta vacía de Gemini ({cand.get('finishReason', 'sin motivo')})")
+        meta = cand.get("groundingMetadata") or {}
+        sources = [{"url": c["web"].get("uri"), "title": c["web"].get("title"), "page_age": None}
+                   for c in meta.get("groundingChunks", []) if c.get("web")]
+        usage = data.get("usageMetadata", {})
+        return LLMResult(text, usage.get("promptTokenCount", 0), usage.get("candidatesTokenCount", 0), self.model,
+                         "real", len(meta.get("webSearchQueries", [])), sources)
+
+
 class FakeProvider(LLMProvider):
     """Solo para pruebas. Sus resultados se marcan como simulación."""
     name = "fake"
@@ -119,6 +170,8 @@ class FakeProvider(LLMProvider):
 def build_provider(settings: Settings) -> LLMProvider:
     if settings.llm_provider == "anthropic":
         return AnthropicProvider(settings.llm_model)
+    if settings.llm_provider == "gemini":
+        return GeminiProvider(settings.llm_model)
     if settings.llm_provider == "fake":
         return FakeProvider()
     return LLMProvider()
@@ -144,6 +197,17 @@ def guarded_complete(conn: sqlite3.Connection, actor: Actor, provider: LLMProvid
     calls = conn.execute("SELECT COUNT(*) c FROM llm_usage WHERE agent=? AND ts >= ?", (actor.name, day)).fetchone()["c"]
     if calls >= settings_store.get_int(conn, "llm_max_calls_per_agent_day"):
         raise budget.BudgetError("límite diario de llamadas al modelo alcanzado")
+
+    if getattr(provider, "free", False):
+        # Nivel gratuito: no hay gasto que reservar; se registra el uso a 0 céntimos.
+        res = provider.complete(system, user, max_tokens, web_search)
+        with transaction(conn):
+            conn.execute(
+                "INSERT INTO llm_usage (ts, agent, provider, model, input_tokens, output_tokens, cost_cents, data_kind)"
+                " VALUES (?,?,?,?,?,?,?,?)",
+                (now_iso(), actor.name, provider.name, res.model, res.input_tokens, res.output_tokens, 0, res.data_kind),
+            )
+        return res
 
     # Reserva prudente: los resultados de búsqueda entran como tokens de entrada (decenas de miles).
     est_in = (len(system) + len(user)) // 3 + 500 + (60000 if web_search else 0)

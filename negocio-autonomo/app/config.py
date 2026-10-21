@@ -34,7 +34,7 @@ class Settings:
     reports_dir: Path = field(default_factory=lambda: BASE_DIR / "reports")
     initial_capital_eur: float = 0.0
 
-    llm_provider: str = "none"  # none | anthropic | fake (solo pruebas)
+    llm_provider: str = "none"  # none | anthropic | gemini (nivel gratuito) | fake (solo pruebas)
     llm_model: str = "claude-opus-5-5"
     # Precios en USD por millón de tokens (configurables: cambian con el tiempo).
     llm_price_in_usd_mtok: float = 4.0

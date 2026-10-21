@@ -134,11 +134,55 @@ def synthesize_elevenlabs(sentences: list[str], voice_id: str | None = None, mod
     return Speech(pcm, rate, words)
 
 
+FISH_API = "https://api.fish.audio/v1/tts"
+
+
+def synthesize_fish(sentences: list[str], voice_id: str | None = None) -> Speech:
+    """Voz de Fish Audio (FISH_API_KEY y FISH_VOICE_ID en .env; modelo FISH_MODEL, por defecto el gratuito
+    s2.1-pro-free). Frase a frase, como Piper, para conocer la duración de cada una."""
+    import json
+    import subprocess
+    import urllib.error
+    import urllib.request
+
+    key = os.environ.get("FISH_API_KEY", "").strip()
+    vid = voice_id or os.environ.get("FISH_VOICE_ID", "").strip()
+    if not key:
+        raise RuntimeError("Falta FISH_API_KEY en .env")
+    model = os.environ.get("FISH_MODEL", "").strip() or "s2.1-pro-free"
+    rate = 44100
+    pcm, words = array.array("h"), []
+    for sentence in sentences:
+        sentence = sentence.strip()
+        if not sentence:
+            continue
+        body = {"text": sentence, "format": "mp3"}
+        if vid:
+            body["reference_id"] = vid
+        req = urllib.request.Request(FISH_API, data=json.dumps(body).encode("utf-8"), method="POST",
+                                     headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                                              "model": model})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                mp3 = r.read()
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"Fish Audio no generó la voz: HTTP {e.code} {e.read()[:200].decode('utf-8', 'replace')}")
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", "-", "-f", "s16le", "-ac", "1", "-ar", str(rate), "-"],
+                             input=mp3, capture_output=True, check=True).stdout
+        start = len(pcm) / rate
+        pcm.frombytes(raw[: len(raw) // 2 * 2])
+        words += _words_in(sentence, start, len(pcm) / rate)
+        pcm.extend([0] * int(PAUSE * rate))
+    return Speech(pcm, rate, words)
+
+
 def speak(sentences: list[str], voice_name: str | None = None) -> Speech:
-    """ElevenLabs si está configurado (VIDEO_TTS=elevenlabs o clave presente); si no, Piper local."""
+    """Motor según VIDEO_TTS (elevenlabs | fish | piper); sin él, el primero con clave en .env y si no, Piper local."""
     engine = os.environ.get("VIDEO_TTS", "").strip().lower()
     if engine == "elevenlabs" or (not engine and os.environ.get("ELEVENLABS_API_KEY")):
         return synthesize_elevenlabs(sentences)
+    if engine == "fish" or (not engine and os.environ.get("FISH_API_KEY")):
+        return synthesize_fish(sentences)
     return synthesize(sentences, voice_name)
 
 
